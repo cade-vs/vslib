@@ -25,7 +25,7 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.10 2002/12/12 23:45:14 cade Exp $
+ * $Id: vstring.h,v 1.11 2002/12/17 10:12:07 cade Exp $
  *
  */
 
@@ -190,7 +190,8 @@
 
     friend char*  str_word( String& target, const char* delimiters, char* result );
     friend char*  str_rword( String& target, const char* delimiters, char* result );
-
+    // check VArray::split() instead of word() funtions...
+    
     // this `sprintf'-like function works as follows:
     // 1. set `this.string' length to `init_size'
     // 2. call `sprintf' with `format' and `...'
