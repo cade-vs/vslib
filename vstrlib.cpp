@@ -4,7 +4,7 @@
  * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.24 2003/02/16 23:33:51 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.25 2003/04/28 17:17:13 cade Exp $
  *
  */
 
@@ -238,8 +238,6 @@ int mem_quick_search_nc( const char *p, int ps, const char *d, int ds )
 
 int mem_sum_search( const char *p, int ps, const char *d, int ds )
 {
-   char *buff;
-   
    int psum = 0;
    
    int i;

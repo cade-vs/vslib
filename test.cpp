@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: test.cpp,v 1.15 2003/03/11 21:25:45 cade Exp $
+ * $Id: test.cpp,v 1.16 2003/04/28 17:17:12 cade Exp $
  *
  */
 
@@ -379,11 +379,12 @@ int main( int argc, char* argv[] )
   
   #define PAT "MARINOW Uliqn P. prof. dtn kw.Wladaq ul.Witoshki granit 11"
   //#define PAT "marinow uliqn p. prof. dtn kw.wladaq ul.witoshki granit 11"
-  printf( "found at pos %d\n", file_pattern_search( PAT, strlen(PAT),
+  printf( "found at pos %ld\n", file_pattern_search( PAT, strlen(PAT),
                                "/tmp/ss.txt", "",
                                mem_quick_search ) );
   
   //printf( "expand=[%s]\n", (const char*)tilde_expand( "~root/" ) );
+  
   /*
   test1();
   test2();
@@ -392,6 +393,6 @@ int main( int argc, char* argv[] )
   test5();
   test6();
   test7();
-  /**/
+  //*/
   return 0;
 }

@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.21 2003/01/29 22:59:27 cade Exp $
+ *  $Id: vstring.h,v 1.22 2003/04/28 17:17:13 cade Exp $
  *
  */
 
@@ -297,6 +297,7 @@ public:
   friend char*  str_rword( VString& target, const char* delimiters, char* result );
   // check VArray::split() instead of word() funtions...
   
+  //FIXME: TODO: str_sprintf() should return VString!
   // this `sprintf'-like function works as follows:
   // 1. set `this.VString' length to `init_size'
   // 2. call `sprintf' with `format' and `...'
@@ -304,6 +305,7 @@ public:
   friend int sprintf( int init_size, VString& target, const char *format, ... );
   // this is equal to `printf( 1024, format, ... )', i.e. `init_size=1024'
   friend int sprintf( VString& target, const char *format, ... );
+
 
   friend VString& str_tr ( VString& target, const char *from, const char *to );
   friend VString& str_up ( VString& target );

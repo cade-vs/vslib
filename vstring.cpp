@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.22 2003/01/29 22:59:27 cade Exp $
+ *  $Id: vstring.cpp,v 1.23 2003/04/28 17:17:12 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -395,7 +395,7 @@
 
   int sprintf( int init_size, VString &target, const char *format, ... )
   {
-    char *tmp = new char[init_size+1];
+    char *tmp = new char[init_size];
     va_list vlist;
     va_start( vlist, format );
     int res = vsnprintf( tmp, init_size, format, vlist );
@@ -408,7 +408,7 @@
   int sprintf( VString &target, const char *format, ... )
   {
     #define VSPRINTF_BUF_SIZE 1024
-    char tmp[VSPRINTF_BUF_SIZE+1];
+    char tmp[VSPRINTF_BUF_SIZE];
     va_list vlist;
     va_start( vlist, format );
     int res = vsnprintf( tmp, VSPRINTF_BUF_SIZE, format, vlist );
