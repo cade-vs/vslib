@@ -4,7 +4,7 @@
  * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.25 2003/04/28 17:17:13 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.26 2003/05/25 14:31:12 cade Exp $
  *
  */
 
@@ -51,7 +51,7 @@
     return tim;
   };
 
-  int str_find_regexp( const char* target, const char* pattern, int startpos = 0 )
+  int str_find_regexp( const char* target, const char* pattern, int startpos )
   {
     VRegexp re;
     if ( ! re.comp( pattern ) ) return -1;
@@ -871,7 +871,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
 ****************************************************************************/
 
   // split `source' with `regexp_str' regexp
-  VArray str_split( const char* regexp_str, const char* source, int maxcount = -1 )
+  VArray str_split( const char* regexp_str, const char* source, int maxcount )
   {
     VArray arr;
     VRegexp re;
@@ -899,7 +899,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
   };
   
   // split `source' with exact string `delimiter_str'
-  VArray str_split_simple( const char* delimiter_str, const char* source, int maxcount = -1 )
+  VArray str_split_simple( const char* delimiter_str, const char* source, int maxcount )
   {
     VArray arr;
     const char* ps = source;
@@ -927,7 +927,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
 
   // join array data to single string with `glue' string
   // returns the result string or store to optional `dest'
-  VString str_join( VArray array, const char* glue = "" )
+  VString str_join( VArray array, const char* glue )
   {
     VString str;
     for( int z = 0; z < array.count()-1; z++ )
