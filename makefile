@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sat Jan  4 20:32:20 2003 #########################
+### Created by makemake.pl on Sun Jan  5 23:54:54 2003 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -55,7 +55,6 @@ SRC_1= \
      eval.cpp \
      fnmatch2.cpp \
      getopt2.cpp \
-     regexp3.cpp \
      scroll.cpp \
      vslib.cpp \
      vstring.cpp \
@@ -71,7 +70,6 @@ OBJ_1= \
      .OBJ.libvslib.a/eval.o \
      .OBJ.libvslib.a/fnmatch2.o \
      .OBJ.libvslib.a/getopt2.o \
-     .OBJ.libvslib.a/regexp3.o \
      .OBJ.libvslib.a/scroll.o \
      .OBJ.libvslib.a/vslib.o \
      .OBJ.libvslib.a/vstring.o \
@@ -112,17 +110,15 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c fnmatch2.cpp -o .OBJ.libvslib.a/fnmatch2.o
 .OBJ.libvslib.a/getopt2.o: getopt2.cpp  getopt2.cpp getopt2.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c getopt2.cpp -o .OBJ.libvslib.a/getopt2.o
-.OBJ.libvslib.a/regexp3.o: regexp3.cpp  regexp3.cpp regexp3.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c regexp3.cpp -o .OBJ.libvslib.a/regexp3.o
 .OBJ.libvslib.a/scroll.o: scroll.cpp  scroll.cpp scroll.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c scroll.cpp -o .OBJ.libvslib.a/scroll.o
 .OBJ.libvslib.a/vslib.o: vslib.cpp  vslib.cpp
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vslib.cpp -o .OBJ.libvslib.a/vslib.o
 .OBJ.libvslib.a/vstring.o: vstring.cpp  vstring.cpp vstring.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstring.cpp -o .OBJ.libvslib.a/vstring.o
-.OBJ.libvslib.a/vstrlib.o: vstrlib.cpp  vstrlib.cpp vstrlib.h regexp3.h vstring.h
+.OBJ.libvslib.a/vstrlib.o: vstrlib.cpp  vstrlib.cpp vstrlib.h vstring.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstrlib.cpp -o .OBJ.libvslib.a/vstrlib.o
-.OBJ.libvslib.a/vsuti.o: vsuti.cpp  vsuti.cpp vsuti.h target.h vstring.h regexp3.h
+.OBJ.libvslib.a/vsuti.o: vsuti.cpp  vsuti.cpp vsuti.h target.h vstring.h vstrlib.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vsuti.cpp -o .OBJ.libvslib.a/vsuti.o
 .OBJ.libvslib.a/vscrc.o: vscrc.cpp  vscrc.cpp vsuti.h target.h vstring.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vscrc.cpp -o .OBJ.libvslib.a/vscrc.o
@@ -217,9 +213,7 @@ OBJ_3= \
 .OBJ.test: 
 	$(MKDIR) .OBJ.test
 
-test-extra-deps: libvslib.a
-
-test: .OBJ.test $(OBJ_3) test-extra-deps
+test: .OBJ.test $(OBJ_3)
 	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
 
 clean-test: 
@@ -235,7 +229,7 @@ link-test: .OBJ.test $(OBJ_3)
 
 ### TARGET OBJECTS FOR TARGET 3: test ##########################################
 
-.OBJ.test/test.o: test.cpp  test.cpp vstring.h vstrlib.h regexp3.h
+.OBJ.test/test.o: test.cpp  test.cpp vstring.h vstrlib.h
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp -o .OBJ.test/test.o
 
 

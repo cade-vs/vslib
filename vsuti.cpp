@@ -4,13 +4,13 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.5 2002/04/26 06:40:08 cade Exp $
+ * $Id: vsuti.cpp,v 1.6 2003/01/06 00:37:49 cade Exp $
  *
  */
 
 #include "vsuti.h"
-#include "regexp3.h"
 #include "vstring.h"
+#include "vstrlib.h"
 
 /*###########################################################################*/
 
@@ -433,8 +433,9 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos )
   char newpat[MAX_PATTERN+1];
   strcpy( newpat, re_string );
   if ( nocase ) str_up( newpat );
-  regexp *re = regcomp( newpat );
-  if (re == NULL) return -2;
+  
+  VRegexp re;
+  if ( ! re.comp( newpat ) ) return -2;
   char *line = (char*)malloc( file_grep_max_line+1 );
 
   long filesize = file_size( f );
@@ -448,7 +449,7 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos )
   while( fgets( line, file_grep_max_line, f ) )
     {
     if ( nocase ) str_up( line );
-    if ( regexec( re, line ) )
+    if ( re.m( line ) )
       {
       found = 1;
       break;
@@ -460,10 +461,9 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos )
 
   fseek( f, opos, SEEK_SET );
   if (found)
-    cpos += ( re->startp[0] - line );
+    cpos += ( re.sub_sp( 0 ) );
 
   free(line);
-  free(re);
   file_grep_max_line = MAX_GREP_LINE;
   return found ? cpos : -1;
 }

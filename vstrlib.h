@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.11 2003/01/05 12:45:12 cade Exp $
+ *  $Id: vstrlib.h,v 1.12 2003/01/06 00:37:49 cade Exp $
  *
  */
 
@@ -47,12 +47,17 @@ class VRegexp; /* forward */
 
 /****************************************************************************
 **
-** VString Conversions
+** VString aditional functions
 **
 ****************************************************************************/
 
 char*  time2str( const time_t tim );
 time_t str2time( const char* timstr );
+
+int str_find_regexp( const char* target, const char* pattern, int startpos = 0 );
+// warning: str_rfind_regexp() is slow! it can execute pattern matching to `n'
+// times where n is the target string length...
+int str_rfind_regexp( const char* target, const char* pattern );
 
 /***************************************************************************
 **
@@ -113,9 +118,9 @@ class VArray
   void shuffle(); // randomize element order with Fisher-Yates shuffle
 
   // split `str' with `res' regexp
-  void split( const char* res, const char* str, int maxcount = -1 );
+  void split( const char* regexp_str, const char* source, int maxcount = -1 );
   // split `str' with exact string `spl'
-  void split_str( const char* spl, const char* str, int maxcount = -1 );
+  void split_str( const char* delimiter_str, const char* source, int maxcount = -1 );
   // join array data to single string with `glue' string
   // returns the result string or store to optional `dest'
   const char* join( const char* glue = "", String* dest = NULL );
@@ -268,6 +273,14 @@ class VTrie
 **               x -- extended (ifnores whitespace and comments)
 **
 ** for more docs see perlre(1) and pcre library docs
+**
+**
+** WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+** extracting of the captured substring is only possible while subject input
+** line which is used as matching target is intact! which means that if you
+** change this line between match and substring extraction this will lead to
+** segmentation fault!
+**
 */
 
 /* number of subpatterns which can be catched by VRegexp::m() */
@@ -293,7 +306,7 @@ class VRegexp
   VRegexp( const char* pattern, const char *opt = NULL ); // compiles new regexp
   ~VRegexp(); 
 
-  int comp( const char* pattern, const char *opt = NULL ); // compile re, return 1 for success
+  int comp( const char* pattern, const char *opt = NULL ); // compile re, return > 0 for success
   int study(); // optimizing regexp for (big-size) multiple matches
   int ok(); // return 1 if regexp is compiled ok, 0 if not
   
@@ -301,6 +314,9 @@ class VRegexp
   int m( const char* line, const char* pattern, const char *opt = NULL ); // same as exec, but compiles first
 
   const char* sub( int n ); // return n-th substring match
+  int sub_sp( int n ); // return n-th substring start position
+  int sub_ep( int n ); // return n-th substring end position
+  
   String& operator []( int n ) // same as sub()
     { substr = ""; sub( n ); return substr; }
     

@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.cpp,v 1.4 2002/04/14 10:14:44 cade Exp $
+ * $Id: conmenu.cpp,v 1.5 2003/01/06 00:37:49 cade Exp $
  *
  */
 
@@ -214,8 +214,7 @@ int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConM
  
       str_pad( str,-w , (strncmp("--", str, 2) == 0)?'-':' ');
       if (str_len(str) > w) 
-        // str_sleft(str,w);
-        str_dot_reduce( NULL, str, w );
+        str = str_dot_reduce( str, w );
       if (menu_info->bo)
         str = "| " + str + " |";
       else
@@ -302,7 +301,7 @@ int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu
         str = va->get( scroll.page + z );
       else
         str = "~";
-      str_dot_reduce( NULL, str, con_max_x()-1 );
+      str = str_dot_reduce( str, con_max_x()-1 );
       con_xy( 1, z + 2 );
       int c = ( scroll.page + z == scroll.pos ) ? menu_info->ch : menu_info->cn;
       con_puts( str, c );

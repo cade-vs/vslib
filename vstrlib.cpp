@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.16 2003/01/05 12:45:12 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.17 2003/01/06 00:37:49 cade Exp $
  *
  */
 
@@ -15,7 +15,7 @@
 
 /****************************************************************************
 **
-** VString Conversions
+** VString aditional functions
 **
 ****************************************************************************/
 
@@ -46,6 +46,38 @@
     m.tm_isdst = -1;
     time_t tim = mktime( &m );
     return tim;
+  };
+
+  int str_find_regexp( const char* target, const char* pattern, int startpos = 0 )
+  {
+    VRegexp re;
+    if ( ! re.comp( pattern ) ) return -1;
+    if ( startpos < 0 ) return -1;
+    int z = 0;
+    while( startpos-- )
+      {
+      if ( target[z] == 0 ) return -1;
+      z++;
+      }
+    if ( re.m( target + z ) )
+      return z + re.sub_sp( 0 );
+    else
+      return -1;
+  };
+  
+  int str_rfind_regexp( const char* target, const char* pattern )
+  {
+    VRegexp re;
+    if ( ! re.comp( pattern ) ) return -1;
+    int z = str_len( target );
+    while(4)
+      {
+      z--;
+      if ( re.m( target + z ) )
+        return z + re.sub_sp( 0 );
+      if ( z == 0 ) break;
+      }
+    return -1;  
   };
 
 /***************************************************************************
@@ -331,16 +363,17 @@
       }
   };
 
-  void VArray::split( const char* res, const char* str, int maxcount )
+  void VArray::split( const char* regexp_str, const char* source, int maxcount )
   {
-    regexp *re = regcomp( res );
-    ASSERT( re );
-
+    VRegexp re;
+    int z = re.comp( regexp_str );
+    ASSERT( z );
     undef();
+    if ( ! z ) return;
 
-    const char* ps = str;
+    const char* ps = source;
 
-    while( ps && ps[0] && regexec( re, ps ) )
+    while( ps && ps[0] && re.m( ps ) )
       {
       if ( maxcount != -1 )
         {
@@ -348,27 +381,25 @@
         if ( maxcount == 0 ) break;
         }
       String s;
-      int l = re->startp[0] - ps;
-      s.setn( ps, l );
+      s.setn( ps, re.sub_sp( 0 ) );
       push( s );
-      ps = re->endp[0];
+      ps += re.sub_ep( 0 );
       }
-    push( ps );
-
-    free( re );
+    if ( ps && ps[0] ) 
+      push( ps );
   };
 
-  void VArray::split_str( const char* spl, const char* str, int maxcount )
+  void VArray::split_str(  const char* delimiter_str, const char* source, int maxcount )
   {
-    const char* ps = str;
+    const char* ps = source;
     const char* fs;
     
     undef();
     
-    int rl = strlen( spl );
+    int rl = strlen( delimiter_str );
     
     String s;
-    while( (fs = strstr( ps, spl )) )
+    while( (fs = strstr( ps, delimiter_str )) )
       {
       if ( maxcount != -1 )
         {
@@ -878,7 +909,9 @@
     errstr = "";
     lp = line;
     rc = pcre_exec( re, pe, lp, strlen( lp ), 0, 0, sp, VREGEXP_MAX_SUBS*3 );
+    ASSERT( rc >= -1 && rc != 0 );
     if ( rc > VREGEXP_MAX_SUBS ) rc = VREGEXP_MAX_SUBS;
+    if ( rc < 1 ) rc = 0; // fail-safe, should throw exception above in debug mode
     return rc;
   };
   
@@ -900,6 +933,18 @@
     int l = e - s;
     substr.setn( lp + s, l );
     return substr.data();
+  };
+
+  int VRegexp::sub_sp( int n )
+  {
+    if ( n < 0 || n >= rc ) return -1;
+    return sp[n*2];
+  };
+  
+  int VRegexp::sub_ep( int n )
+  {
+    if ( n < 0 || n >= rc ) return -1;
+    return sp[n*2+1];
   };
 
 /***************************************************************************

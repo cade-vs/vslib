@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.13 2003/01/05 12:45:12 cade Exp $
+ *  $Id: vstring.cpp,v 1.14 2003/01/06 00:37:49 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -119,6 +119,11 @@
 
   void VString::setn( const char* ps, int len )
   {
+    if ( !ps || len < 1 ) 
+      {
+      resize( 0 );
+      return;
+      }
     int z = strlen( ps );
     if ( len < z ) z = len;
     sl = z;
@@ -129,6 +134,7 @@
 
   void VString::catn( const char* ps, int len )
   {
+    if ( !ps || len < 1 ) return;
     int z = strlen( ps );
     if ( len < z ) z = len;
     resize( sl + z );
@@ -193,10 +199,16 @@
 
   VString &str_copy( VString &target, const char* source, int pos, int len ) // returns `len' chars from `pos'
   {
+    if ( len == -1 ) len = str_len( source ) - pos;
+    if ( len < 1 )
+      {
+      target = "";
+      return target;
+      }
     target.resize( len );
     str_copy( target.s, source, pos, len );
     target.fix();
-    ASSERT(target.check());
+    ASSERT( target.check() );
     return target;
   };
 
@@ -331,7 +343,7 @@
     char *tmp = new char[init_size+1];
     va_list vlist;
     va_start( vlist, format );
-    int res = vsprintf( tmp, format, vlist );
+    int res = vsnprintf( tmp, init_size, format, vlist );
     va_end( vlist );
     target = tmp;
     delete [] tmp;
@@ -340,10 +352,11 @@
 
   int sprintf( VString &target, const char *format, ... )
   {
-    char tmp[1024];
+    #define VSPRINTF_BUF_SIZE 1024
+    char tmp[VSPRINTF_BUF_SIZE];
     va_list vlist;
     va_start( vlist, format );
-    int res = vsprintf( tmp, format, vlist );
+    int res = vsnprintf( tmp, VSPRINTF_BUF_SIZE, format, vlist );
     va_end( vlist );
     target = tmp;
     return res;
@@ -413,6 +426,7 @@
 
   int str_find( const char* target, const char  s, int startpos ) // returns first zero-based position of char, or -1 if not found
   {
+    if (startpos < 0) return -1;
     int sl = strlen( target );
     if (startpos >= sl) return -1;
     char* pc = strchr( target + startpos, s );
@@ -431,6 +445,7 @@
 
   int str_find( const char* target, const char* s, int startpos ) // returns first zero-based position of VString, or -1 if not found
   {
+    if (startpos < 0) return -1;
     int sl = strlen( target );
     if (startpos >= sl) return -1;
     char* pc = strstr( target + startpos, s );
@@ -511,15 +526,15 @@
   char* str_copy( char* target, const char* source, int pos, int len ) // returns `len' chars from `pos'
   {
     target[0] = 0;
-    int sl = strlen( source );
-    int s = pos;
-    int l = len;
-    if ( s < 0 || s >= sl ) return target;
-    if ( s + l >= sl ) l = sl - s;
+    int sl = str_len( source );
+    
+    if ( pos < 0 || pos >= sl ) return target;
+    if ( len == -1 ) len = sl - pos;
+    if ( len < 1 ) return target;
+    if ( pos + len >= sl ) len = sl - pos;
 
-    strncpy( target, source + s, l );
-    target[ l ] = 0;
-
+    strncpy( target, source + pos, len );
+    target[ len ] = 0;
     return target;
   }
 

@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.13 2003/01/05 12:45:12 cade Exp $
+ *  $Id: vstring.h,v 1.14 2003/01/06 00:37:49 cade Exp $
  *
  */
 
@@ -181,7 +181,7 @@
     friend VString& str_ins_ch ( VString& target, int pos, char ch ); // inserts `ch' in position `pos'
     friend VString& str_replace( VString& target, const char* out, const char* in ); // replace `out' w. `in'
 
-    friend VString& str_copy  ( VString& target, const char* source, int pos, int len ); // returns `len' chars from `pos'
+    friend VString& str_copy  ( VString& target, const char* source, int pos, int len = -1 ); // returns `len' chars from `pos'
     friend VString& str_left  ( VString& target, const char* source, int len ); // returns `len' chars from the left
     friend VString& str_right ( VString& target, const char* source, int len ); // returns `len' chars from the right
     friend VString& str_sleft ( VString& target, int len ); // SelfLeft -- just as 'Left' but works on `this'
@@ -247,7 +247,7 @@
   char* str_ins_ch ( char* target, int pos, char ch ); // inserts `ch' in position `pos'
   char* str_replace( char* target, const char* out, const char* in ); // replace `out' w. `in'
 
-  char* str_copy  ( char* target, const char* source, int pos, int len ); // returns `len' chars from `pos'
+  char* str_copy  ( char* target, const char* source, int pos, int len = -1 ); // returns `len' chars from `pos'
   char* str_left  ( char* target, const char* source, int len ); // returns `len' chars from the left
   char* str_right ( char* target, const char* source, int len ); // returns `len' chars from the right
   char* str_sleft ( char* target, int len ); // just as 'left' but works on `target'

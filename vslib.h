@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.h,v 1.5 2002/08/17 11:48:37 cade Exp $
+ * $Id: vslib.h,v 1.6 2003/01/06 00:37:49 cade Exp $
  *
  */
 
@@ -15,7 +15,6 @@
 #include <vstrlib.h>
 #include <fnmatch2.h>
 #include <getopt2.h>
-#include <regexp3.h>
 #include <vsuti.h>
 #include <dlog.h>
 #include <unicon.h>
