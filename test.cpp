@@ -4,12 +4,12 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: test.cpp,v 1.14 2003/02/08 02:48:50 cade Exp $
+ * $Id: test.cpp,v 1.15 2003/03/11 21:25:45 cade Exp $
  *
  */
 
 #include <stdio.h>
-#include "vslib.h"
+#include "vstrlib.h"
 
 void test1()
 {
