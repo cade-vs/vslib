@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: conmenu.cpp,v 1.3 2001/11/20 19:09:55 cade Exp $
  *
  */
 
@@ -43,6 +43,7 @@ int con_toggle_box( int x, int y, const char *title, ToggleEntry* toggles, ConMe
   if (h > count) h = count;
   if (h == 0) h = 1;
 
+  // FIXME: those should be fixed!!!
   if (x + w > con_max_x()) w = con_max_x() - x - 1;
   if (y + h > con_max_y()-4) h = con_max_y() - y - 5;
 
@@ -161,8 +162,9 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
   if (h > sc->count()) h = sc->count();
   if (h == 0) h = 1;
 
-  if (x + w > con_max_x()) w = con_max_x() - x - 5;
-  if (y + h > con_max_y()-5) h = con_max_y() - y - 5;
+  // FIXME: those should be fixed!!!
+  if (x + w > con_max_x()) w = con_max_x() - x - 4;
+  if (y + h > con_max_y()-4) h = con_max_y() - y - 4;
 
   String str;
   String hots = "";

@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: vslib.cpp,v 1.3 2001/11/20 19:09:55 cade Exp $
  *
  */
 
@@ -65,7 +65,7 @@ int main( int argc, char* argv[] )
   VRegexp re( "a([0-9]+)" );
 
   if( re.m( "tralala85." ) )
-    printf( "sub 1 = %s\n", re[1] ); // re[1] e purviq izraz ot skobite
+    printf( "sub 1 = %s\n", re[1].data() ); // re[1] e purviq izraz ot skobite
 
   printf( "--------------------\n" );
   v1.zap();

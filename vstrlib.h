@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: vstrlib.h,v 1.3 2001/11/20 19:09:55 cade Exp $
  *
  */
 
@@ -237,8 +237,7 @@ class VRegexp
     { comp( rs ); return m( line ); };
 
   const char* sub( int n ); // return n-th substring match
-  const char* operator []( int n ) // same as sub(n)
-    { return sub( n ); }
+  String& operator []( int n ) { substr = ""; sub( n ); return substr; }
 };
 
 #endif /* _VSTRLIB_H_ */
