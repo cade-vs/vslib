@@ -135,11 +135,90 @@ void test3()
   printf( "************************ test 3 ends here\n" );
 }
 
+void test4()
+{
+  // this is regression test, please ignore it...
+
+  int i;
+  int ii;
+  
+  VArray va;
+  ii = 2000;
+  i = ii;
+  while( i-- )
+    {
+    va.zap();
+    va.split( ",", "this is, just a simple. but fixed, nonsense test, voila :)" );
+    printf( "%d%% va count = %d\n", (100*i)/ii, va.count() );
+    }
+  
+  String set;
+  String cat;
+  String setn;
+  String catn;
+  String sete;
+  String setp;
+
+  i = 2000;
+  
+  while( i-- )
+    {
+    set.set( "this is, just a simple. but fixed, nonsense test, voila :)" );
+    cat.cat( "this is, just a simple. but fixed, nonsense test, voila :)" );
+    setn.setn( "this is, just a simple. but fixed, nonsense test, voila :)", 20 );
+    catn.catn( "this is, just a simple. but fixed, nonsense test, voila :)", 20 );
+    
+    sete = "this is, just a simple. but fixed, nonsense test, voila :)";
+    setp += "this is, just a simple. but fixed, nonsense test, voila :)";
+    }
+
+  printf( "set  = %d\n", str_len( set  ) );
+  printf( "cat  = %d\n", str_len( cat  ) );
+  printf( "setn = %d\n", str_len( setn ) );
+  printf( "catn = %d\n", str_len( catn ) );
+  printf( "sete = %d\n", str_len( sete ) );
+  printf( "setp = %d\n", str_len( setp ) );
+
+  printf( "--------------------\n" );
+  
+  i = 2000;
+  while( i-- )
+    {
+    set = "this is, just a simple. but fixed, nonsense test, voila :)";
+    setn = set;
+    str_del( set, 20, 10 );
+    str_ins( set, 30, "***opa***" );
+    str_replace( setn, "i", "[I]" );
+    }
+  printf( "set  = %s\n", set.data() );
+  printf( "setn = %s\n", setn.data() );
+}
+
+void test5()
+{
+  VTrie tr; // hash-like
+  VArray va;
+  
+  // inserting keys and values
+  tr[ "key1" ] = "data1";
+  tr[ "key2" ] = "data2";
+  tr[ "key3" ] = "data3";
+  
+  tr.print();
+  tr.reverse();
+  tr.print();
+  tr.reverse();
+  tr.print();
+  
+  printf( "************************ test 5 ends here\n" );
+}
+
 int main( int argc, char* argv[] )
 {
   test1();
   test2();
   test3();
-  
+  test4();
+  test5();
   return 0;
 }

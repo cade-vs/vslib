@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sun Dec 15 20:04:06 2002 #########################
+### Created by makemake.pl on Sun Dec 15 22:20:19 2002 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -111,7 +111,7 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c fnmatch2.cpp -o .OBJ.libvslib.a/fnmatch2.o
 .OBJ.libvslib.a/getopt2.o: getopt2.cpp  getopt2.cpp getopt2.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c getopt2.cpp -o .OBJ.libvslib.a/getopt2.o
-.OBJ.libvslib.a/regexp3.o: regexp3.cpp  regexp3.cpp
+.OBJ.libvslib.a/regexp3.o: regexp3.cpp  regexp3.cpp regexp3.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c regexp3.cpp -o .OBJ.libvslib.a/regexp3.o
 .OBJ.libvslib.a/scroll.o: scroll.cpp  scroll.cpp scroll.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c scroll.cpp -o .OBJ.libvslib.a/scroll.o
@@ -204,12 +204,12 @@ TARGET_3   = test
 ### SOURCES FOR TARGET 3: test #################################################
 
 SRC_3= \
-     vslib.cpp \
+     test.cpp \
 
 #### OBJECTS FOR TARGET 3: test ################################################
 
 OBJ_3= \
-     .OBJ.test/vslib.o \
+     .OBJ.test/test.o \
 
 ### TARGET DEFINITION FOR TARGET 3: test #######################################
 
@@ -232,8 +232,8 @@ link-test: .OBJ.test $(OBJ_3)
 
 ### TARGET OBJECTS FOR TARGET 3: test ##########################################
 
-.OBJ.test/vslib.o: vslib.cpp  vslib.cpp
-	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c vslib.cpp -o .OBJ.test/vslib.o
+.OBJ.test/test.o: test.cpp  test.cpp vstring.h vstrlib.h regexp3.h
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp -o .OBJ.test/test.o
 
 
 ### MAKEMAKE ENDS HERE #########################################################

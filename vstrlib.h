@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.h,v 1.7 2002/12/15 20:18:03 cade Exp $
+ * $Id: vstrlib.h,v 1.8 2002/12/16 01:09:58 cade Exp $
  *
  */
 
@@ -182,6 +182,8 @@ class VTrie
   void zap(); // delete all key+data pairs
   int keys( VArray* arr ); // return keys count
   int values( VArray* arr ); // return values count
+
+  void reverse(); // reverse keys <-> values
 
   int merge( VTrie *tr ); // return new keys count
   int merge( VArray *arr ); // return new keys count

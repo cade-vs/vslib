@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.12 2002/12/15 20:18:03 cade Exp $
+ * $Id: vstrlib.cpp,v 1.13 2002/12/16 01:09:58 cade Exp $
  *
  */
 #ifdef WIN32
@@ -648,6 +648,19 @@
     value_node( root, arr );
     return arr->count();
   };
+
+  void VTrie::reverse()
+  {
+    VArray va;
+    va = *this;
+    zap();
+    while( va.count() )
+      {
+      set( va[1], va[0] );
+      va.shift();
+      va.shift();
+      }
+  }
 
   int VTrie::merge( VTrie *tr )
   {
