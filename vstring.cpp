@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.17 2003/01/19 17:13:38 cade Exp $
+ *  $Id: vstring.cpp,v 1.18 2003/01/19 17:32:12 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -44,6 +44,7 @@
   
   void VStringBox::resize_buf( int new_size )
   {
+    /* FIXME: this breaks a lot of things: ==, strcmp, const char*, ...
     if ( new_size == 0 )
       {
       sl = 0;
@@ -52,6 +53,7 @@
       size = 0;
       return;
       }
+    */  
     new_size++; /* for the trailing 0 */
     if ( !compact )
       {

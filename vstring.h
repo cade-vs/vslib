@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.17 2003/01/19 17:13:38 cade Exp $
+ *  $Id: vstring.h,v 1.18 2003/01/19 17:32:12 cade Exp $
  *
  */
 
@@ -97,8 +97,8 @@ public:
 
   int   compact;
 
-  VStringBox() { s = NULL; sl = size = compact = 0; };
-  ~VStringBox() { undef(); };
+  VStringBox() { s = NULL; sl = size = compact = 0; resize_buf( 0 ); };
+  ~VStringBox() { undef(); if ( s ) free( s ); };
   
   VStringBox* clone();
   
@@ -234,21 +234,21 @@ public:
 
   void fixlen() 
        { box->sl = strlen(box->s); 
-         ASSERT( box->sl ? box->sl < box->size : box->sl == box->size ); };
+         ASSERT( box->sl < box->size ); }
   void fix() 
        { box->sl = strlen(box->s); 
          box->resize_buf(box->sl); 
-         ASSERT( box->sl ? box->sl < box->size : box->sl == box->size ); };
+         ASSERT( box->sl < box->size ); }
 
   void   i( const int n );
   void   l( const long n );
   void   f( const double d );
   void   fi( const double d ); // sets double as int (w/o frac)
 
-  int    i() { return atoi( box->s ); };
-  long   l() { return atol( box->s ); };
-  double f() { return atof( box->s ); };
-  double fi() { return atof( box->s ); };
+  int    i() { return atoi( box->s ); }
+  long   l() { return atol( box->s ); }
+  double f() { return atof( box->s ); }
+  double fi() { return atof( box->s ); }
 
   void   set( const char* ps );
   void   cat( const char* ps );
@@ -256,7 +256,7 @@ public:
   void   catn( const char* ps, int len );
 
   /* for debugging only */
-  int check() { int len = strlen(box->s); return ((len == box->sl)&&(len<box->size)); };
+  int check() { int len = strlen(box->s); return ((len == box->sl)&&(len<box->size)); }
 
   /****************************************************************************
   ** VString Friend Functions (for class VString)
