@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.h,v 1.7 2003/02/08 17:31:04 cade Exp $
+ * $Id: vsuti.h,v 1.8 2003/02/16 23:33:51 cade Exp $
  *
  */
 
@@ -41,16 +41,6 @@
 /* max filename length */
 #ifndef MAX_PATH
 #define MAX_PATH	512
-#endif
-
-/* max pattern length for file_find_*() and ... */
-#ifndef MAX_PATTERN
-#define MAX_PATTERN		2048
-#endif
-
-/* max file_grep() text line input length... :| */
-#ifndef MAX_GREP_LINE
-#define MAX_GREP_LINE		4096
 #endif
 
 /*###########################################################################*/
@@ -97,77 +87,6 @@ int file_is_link( const char* fname );
 int file_is_dir( const char* fname );
 int file_is_dir( struct stat st );
 int file_exists( const char* fname );
-
-/*
- Converts hex-string to binary pattern (data)
- example: `ff 01 ab 11 2c' -> ...
- returns result pattern length
-*/
-int hex_string_to_pattern( const char *str, char* pattern );
-
-/*****************************************************************************
-**
-** Next mem* search functions are used to find pattern into memory block
-** p is pattern, ps is pattern size, d is data searched and ds is its size
-** return found pttern position or -1 for not found
-**
-*****************************************************************************/
-
-int mem_kmp_search( const char *p, int ps, const char *d, int ds ); 
-int mem_quick_search( const char *p, int ps, const char *d, int ds ); 
-int mem_sum_search( const char *p, int ps, const char *d, int ds );
-
-/* no-case versions */
-
-int mem_quick_search_nc( const char *p, int ps, const char *d, int ds ); 
-
-/*****************************************************************************
-**
-** Function which return position of pattern into a file
-** this uses mem* functions above or defaults to mem_quick_search
-**
-*****************************************************************************/
-
-long file_pattern_search( const char *p, int ps, FILE* f, const char* opt = "",
-                          int (*mem_search)( const char *p, int ps, 
-                                             const char *d, int ds ) = NULL );
-
-long file_pattern_search( const char *p, int ps, const char* fn, const char* opt = "",
-                          int (*mem_search)( const char *p, int ps, 
-                                             const char *d, int ds ) = NULL );
-
-/*****************************************************************************
-**
-** This function reads lines from a text file and runs regexp on it.
-** file_grep_max_line defines the max line length read (1024)
-** file_grep_lines_read reports how many lines are read in during the
-**                      last file_grep() call
-** re_string is regexp string, not arbitrary (binary) pattern
-** spos defines what file start offset should be accepted					 
-**
-*****************************************************************************/
-
-extern int file_grep_max_line;
-extern int file_grep_lines_read;
-long file_grep( const char *re_string, const char* file_name, int nocase, int spos = -1 );
-long file_grep( const char *re_string, FILE* f, int nocase, int spos = -1 );
-
-/*****************************************************************************
-**
-** Search interface functions
-**
-** options are:
-**
-** i    -- ignore case
-** r    -- regular expression (grep)
-** h    -- hex pattern search
-**
-*****************************************************************************/
-
-long file_string_search( const char *p, const char* fn, const char* opt );
-long file_string_search( const char *p, FILE *f, const char* opt );
-
-int mem_string_search( const char *p, const char* d, const char* opt );
 
 /*****************************************************************************
 **

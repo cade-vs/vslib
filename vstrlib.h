@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.18 2003/01/21 19:56:35 cade Exp $
+ *  $Id: vstrlib.h,v 1.19 2003/02/16 23:33:51 cade Exp $
  *
  */
 
@@ -37,6 +37,13 @@
 
 #define VCHARSET_BLOCK_SIZE 32
 
+/* max pattern length for file_find_*() and ... */
+#define MAX_PATTERN		2048
+
+/* max file_grep() text line input length... :| */
+#define MAX_GREP_LINE		4096
+
+
 /****************************************************************************
 **
 ** VString aditional functions
@@ -51,6 +58,82 @@ int str_find_regexp( const char* target, const char* pattern, int startpos = 0 )
 // times where n is the target string length...
 int str_rfind_regexp( const char* target, const char* pattern );
 
+/*****************************************************************************
+**
+** Hex string to pattern conversion
+**
+** Converts hex-string to binary pattern (data)
+** example: `56 6C 61 64 69' -> ...
+** returns pattern length
+**
+*****************************************************************************/
+
+int hex_string_to_pattern( const char *str, char* pattern );
+
+/*****************************************************************************
+**
+** Next mem* search functions are used to find pattern into memory block
+** p is pattern, ps is pattern size, d is data searched and ds is its size
+** return found pttern position or -1 for not found
+**
+*****************************************************************************/
+
+int mem_kmp_search( const char *p, int ps, const char *d, int ds ); 
+int mem_quick_search( const char *p, int ps, const char *d, int ds ); 
+int mem_sum_search( const char *p, int ps, const char *d, int ds );
+
+/* no-case versions */
+
+int mem_quick_search_nc( const char *p, int ps, const char *d, int ds ); 
+
+/*****************************************************************************
+**
+** Function which return position of pattern into a file
+** this uses mem* functions above or defaults to mem_quick_search
+**
+*****************************************************************************/
+
+long file_pattern_search( const char *p, int ps, FILE* f, const char* opt = "",
+                          int (*mem_search)( const char *p, int ps, 
+                                             const char *d, int ds ) = NULL );
+
+long file_pattern_search( const char *p, int ps, const char* fn, const char* opt = "",
+                          int (*mem_search)( const char *p, int ps, 
+                                             const char *d, int ds ) = NULL );
+
+/*****************************************************************************
+**
+** This function reads lines from a text file and runs regexp on it.
+** file_grep_max_line defines the max line length read (1024)
+** file_grep_lines_read reports how many lines are read in during the
+**                      last file_grep() call
+** re_string is regexp string, not arbitrary (binary) pattern
+** spos defines what file start offset should be accepted					 
+**
+*****************************************************************************/
+
+extern int file_grep_max_line;
+extern int file_grep_lines_read;
+long file_grep( const char *re_string, const char* file_name, int nocase, int spos = -1 );
+long file_grep( const char *re_string, FILE* f, int nocase, int spos = -1 );
+
+/*****************************************************************************
+**
+** Search interface functions
+**
+** options are:
+**
+** i    -- ignore case
+** r    -- regular expression (grep)
+** h    -- hex pattern search
+**
+*****************************************************************************/
+
+long file_string_search( const char *p, const char* fn, const char* opt );
+long file_string_search( const char *p, FILE *f, const char* opt );
+
+int mem_string_search( const char *p, const char* d, const char* opt );
+
 /***************************************************************************
 **
 ** VREGEXP
@@ -62,6 +145,9 @@ int str_rfind_regexp( const char* target, const char* pattern );
 **               m -- multiline matches
 **               s -- single line (`.' matches and NEWLINE's)
 **               x -- extended (ifnores whitespace and comments)
+**
+**               f -- plain find (substring) using quick search
+**               h -- hex search, input pattern is converted from hex string
 **
 ** for more docs see perlre(1) and pcre library docs
 **
@@ -79,13 +165,26 @@ int str_rfind_regexp( const char* target, const char* pattern );
 
 class VRegexp
 {
-
+  /* search modes */
+  enum SearchMode { MODE_REGEXP = 0, MODE_FIND, MODE_HEX };
+  
+  /* common data */
+  SearchMode opt_mode;
+  int opt_nocase; // 1 if caseless search needed
+  
+  /* regexp data */
   pcre*       re;
   pcre_extra *pe;
   int         sp[VREGEXP_MAX_SUBS*3]; // sub pointers
   int         rc;
   const char *lp; // last line matched ptr
+
+  /* no-regexp/hex search pattern */
+  char*       pt; // pattern
+  int         pl; // pattern length
+  int         pos; // last match found pos
   
+  /* common data */
   VString substr;
   VString errstr;
 
