@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.cpp,v 1.5 2003/01/06 00:37:49 cade Exp $
+ * $Id: conmenu.cpp,v 1.6 2003/01/19 17:13:38 cade Exp $
  *
  */
 
@@ -47,9 +47,9 @@ int con_toggle_box( int x, int y, const char *title, ToggleEntry* toggles, ConMe
   if (x + w > con_max_x()) w = con_max_x() - x - 1;
   if (y + h > con_max_y()-4) h = con_max_y() - y - 5;
 
-  String str;
-  String str1;
-  String hots = "";
+  VString str;
+  VString str1;
+  VString hots = "";
   for(z = 0; z < count; z++)
     if (strncmp("--", toggles[z].name, 2))
       str_add_ch( hots, toggles[z].key );
@@ -166,8 +166,8 @@ int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConM
   if (x + w > con_max_x()) w = con_max_x() - x - 4;
   if (y + h > con_max_y()-4) h = con_max_y() - y - 4;
 
-  String str;
-  String hots = "";
+  VString str;
+  VString hots = "";
   if ( hotkeys > -1 )
     {
     for(z = 0; z < va->count(); z++)
@@ -293,7 +293,7 @@ int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu
   con_ce( menu_info->ti );
   while(4)
     {
-    String str;
+    VString str;
     int z;
     for( z = 0; z < scroll.pagesize; z++ )
       {

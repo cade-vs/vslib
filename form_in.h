@@ -4,7 +4,7 @@
  * 
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: form_in.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: form_in.h,v 1.3 2003/01/19 17:13:38 cade Exp $
  *
  */
 
@@ -27,9 +27,9 @@ extern int EditStrBF; // bakground/foreground
 extern int EditStrFH; // first hit color
 
 // allows only FI_USERS chars
-int FormInput( int x, int y, const char *prompt, const char *mask, String *strres, void (*handlekey)( int key, String &s, int &pos ) = NULL );
-int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, String *strres, void (*handlekey)( int key, String &s, int &pos ) = NULL );
-int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, char *strres, void (*handlekey)( int key, String &s, int &pos ) = NULL );
+int FormInput( int x, int y, const char *prompt, const char *mask, VString *strres, void (*handlekey)( int key, VString &s, int &pos ) = NULL );
+int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VString *strres, void (*handlekey)( int key, VString &s, int &pos ) = NULL );
+int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, char *strres, void (*handlekey)( int key, VString &s, int &pos ) = NULL );
 
 #endif //_FORM_IN_H_
 

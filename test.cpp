@@ -4,7 +4,7 @@
 
 void test1()
 {
-  String str = "Hello";
+  VString str = "Hello";
   str += " World"; // str is `Hello World' now
   str_reverse( str ); // str is `dlroW olleH' now
   str_low( str ); // lower case
@@ -36,7 +36,7 @@ void test2()
   va[1] = "my"; // replaces `your'
   va[3] = "!";  // set outside the size, array is extended
   
-  String str = va.pop(); // pops last element, str is now `!'
+  VString str = va.pop(); // pops last element, str is now `!'
   
   str = str_join( va, "-" ); // joins to given string
   
@@ -171,12 +171,12 @@ void test4()
     printf( "%d%% va count = %d\n", (100*i)/ii, va.count() );
     }
   
-  String set;
-  String cat;
-  String setn;
-  String catn;
-  String sete;
-  String setp;
+  VString set;
+  VString cat;
+  VString setn;
+  VString catn;
+  VString sete;
+  VString setp;
 
   i = 2000;
   

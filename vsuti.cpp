@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.6 2003/01/06 00:37:49 cade Exp $
+ * $Id: vsuti.cpp,v 1.7 2003/01/19 17:13:38 cade Exp $
  *
  */
 
@@ -505,7 +505,7 @@ char* tilde_expand( char* path ) // expands ~/path and ~name/path
   return path;
 };
 
-String& tilde_expand( String &str )
+VString& tilde_expand( VString &str )
 {
 #ifdef _TARGET_UNIX_
   char t[MAX_PATH];
@@ -664,7 +664,7 @@ int __ftwalk_process( const char *origin,
   
   if ( level != -1 && level == 0) return 0; /* required level reqched */
   
-  String this_path = path;
+  VString this_path = path;
   int this_path_len = str_len( this_path );
   
   dir = opendir( this_path );
@@ -732,7 +732,7 @@ int ftwalk( const char *origin,
   
   if ( !origin || !func || !origin[0] ) return 255;
 
-  String o = origin;
+  VString o = origin;
   str_fix_path( o );
 
   if ( !file_is_dir( o ) ) return 255;

@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: form_in.cpp,v 1.4 2002/10/09 22:02:33 cade Exp $
+ * $Id: form_in.cpp,v 1.5 2003/01/19 17:13:38 cade Exp $
  *
  */
 
@@ -21,12 +21,12 @@ BSet FI_MASKS    = "A#$U"; // A-any, #-int, $-real, U-users
 int EditStrBF = CONCOLOR( chWHITE, cBLUE );
 int EditStrFH = CONCOLOR( cBLACK, cWHITE );
 
-int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, String *strres, void (*handlekey)( int key, String &s, int &pos ) )
+int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VString *strres, void (*handlekey)( int key, VString &s, int &pos ) )
 {
   int res = 0;
   int insert = 1;
-  String str = *strres;
-  String tmp;
+  VString str = *strres;
+  VString tmp;
   int ch;
 
   TScrollPos scroll;
@@ -113,9 +113,9 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, Strin
   return res;
 }
 
-int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, char *strres, void (*handlekey)( int key, String &s, int &pos ) )
+int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, char *strres, void (*handlekey)( int key, VString &s, int &pos ) )
 {
-  String str = strres;
+  VString str = strres;
   int res = TextInput( x, y, prompt, maxlen, fieldlen, &str, handlekey );
   strcpy( strres, str.data() );
   return res;

@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: unicon.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: unicon.cpp,v 1.3 2003/01/19 17:13:38 cade Exp $
  *
  */
 
@@ -80,7 +80,7 @@
   void con_puts( const char *s )
   {
     #ifdef _TARGET_GO32_
-    String str = s;
+    VString str = s;
     str_replace( str, "\n", "\r\n" );
     cputs( str );
     #else

@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: eval.cpp,v 1.3 2003/01/06 00:37:49 cade Exp $
+ * $Id: eval.cpp,v 1.4 2003/01/19 17:13:38 cade Exp $
  *
  */
 
@@ -22,7 +22,7 @@
 int EvalResult;
 double Eval( const char* a_exp )
 {
-  String exp = a_exp;
+  VString exp = a_exp;
   str_cut_spc( exp );
   
   int ps    = 0; // pos of the +/-/:/* signs

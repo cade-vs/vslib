@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.h,v 1.3 2002/08/17 11:48:37 cade Exp $
+ * $Id: vsuti.h,v 1.4 2003/01/19 17:13:38 cade Exp $
  *
  */
 
@@ -161,7 +161,7 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos = -1 );
 /* FILENAMES functions */
 
 char* tilde_expand( char* path ); // expands ~/path and ~name/path
-String& tilde_expand( String &str ); // expands ~/path and ~name/path
+VString& tilde_expand( VString &str ); // expands ~/path and ~name/path
 
 /*###########################################################################*/
 
