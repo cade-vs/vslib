@@ -1,6 +1,7 @@
 
-  VSLIB MAY.2000
-  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
+  VSLIB
+  $Id: README,v 1.2 2001/10/28 13:44:35 cade Exp $
+  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2001
  
   This library is collection of some structures/functions/etc.
   that I need to write my programs a bit faster and to avoid
