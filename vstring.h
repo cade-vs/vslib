@@ -20,12 +20,12 @@
  *  Vladi Belperchinov-Shabanski "Cade"
  *  <cade@biscom.net>
  *  <cade@datamax.bg>
- *  http://www.biscom.net/~cade
+ *  http://soul.datamax.bg/~cade
  *
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.8 2002/10/29 04:09:03 cade Exp $
+ * $Id: vstring.h,v 1.9 2002/11/27 21:41:52 cade Exp $
  *
  */
 

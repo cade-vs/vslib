@@ -1,8 +1,8 @@
 /*
  * slightly modified to become .cpp and be used as part of vslib
  * modifications by (c) Vladi Belperchinov-Shabanski "Cade" 2002
- * <cade@biscom.net> [http://www.biscom.net/~cade]
- * $Id: regexp3.cpp,v 1.2 2002/04/26 06:40:08 cade Exp $
+ * <cade@biscom.net> [http://soul.datamax.bg/~cade]
+ * $Id: regexp3.cpp,v 1.3 2002/11/27 21:41:52 cade Exp $
  */
 
 /*
