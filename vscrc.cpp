@@ -1,10 +1,10 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-1999
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vscrc.cpp,v 1.1 2002/02/24 13:05:10 cade Exp $
+ * $Id: vscrc.cpp,v 1.2 2003/01/21 19:56:35 cade Exp $
  *
  */
 

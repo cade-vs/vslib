@@ -1,10 +1,10 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-1999
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: clusters.h,v 1.4 2003/01/01 15:41:55 cade Exp $
+ * $Id: clusters.h,v 1.5 2003/01/21 19:56:35 cade Exp $
  *
  */
 /*

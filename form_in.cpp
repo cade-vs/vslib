@@ -1,10 +1,10 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2002
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: form_in.cpp,v 1.5 2003/01/19 17:13:38 cade Exp $
+ * $Id: form_in.cpp,v 1.6 2003/01/21 19:56:35 cade Exp $
  *
  */
 

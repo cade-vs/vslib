@@ -1,10 +1,10 @@
 /*
  *
  *  VSTRING Library supporting structures and functions
- *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.21 2003/01/19 17:13:38 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.22 2003/01/21 19:56:35 cade Exp $
  *
  */
 

@@ -1,7 +1,7 @@
 /*
  *
  *  VSTRING Library supporting structures and functions
- *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
  *  VSTRLIB library provides string data structures which mimic Perl's.
@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.17 2003/01/19 17:13:38 cade Exp $
+ *  $Id: vstrlib.h,v 1.18 2003/01/21 19:56:35 cade Exp $
  *
  */
 

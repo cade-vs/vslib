@@ -1,7 +1,7 @@
 /*
  *
  *  VSTRING Library
- *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2002
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
  *  VSTRING library provides vast set of string manipulation features
@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.19 2003/01/19 18:40:31 cade Exp $
+ *  $Id: vstring.h,v 1.20 2003/01/21 19:56:35 cade Exp $
  *
  */
 

@@ -1,10 +1,10 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-1999
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: target.h,v 1.4 2002/08/17 11:48:37 cade Exp $
+ * $Id: target.h,v 1.5 2003/01/21 19:56:35 cade Exp $
  *
  */
 

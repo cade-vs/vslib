@@ -1,10 +1,10 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-1999
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.h,v 1.6 2003/01/06 00:37:49 cade Exp $
+ * $Id: vslib.h,v 1.7 2003/01/21 19:56:35 cade Exp $
  *
  */
 
