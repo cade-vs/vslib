@@ -1,0 +1,9 @@
+
+  $Id: THANKS.TO,v 1.1 2003/01/08 01:16:43 cade Exp $
+  
+  I'd like to thank the following people for helping me for vslib:
+  
+  - Ivo Baylov <ivo@datamax.bg> for the KMP search hint.  
+
+  - Philip Hazel <ph10@cam.ac.uk> and University of Cambridge for
+    the fantastic pcre library!
