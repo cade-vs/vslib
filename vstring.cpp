@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.21 2003/01/21 19:56:35 cade Exp $
+ *  $Id: vstring.cpp,v 1.22 2003/01/29 22:59:27 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -1148,15 +1148,15 @@
     return 0;
   };
 
-  void VArray::sort( int rev )
+  void VArray::sort( int rev, int (*q_strcmp)(const char *, const char *) )
   {
     if ( count() > 1 )
-      q_sort( 0, count() - 1 );
+      q_sort( 0, count() - 1, q_strcmp ? q_strcmp : strcmp );
     if ( rev ) // FIXME: not optimal...
       reverse();
   };
 
-  void VArray::q_sort( int lo, int hi )
+  void VArray::q_sort( int lo, int hi, int (*q_strcmp)(const char *, const char *) )
   {
     int m, l, r;
     const char* v;
@@ -1168,8 +1168,8 @@
 
     do
       {
-      while( (l <= hi) && (strcmp(box->_data[l]->data(),v) < 0) ) l++;
-      while( (r >= lo) && (strcmp(v,box->_data[r]->data()) < 0) ) r--;
+      while( (l <= hi) && (q_strcmp(box->_data[l]->data(),v) < 0) ) l++;
+      while( (r >= lo) && (q_strcmp(v,box->_data[r]->data()) < 0) ) r--;
       if ( l <= r )
         {
         VString *t;
@@ -1182,8 +1182,8 @@
       }
     while( l <= r );
 
-    if ( lo < r ) q_sort( lo, r );
-    if ( l < hi ) q_sort( l, hi );
+    if ( lo < r ) q_sort( lo, r, q_strcmp );
+    if ( l < hi ) q_sort( l, hi, q_strcmp );
   };
 
   void VArray::reverse()
@@ -1398,6 +1398,7 @@
     VTrieBox *new_box = new VTrieBox();
     delete new_box->root;
     new_box->root = root->clone();
+    return new_box;
   };
 
 /***************************************************************************

@@ -4,31 +4,57 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: scroll.h,v 1.3 2003/01/21 19:56:35 cade Exp $
+ * $Id: scroll.h,v 1.4 2003/01/29 22:59:27 cade Exp $
  *
  */
 
 #ifndef _SCROLL_H_
 #define _SCROLL_H_
 
-class TScrollPos
-  {
+class ScrollPos
+{
+    int _min;
+    int _max;
+    int _pos;
+    int _page;
+    int _pagesize;
+    int _pagestep; // step to change page on up/down out of the current page
+
+    int _size;
+
+    void fix();
+    int check();
+  
   public:
-    int type; // 0 -- standart static, else -- extended non static
+
     int wrap; // 0 -- none, else -- wrap end/begin; NOTE: works only on up/down
-    int min;
-    int max;
-    int pos;
-    int page;
-    int pagesize;
-    int step;
 
-    TScrollPos()
-      { wrap = type = min = max = pos = page = pagesize = step = 0; };
+    ScrollPos()
+      { 
+      wrap = _min = _max = _pos = _page = _pagesize = _size = 0; 
+      _pagestep = 1;
+      };
 
-    void create( int pmin, int pmax, int ppos, int ppage, int ppagesize, int pstep)
-          { min = pmin; max = pmax; pos = ppos; page = ppage; pagesize = ppagesize; step = pstep; };
+    void set_min_max( int a_min, int a_max ) 
+      { _min = a_min; _max = a_max; _size = _max - _min + 1; }
+    void set_pos( int a_pos ) 
+      { _pos = a_pos; ASSERT( check() ); }
+    void set_page( int a_page ) 
+      { _page = a_page; ASSERT( check() ); }
+    void set_pagesize( int a_pagesize ) 
+      { _pagesize = a_pagesize; 
+        if ( _pagesize < 0 ) _pagesize = 0; }
+    void set_pagestep( int a_pagestep ) 
+      { _pagestep = a_pagestep; 
+        if ( _pagestep < 1 ) _pagestep = 1; }
 
+    int min() { return _min; }
+    int max() { return _max; }
+    int pos() { if ( ! _size ) return 0; return _pos; }
+    int page() { if ( ! _size ) return 0; return _page; }
+    int pagesize() { return _pagesize; }
+    int step() { return _pagestep; }
+    
     void home();
     void end();
     void up();
@@ -40,8 +66,8 @@ class TScrollPos
     void ppage() { pageup(); }
     void npage() { pagedown(); }
 
-    void gotopos( int newpos );
-  };
+    void go( int new_pos );
+};
 
 #endif //_SCROLL_H_
 

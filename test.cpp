@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: test.cpp,v 1.12 2003/01/21 19:56:35 cade Exp $
+ * $Id: test.cpp,v 1.13 2003/01/29 22:59:27 cade Exp $
  *
  */
 
@@ -295,7 +295,7 @@ void test6()
   const char* ps;
   
   va.reset();
-  while( ps = va.next() )
+  while( ( ps = va.next() ) )
     {
     printf( "------------------------------------\n" );
     printf( "file is: %s\n", ps );

@@ -4,7 +4,7 @@
  * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.22 2003/01/21 19:56:35 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.23 2003/01/29 22:59:27 cade Exp $
  *
  */
 
@@ -262,7 +262,7 @@
   void VCharSet::push( int n, int val )
   {
     if ( n < 0 ) return;
-    if ( n >= _size * sizeof(unsigned char) ) resize( n + 1 );
+    if ( n >= _size * (int)sizeof(unsigned char) ) resize( n + 1 );
     if ( val )
       _data[ n / sizeof(unsigned char) ] |= 1 << (n % sizeof(unsigned char));
     else
@@ -281,7 +281,7 @@
 
   int VCharSet::in( int n )
   {
-    if ( n < 0 || n >= _size * sizeof(unsigned char) ) return 0;
+    if ( n < 0 || n >= _size * (int)sizeof(unsigned char) ) return 0;
     return ( _data[ n / sizeof(unsigned char) ] & ( 1 << ( n % sizeof(unsigned char) ) ) ) != 0;
   };
 

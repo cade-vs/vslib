@@ -4,141 +4,124 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: scroll.cpp,v 1.3 2003/01/21 19:56:35 cade Exp $
+ * $Id: scroll.cpp,v 1.4 2003/01/29 22:59:27 cade Exp $
  *
  */
 
+#include <assert.h>
+
+#ifndef ASSERT
+#define ASSERT assert
+#endif
+
 #include "scroll.h"
 
-  void TScrollPos::home()
+  void ScrollPos::home()
   {
-    pos = min;
-    page = min;
+    if ( ! _size ) return;
+    _pos  = _min;
+    _page = _min;
+    fix();
   };
 
-  void TScrollPos::end()
+  void ScrollPos::end()
   {
-    pos = max;
-    if (type)
+    if ( ! _size ) return;
+    _pos = _max;
+    fix();
+  };
+
+  void ScrollPos::up()
+  {
+    if ( ! _size ) return;
+    ASSERT( check() );
+    _pos--;
+    if ( _pos < _min ) 
       {
-      if (pos > page + pagesize - 1 ) page = max - pagesize + 1;
-      if (page < min) page = min;
+      if ( wrap )
+        _pos = _max;
+      else
+        _pos = _min;  
       }
+    if ( _pos < _page ) _page--;
+    fix();
+  };
+
+  void ScrollPos::down()
+  {
+    if ( ! _size ) return;
+    ASSERT( check() );
+    _pos++;
+    if ( _pos > _max )
+      {
+      if ( wrap )
+        _pos = _min;
+      else
+        _pos = _max;  
+      }
+    if ( _pos > _page + _pagesize - 1 ) _page++;
+    fix();
+  };
+
+  void ScrollPos::pageup()
+  {
+    if ( ! _size ) return;
+    ASSERT( check() );
+    if ( _pos != _page)
+      _pos  = _page;
+    else
+      _pos -= _pagesize;
+    fix();  
+  };
+
+  void ScrollPos::pagedown()
+  {
+    if ( ! _size ) return;
+    ASSERT( check() );
+    if ( _pos != _page + _pagesize -1 )
+      _pos = _page + _pagesize - 1;
     else
       {
-      page = (pos / pagesize)*pagesize;
+      _pos += _pagesize;
+      if ( _page + _pagesize <= _max ) _page += _pagesize;
       }
+    fix();  
   };
 
-  void TScrollPos::up()
+  void ScrollPos::go( int new_pos )
   {
-    pos--;
-    if (pos < min)
-      if (wrap)
-        {
-        gotopos( max );
-        return;
-        }
-      else
-        pos = min;
-    if (type)
-      {
-      if (pos < page) page--;
-      }
-    else
-      {
-      page = (pos / pagesize)*pagesize;
-      }
-  };
-
-  void TScrollPos::down()
-  {
-    pos++;
-    if (pos > max)
-      if (wrap)
-        {
-        gotopos( min );
-        return;
-        }
-      else
-        pos = max;
-    if (type)
-      {
-      if (pos > page + pagesize - 1) page++;
-      }
-    else
-      {
-      page = (pos / pagesize)*pagesize;
-      }
-  };
-
-  void TScrollPos::pageup()
-  {
-    if (type)
-      {
-      if (pos != page)
-        {
-        pos = page;
-        }
-      else
-        {
-        pos -= pagesize;
-        if (pos < min) pos = min;
-        page = pos;
-        }
-      }
-    else
-      {
-      if (pos != page)
-        {
-        pos = page;
-        }
-      else
-        {
-        pos -= pagesize;
-        if (pos < min) pos = min;
-        page = (pos / pagesize)*pagesize;
-        }
-      }
-  };
-
-  void TScrollPos::pagedown()
-  {
-    if (type)
-      {
-      if (pos != page + pagesize -1)
-        {
-        pos = page + pagesize - 1;
-        if (pos > max) pos = max;
-        }
-      else
-        {
-        pos += pagesize;
-        if (pos > max) pos = max;
-        if (page+pagesize <= max) page += pagesize;
-        }
-      }
-    else
-      {
-      if (pos != page + pagesize -1)
-        {
-        pos = page + pagesize - 1;
-        if (pos > max) pos = max;
-        }
-      else
-        {
-        pos += pagesize;
-        if (pos > max) pos = max;
-        page = (pos / pagesize)*pagesize;
-        }
-      }
-  };
-
-  void TScrollPos::gotopos( int newpos )
-  {
-    pos = newpos;
-    page = (pos / pagesize)*pagesize;
+    _pos = new_pos;
+    fix();
   }
 
+  void ScrollPos::fix()
+  {
+    if ( _pos  < _min ) _pos  = _min;
+    if ( _pos  > _max ) _pos  = _max;
+    if ( _page < _min ) _page = _min;
+    if ( _page > _max ) _page = _max;
+    if ( _pos  < _page || _pos > _page + _pagesize - 1 )
+      {
+      if ( _pagesize )
+        _page = ( _pos / _pagesize ) * _pagesize;
+      else
+        _page = 0;  
+      }  
+    ASSERT( check() );
+  }
+
+  int ScrollPos::check()
+  {
+    if ( ! _size ) return 1;
+    if ( _pos  < _min ) return 0;
+    if ( _pos  > _max ) return 0;
+    if ( _page < _min ) return 0;
+    if ( _page > _max ) return 0;
+    if ( _pos  < _page ) return 0;
+    if ( _pagesize < 0 ) return 0;
+    if ( _pagestep < 1 ) return 0;
+    if ( _pos >= _page + _pagesize ) return 0;
+    return 1;
+  }
 
  // eof scroll.cpp

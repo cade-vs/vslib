@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.20 2003/01/21 19:56:35 cade Exp $
+ *  $Id: vstring.h,v 1.21 2003/01/29 22:59:27 cade Exp $
  *
  */
 
@@ -437,7 +437,7 @@ class VArray
   VString   _ret_str; // return-container
 
   void detach();
-  void q_sort( int lo, int hi );
+  void q_sort( int lo, int hi, int (*q_strcmp)(const char *, const char *) );
 
   public:
 
@@ -474,7 +474,7 @@ class VArray
   int fload( FILE* f ); // return 0 for ok
   int fsave( FILE* f ); // return 0 for ok
 
-  void sort( int rev = 0 ); // sort (optional reverse order)
+  void sort( int rev = 0, int (*q_strcmp)(const char *, const char *) = NULL ); // sort (optional reverse order)
   void reverse(); // reverse elements order
   void shuffle(); // randomize element order with Fisher-Yates shuffle
 
