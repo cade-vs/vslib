@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: form_in.cpp,v 1.7 2003/01/29 22:59:27 cade Exp $
+ * $Id: form_in.cpp,v 1.8 2003/04/27 11:53:43 cade Exp $
  *
  */
 
@@ -96,8 +96,10 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
     if ( ch == KEY_IC    ) insert = !insert; else
     if ( ch == KEY_LEFT  ) scroll.up(); else
     if ( ch == KEY_RIGHT ) scroll.down(); else
+    /*
     if ( ch == KEY_PPAGE ) scroll.ppage(); else
     if ( ch == KEY_NPAGE ) scroll.npage(); else
+    */
     if ( ch == KEY_HOME || ch == KEY_CTRL_A ) scroll.go(0); else
     if ( ch == KEY_END  || ch == KEY_CTRL_E ) scroll.go(str_len(str)); else
     if ( ( ch == KEY_DC || ch == KEY_CTRL_D ) && scroll.pos() < str_len(str) )
