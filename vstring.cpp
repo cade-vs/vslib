@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.4 2002/04/14 10:14:44 cade Exp $
+ * $Id: vstring.cpp,v 1.5 2002/04/26 06:40:08 cade Exp $
  *
  */
 
@@ -797,7 +797,7 @@
     return cnt;
   }
 
-  int str_str_count( const char* target, const char* s, int startpos = 0 ) // returns match count of `s' string into target
+  int str_str_count( const char* target, const char* s, int startpos ) // returns match count of `s' string into target
   {
     if (!target) return 0;
     int cnt = 0;

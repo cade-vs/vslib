@@ -2,7 +2,7 @@
  * slightly modified to become .cpp and be used as part of vslib
  * modifications by (c) Vladi Belperchinov-Shabanski "Cade" 2002
  * <cade@biscom.net> [http://www.biscom.net/~cade]
- * $Id: regexp3.cpp,v 1.1 2002/04/13 11:12:53 cade Exp $
+ * $Id: regexp3.cpp,v 1.2 2002/04/26 06:40:08 cade Exp $
  */
 
 /*
@@ -262,7 +262,7 @@ regexp * regcomp( const char *exp )
 	regnpar = 1;
 	regsize = 0L;
 	regcode = &regdummy;
-	regc(MAGIC);
+	regc((char)MAGIC);
 	if (reg(0, &flags) == NULL)
 		return(NULL);
 
@@ -279,7 +279,7 @@ regexp * regcomp( const char *exp )
 	regparse = exp;
 	regnpar = 1;
 	regcode = r->program;
-	regc(MAGIC);
+	regc((char)MAGIC);
 	if (reg(0, &flags) == NULL)
 		return(NULL);
 
@@ -310,7 +310,7 @@ regexp * regcomp( const char *exp )
 			longest = NULL;
 			len = 0;
 			for (; scan != NULL; scan = regnext(scan))
-				if (OP(scan) == EXACTLY && strlen(OPERAND(scan)) >= len) {
+				if (OP(scan) == EXACTLY && strlen(OPERAND(scan)) >= (size_t)len) {
 					longest = OPERAND(scan);
 					len = strlen(OPERAND(scan));
 				}
@@ -336,7 +336,7 @@ char * reg( int paren, int *flagp)
 	char *ret;
 	char *br;
 	char *ender;
-	int parno;
+	int parno = 0;
 	int flags;
 
 	*flagp = HASWIDTH;	/* Tentatively. */
@@ -362,7 +362,7 @@ char * reg( int paren, int *flagp)
 	if (!(flags&HASWIDTH))
 		*flagp &= ~HASWIDTH;
 	*flagp |= flags&SPSTART;
-	while (*regparse == '|') {
+	while (*regparse == (char)'|') {
 		regparse++;
 		br = regbranch(&flags);
 		if (br == NULL)

@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.4 2002/04/14 10:14:44 cade Exp $
+ * $Id: vstrlib.cpp,v 1.5 2002/04/26 06:40:08 cade Exp $
  *
  */
 
@@ -67,7 +67,7 @@
     new_size  = new_size / VARRAY_BLOCK_SIZE + (new_size % VARRAY_BLOCK_SIZE != 0);
     new_size *= VARRAY_BLOCK_SIZE;
     if ( new_size == _size ) return;
-    String** new_data = new (String*)[ new_size ];
+    String** new_data = new String*[ new_size ];
     ASSERT( new_data );
     memset( new_data, 0, new_size * sizeof(String*) );
     if ( _data )
@@ -337,7 +337,7 @@
     int rl = strlen( res );
     
     String s;
-    while( fs = strstr( ps, res ) )
+    while( (fs = strstr( ps, res )) )
       {
       if ( maxcount != -1 )
         {

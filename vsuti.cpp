@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.4 2002/04/13 11:12:53 cade Exp $
+ * $Id: vsuti.cpp,v 1.5 2002/04/26 06:40:08 cade Exp $
  *
  */
 
@@ -73,7 +73,7 @@ adler32_t str_adler32( const char *s )
 
 /*---------------------------------------------------------------------------*/
 
-adler32_t file_adler32( FILE *f, long buffsize = 256*1024  )
+adler32_t file_adler32( FILE *f, long buffsize  )
 {
   ASSERT( f );
 
@@ -99,7 +99,7 @@ adler32_t file_adler32( FILE *f, long buffsize = 256*1024  )
 
 /*---------------------------------------------------------------------------*/
 
-adler32_t file_adler32( const char *fname, long buffsize = 256*1024  )
+adler32_t file_adler32( const char *fname, long buffsize  )
 {
   FILE *f = fopen( fname, "rb" );
   if (!f) return 0;
@@ -298,7 +298,7 @@ int file_exists( const char* fname )
 // Search interface functions
 //
 
-long file_find_string( const char *pattern, const char* file_name, int nocase, int spos = -1 )
+long file_find_string( const char *pattern, const char* file_name, int nocase, int spos )
 {
   FILE *f = fopen( file_name, "rb" );
   if (!f) return -1;
@@ -307,7 +307,7 @@ long file_find_string( const char *pattern, const char* file_name, int nocase, i
   return pos;
 }
 
-long file_find_string( const char *pattern, FILE* f, int nocase, int spos = -1 )
+long file_find_string( const char *pattern, FILE* f, int nocase, int spos )
 {
   int pattern_size = strlen(pattern);
   ASSERT( pattern_size < MAX_PATTERN );
@@ -334,7 +334,7 @@ long file_find_string( const char *pattern, FILE* f, int nocase, int spos = -1 )
     }
 };
 
-long file_find_pattern( const char *pattern, int pattern_size, const char* file_name, int nocase, int spos = -1 )
+long file_find_pattern( const char *pattern, int pattern_size, const char* file_name, int nocase, int spos )
 {
   FILE *f = fopen( file_name, "rb" );
   if (!f) return -1;
@@ -343,7 +343,7 @@ long file_find_pattern( const char *pattern, int pattern_size, const char* file_
   return pos;
 };
 
-long file_find_pattern( const char *pattern, int pattern_size, FILE* f, int nocase, int spos = -1 )
+long file_find_pattern( const char *pattern, int pattern_size, FILE* f, int nocase, int spos )
 {
   return file_kmp_search( pattern, pattern_size, f, nocase, spos );    
 };
@@ -370,7 +370,7 @@ void __kmp_preprocess_pattern( const char* pattern, int pattern_size, int* next 
    }
 }
 
-long file_kmp_search( const char *pattern, int pattern_size, FILE* f, int nocase, int spos = -1 )
+long file_kmp_search( const char *pattern, int pattern_size, FILE* f, int nocase, int spos )
 {
   int  next[MAX_PATTERN+1];
   char newpat[MAX_PATTERN+1];
@@ -415,7 +415,7 @@ long file_kmp_search( const char *pattern, int pattern_size, FILE* f, int nocase
 
 /* FGrep -- regular expression search (I know `G' here stands for <nothing>:)) */
 
-long file_grep( const char *re_string, const char* file_name, int nocase, int spos = -1 )
+long file_grep( const char *re_string, const char* file_name, int nocase, int spos )
 {    
   FILE *f = fopen( file_name, "rb" );
   if (!f) return -1;
@@ -426,7 +426,7 @@ long file_grep( const char *re_string, const char* file_name, int nocase, int sp
 
 int file_grep_max_line = MAX_GREP_LINE;
 int file_grep_lines_read = 0;
-long file_grep( const char *re_string, FILE* f, int nocase, int spos = -1 )
+long file_grep( const char *re_string, FILE* f, int nocase, int spos )
 {
   if ( strlen(re_string) >= (size_t)file_grep_max_line ) return -2; // just in case, and for now...
 
@@ -726,7 +726,7 @@ int ftwalk( const char *origin,
                          const struct stat* st, /* stat struture or NULL */
                          int is_link,           /* 1 if link */
                          int flag ), 
-            int level = -1 )
+            int level )
 {
   int r;
   
