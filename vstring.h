@@ -25,7 +25,7 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.3 2002/04/14 10:14:44 cade Exp $
+ * $Id: vstring.h,v 1.4 2002/04/26 07:20:36 cade Exp $
  *
  */
 
@@ -234,8 +234,8 @@
   char* str_copy  ( char* target, const char* source, int pos, int len ); // returns `len' chars from `pos'
   char* str_left  ( char* target, const char* source, int len ); // returns `len' chars from the left
   char* str_right ( char* target, const char* source, int len ); // returns `len' chars from the right
-  char* str_sleft ( char* target, int len ); // SelfLeft -- just as 'Left' but works on `this'
-  char* str_sright( char* target, int len ); // SelfRight -- just as 'Right' but works on `this'
+  char* str_sleft ( char* target, int len ); // just as 'left' but works on `target'
+  char* str_sright( char* target, int len ); // just as 'right' but works on `target'
 
   char* str_trim_left ( char* target, int len ); // trims `len' chars from the beginning (left)
   char* str_trim_right( char* target, int len ); // trim `len' chars from the end (right)
@@ -351,6 +351,7 @@ String& str_reduce_path( const char* path, String& dest );
 ****************************************************************************/
 
 long hex2long( const char* s ); // hex to long
+
 #ifndef htol
 #define htol
 #endif
