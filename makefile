@@ -1,15 +1,15 @@
-### MAKEMAKE STARTS HERE #########################################
-#
-# Created by makemake.pl on Fri Nov  8 01:50:49 2002
-#
-##################################################################
 
-### GLOBAL TARGETS ###############################################
+### MAKEMAKE STARTS HERE #######################################################
+
+
+### Created by makemake.pl on Sun Dec 15 20:04:06 2002 #########################
+
+
+### GLOBAL TARGETS #############################################################
 
 default: all
 
 re: rebuild
-
 
 li: link
 
@@ -21,28 +21,34 @@ rebuild: rebuild-libvslib.a rebuild-libvscon.a rebuild-test
 
 link: link-libvslib.a link-libvscon.a link-test 
 
-### GLOBAL DEFS ##################################################
+### GLOBAL (AND USER) DEFS #####################################################
 
-MKDIR      = mkdir -p
-RMDIR      = rm -rf
-RMFILE     = rm -f
 
-### TARGET 0: libvslib.a #########################################
+AR = ar rv
+CC = g++
+LD = g++
+MKDIR = mkdir -p
+RANLIB = ranlib
+RMDIR = rm -rf
+RMFILE = rm -f
+SRC = *.c *.cpp *.cc *.cxx
 
-CC_0      = g++
-LD_0      = g++
-AR_0      = ar rv
-RANLIB_0  = ranlib
-CFLAGS_0  = 
-CCFLAGS_0 = -I. -O2 $(CCDEF)
-LDFLAGS_0 = $(LDDEF)
-DEPFLAGS_0 = 
-ARFLAGS_0 = 
-TARGET_0  = libvslib.a
 
-### SOURCES FOR TARGET 0: libvslib.a #################################
+### TARGET 1: libvslib.a #######################################################
 
-SRC_0= \
+CC_1       = g++
+LD_1       = g++
+AR_1       = ar rv
+RANLIB_1   = ranlib
+CCFLAGS_1  = -I. -O2 $(CCDEF) 
+LDFLAGS_1  = $(LDDEF)
+DEPFLAGS_1 = 
+ARFLAGS_1  = 
+TARGET_1   = libvslib.a
+
+### SOURCES FOR TARGET 1: libvslib.a ###########################################
+
+SRC_1= \
      clusters.cpp \
      dlog.cpp \
      eval.cpp \
@@ -50,181 +56,185 @@ SRC_0= \
      getopt2.cpp \
      regexp3.cpp \
      scroll.cpp \
-     vscrc.cpp \
      vslib.cpp \
      vstring.cpp \
      vstrlib.cpp \
      vsuti.cpp \
+     vscrc.cpp \
 
-#### OBJECTS FOR TARGET 0: libvslib.a ################################
+#### OBJECTS FOR TARGET 1: libvslib.a ##########################################
 
-OBJ_0= \
-     .OBJ.0.libvslib.a/clusters.o \
-     .OBJ.0.libvslib.a/dlog.o \
-     .OBJ.0.libvslib.a/eval.o \
-     .OBJ.0.libvslib.a/fnmatch2.o \
-     .OBJ.0.libvslib.a/getopt2.o \
-     .OBJ.0.libvslib.a/regexp3.o \
-     .OBJ.0.libvslib.a/scroll.o \
-     .OBJ.0.libvslib.a/vscrc.o \
-     .OBJ.0.libvslib.a/vslib.o \
-     .OBJ.0.libvslib.a/vstring.o \
-     .OBJ.0.libvslib.a/vstrlib.o \
-     .OBJ.0.libvslib.a/vsuti.o \
+OBJ_1= \
+     .OBJ.libvslib.a/clusters.o \
+     .OBJ.libvslib.a/dlog.o \
+     .OBJ.libvslib.a/eval.o \
+     .OBJ.libvslib.a/fnmatch2.o \
+     .OBJ.libvslib.a/getopt2.o \
+     .OBJ.libvslib.a/regexp3.o \
+     .OBJ.libvslib.a/scroll.o \
+     .OBJ.libvslib.a/vslib.o \
+     .OBJ.libvslib.a/vstring.o \
+     .OBJ.libvslib.a/vstrlib.o \
+     .OBJ.libvslib.a/vsuti.o \
+     .OBJ.libvslib.a/vscrc.o \
 
-### TARGET DEFINITION FOR TARGET 0: libvslib.a #######################
+### TARGET DEFINITION FOR TARGET 1: libvslib.a #################################
 
-.OBJ.0.libvslib.a: 
-	$(MKDIR) .OBJ.0.libvslib.a
+.OBJ.libvslib.a: 
+	$(MKDIR) .OBJ.libvslib.a
 
-libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
-	$(AR_0) $(ARFLAGS_0) $(TARGET_0) $(OBJ_0)
-	$(RANLIB_0) $(TARGET_0)
+libvslib.a: .OBJ.libvslib.a $(OBJ_1)
+	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
+	$(RANLIB_1) $(TARGET_1)
 
 clean-libvslib.a: 
-	$(RMFILE) $(TARGET_0)
-	$(RMDIR) .OBJ.0.libvslib.a
+	$(RMFILE) $(TARGET_1)
+	$(RMDIR) .OBJ.libvslib.a
 
 rebuild-libvslib.a: clean-libvslib.a libvslib.a
 
-link-libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
+link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 	$(RMFILE) libvslib.a
-	$(AR_0) $(ARFLAGS_0) $(TARGET_0) $(OBJ_0)
-	$(RANLIB_0) $(TARGET_0)
+	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
+	$(RANLIB_1) $(TARGET_1)
 
-### TARGET OBJECTS FOR TARGET 0: libvslib.a ##########################
 
-.OBJ.0.libvslib.a/clusters.o:  clusters.cpp clusters.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c clusters.cpp -o .OBJ.0.libvslib.a/clusters.o
-.OBJ.0.libvslib.a/dlog.o:  dlog.cpp dlog.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c dlog.cpp -o .OBJ.0.libvslib.a/dlog.o
-.OBJ.0.libvslib.a/eval.o:  eval.cpp eval.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c eval.cpp -o .OBJ.0.libvslib.a/eval.o
-.OBJ.0.libvslib.a/fnmatch2.o:  fnmatch2.cpp fnmatch2.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c fnmatch2.cpp -o .OBJ.0.libvslib.a/fnmatch2.o
-.OBJ.0.libvslib.a/getopt2.o:  getopt2.cpp getopt2.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c getopt2.cpp -o .OBJ.0.libvslib.a/getopt2.o
-.OBJ.0.libvslib.a/regexp3.o:  regexp3.cpp
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c regexp3.cpp -o .OBJ.0.libvslib.a/regexp3.o
-.OBJ.0.libvslib.a/scroll.o:  scroll.cpp scroll.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c scroll.cpp -o .OBJ.0.libvslib.a/scroll.o
-.OBJ.0.libvslib.a/vscrc.o:  vscrc.cpp vsuti.h target.h vstring.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vscrc.cpp -o .OBJ.0.libvslib.a/vscrc.o
-.OBJ.0.libvslib.a/vslib.o:  vslib.cpp
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vslib.cpp -o .OBJ.0.libvslib.a/vslib.o
-.OBJ.0.libvslib.a/vstring.o:  vstring.cpp vstring.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vstring.cpp -o .OBJ.0.libvslib.a/vstring.o
-.OBJ.0.libvslib.a/vstrlib.o:  vstrlib.cpp vstrlib.h regexp3.h vstring.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vstrlib.cpp -o .OBJ.0.libvslib.a/vstrlib.o
-.OBJ.0.libvslib.a/vsuti.o:  vsuti.cpp vsuti.h target.h vstring.h regexp3.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vsuti.cpp -o .OBJ.0.libvslib.a/vsuti.o
+### TARGET OBJECTS FOR TARGET 1: libvslib.a ####################################
 
-### TARGET 1: libvscon.a #########################################
+.OBJ.libvslib.a/clusters.o: clusters.cpp  clusters.cpp clusters.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c clusters.cpp -o .OBJ.libvslib.a/clusters.o
+.OBJ.libvslib.a/dlog.o: dlog.cpp  dlog.cpp dlog.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c dlog.cpp -o .OBJ.libvslib.a/dlog.o
+.OBJ.libvslib.a/eval.o: eval.cpp  eval.cpp eval.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c eval.cpp -o .OBJ.libvslib.a/eval.o
+.OBJ.libvslib.a/fnmatch2.o: fnmatch2.cpp  fnmatch2.cpp fnmatch2.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c fnmatch2.cpp -o .OBJ.libvslib.a/fnmatch2.o
+.OBJ.libvslib.a/getopt2.o: getopt2.cpp  getopt2.cpp getopt2.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c getopt2.cpp -o .OBJ.libvslib.a/getopt2.o
+.OBJ.libvslib.a/regexp3.o: regexp3.cpp  regexp3.cpp
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c regexp3.cpp -o .OBJ.libvslib.a/regexp3.o
+.OBJ.libvslib.a/scroll.o: scroll.cpp  scroll.cpp scroll.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c scroll.cpp -o .OBJ.libvslib.a/scroll.o
+.OBJ.libvslib.a/vslib.o: vslib.cpp  vslib.cpp
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vslib.cpp -o .OBJ.libvslib.a/vslib.o
+.OBJ.libvslib.a/vstring.o: vstring.cpp  vstring.cpp vstring.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstring.cpp -o .OBJ.libvslib.a/vstring.o
+.OBJ.libvslib.a/vstrlib.o: vstrlib.cpp  vstrlib.cpp vstrlib.h regexp3.h vstring.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstrlib.cpp -o .OBJ.libvslib.a/vstrlib.o
+.OBJ.libvslib.a/vsuti.o: vsuti.cpp  vsuti.cpp vsuti.h target.h vstring.h regexp3.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vsuti.cpp -o .OBJ.libvslib.a/vsuti.o
+.OBJ.libvslib.a/vscrc.o: vscrc.cpp  vscrc.cpp vsuti.h target.h vstring.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vscrc.cpp -o .OBJ.libvslib.a/vscrc.o
 
-CC_1      = g++
-LD_1      = g++
-AR_1      = ar rv
-RANLIB_1  = ranlib
-CFLAGS_1  = 
-CCFLAGS_1 = -I. -I/usr/include/ncurses -O2 $(CCDEF)
-LDFLAGS_1 = $(LDDEF)
-DEPFLAGS_1 = 
-ARFLAGS_1 = 
-TARGET_1  = libvscon.a
 
-### SOURCES FOR TARGET 1: libvscon.a #################################
+### TARGET 2: libvscon.a #######################################################
 
-SRC_1= \
+CC_2       = g++
+LD_2       = g++
+AR_2       = ar rv
+RANLIB_2   = ranlib
+CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF) 
+LDFLAGS_2  = $(LDDEF)
+DEPFLAGS_2 = 
+ARFLAGS_2  = 
+TARGET_2   = libvscon.a
+
+### SOURCES FOR TARGET 2: libvscon.a ###########################################
+
+SRC_2= \
      ansiterm.cpp \
      conmenu.cpp \
      form_in.cpp \
      unicon.cpp \
 
-#### OBJECTS FOR TARGET 1: libvscon.a ################################
+#### OBJECTS FOR TARGET 2: libvscon.a ##########################################
 
-OBJ_1= \
-     .OBJ.1.libvscon.a/ansiterm.o \
-     .OBJ.1.libvscon.a/conmenu.o \
-     .OBJ.1.libvscon.a/form_in.o \
-     .OBJ.1.libvscon.a/unicon.o \
+OBJ_2= \
+     .OBJ.libvscon.a/ansiterm.o \
+     .OBJ.libvscon.a/conmenu.o \
+     .OBJ.libvscon.a/form_in.o \
+     .OBJ.libvscon.a/unicon.o \
 
-### TARGET DEFINITION FOR TARGET 1: libvscon.a #######################
+### TARGET DEFINITION FOR TARGET 2: libvscon.a #################################
 
-.OBJ.1.libvscon.a: 
-	$(MKDIR) .OBJ.1.libvscon.a
+.OBJ.libvscon.a: 
+	$(MKDIR) .OBJ.libvscon.a
 
-libvscon.a: .OBJ.1.libvscon.a $(OBJ_1)
-	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
-	$(RANLIB_1) $(TARGET_1)
+libvscon.a: .OBJ.libvscon.a $(OBJ_2)
+	$(AR_2) $(ARFLAGS_2) $(TARGET_2) $(OBJ_2)
+	$(RANLIB_2) $(TARGET_2)
 
 clean-libvscon.a: 
-	$(RMFILE) $(TARGET_1)
-	$(RMDIR) .OBJ.1.libvscon.a
+	$(RMFILE) $(TARGET_2)
+	$(RMDIR) .OBJ.libvscon.a
 
 rebuild-libvscon.a: clean-libvscon.a libvscon.a
 
-link-libvscon.a: .OBJ.1.libvscon.a $(OBJ_1)
+link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 	$(RMFILE) libvscon.a
-	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
-	$(RANLIB_1) $(TARGET_1)
+	$(AR_2) $(ARFLAGS_2) $(TARGET_2) $(OBJ_2)
+	$(RANLIB_2) $(TARGET_2)
 
-### TARGET OBJECTS FOR TARGET 1: libvscon.a ##########################
 
-.OBJ.1.libvscon.a/ansiterm.o:  ansiterm.cpp ansiterm.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c ansiterm.cpp -o .OBJ.1.libvscon.a/ansiterm.o
-.OBJ.1.libvscon.a/conmenu.o:  conmenu.cpp conmenu.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c conmenu.cpp -o .OBJ.1.libvscon.a/conmenu.o
-.OBJ.1.libvscon.a/form_in.o:  form_in.cpp form_in.h unicon.h target.h vstring.h \
+### TARGET OBJECTS FOR TARGET 2: libvscon.a ####################################
+
+.OBJ.libvscon.a/ansiterm.o: ansiterm.cpp  ansiterm.cpp ansiterm.h
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c ansiterm.cpp -o .OBJ.libvscon.a/ansiterm.o
+.OBJ.libvscon.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c conmenu.cpp -o .OBJ.libvscon.a/conmenu.o
+.OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h \
  clusters.h scroll.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c form_in.cpp -o .OBJ.1.libvscon.a/form_in.o
-.OBJ.1.libvscon.a/unicon.o:  unicon.cpp unicon.h target.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c unicon.cpp -o .OBJ.1.libvscon.a/unicon.o
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp -o .OBJ.libvscon.a/form_in.o
+.OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp -o .OBJ.libvscon.a/unicon.o
 
-### TARGET 2: test #########################################
 
-CC_2      = g++
-LD_2      = g++
-AR_2      = ar rv
-RANLIB_2  = ranlib
-CFLAGS_2  = 
-CCFLAGS_2 = -g -I. $(CCDEF) -DTEST
-LDFLAGS_2 = -g -L. -lvslib -lvscon -lncurses $(LDDEF)
-DEPFLAGS_2 = 
-ARFLAGS_2 = 
-TARGET_2  = test
+### TARGET 3: test #############################################################
 
-### SOURCES FOR TARGET 2: test #################################
+CC_3       = g++
+LD_3       = g++
+AR_3       = ar rv
+RANLIB_3   = ranlib
+CCFLAGS_3  = -g -I. $(CCDEF) -DTEST 
+LDFLAGS_3  = -g -L. -lvslib -lvscon -lncurses $(LDDEF)
+DEPFLAGS_3 = 
+ARFLAGS_3  = 
+TARGET_3   = test
 
-SRC_2= \
+### SOURCES FOR TARGET 3: test #################################################
+
+SRC_3= \
      vslib.cpp \
 
-#### OBJECTS FOR TARGET 2: test ################################
+#### OBJECTS FOR TARGET 3: test ################################################
 
-OBJ_2= \
-     .OBJ.2.test/vslib.o \
+OBJ_3= \
+     .OBJ.test/vslib.o \
 
-### TARGET DEFINITION FOR TARGET 2: test #######################
+### TARGET DEFINITION FOR TARGET 3: test #######################################
 
-.OBJ.2.test: 
-	$(MKDIR) .OBJ.2.test
+.OBJ.test: 
+	$(MKDIR) .OBJ.test
 
-test: .OBJ.2.test $(OBJ_2)
-	$(LD_2) $(OBJ_2) $(LDFLAGS_2) -o $(TARGET_2)
+test: .OBJ.test $(OBJ_3)
+	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
 
 clean-test: 
-	$(RMFILE) $(TARGET_2)
-	$(RMDIR) .OBJ.2.test
+	$(RMFILE) $(TARGET_3)
+	$(RMDIR) .OBJ.test
 
 rebuild-test: clean-test test
 
-link-test: .OBJ.2.test $(OBJ_2)
+link-test: .OBJ.test $(OBJ_3)
 	$(RMFILE) test
-	$(LD_2) $(OBJ_2) $(LDFLAGS_2) -o $(TARGET_2)
-
-### TARGET OBJECTS FOR TARGET 2: test ##########################
-
-.OBJ.2.test/vslib.o:  vslib.cpp
-	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c vslib.cpp -o .OBJ.2.test/vslib.o
+	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
 
 
-### MAKEMAKE ENDS HERE ###########################################
+### TARGET OBJECTS FOR TARGET 3: test ##########################################
+
+.OBJ.test/vslib.o: vslib.cpp  vslib.cpp
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c vslib.cpp -o .OBJ.test/vslib.o
+
+
+### MAKEMAKE ENDS HERE #########################################################
+
