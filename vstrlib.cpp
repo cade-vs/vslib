@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.7 2002/08/17 12:30:37 cade Exp $
+ * $Id: vstrlib.cpp,v 1.8 2002/09/11 16:29:10 cade Exp $
  *
  */
 #ifdef WIN32
@@ -370,7 +370,7 @@
     for( z = 0; z < count(); z++ )
       {
       int sl = strlen(get(z));
-      if ( sl < l )
+      if ( sl > l )
         l = sl;
       }
     return l;  
