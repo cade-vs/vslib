@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.h,v 1.8 2003/02/16 23:33:51 cade Exp $
+ * $Id: vsuti.h,v 1.9 2004/04/04 23:18:20 cade Exp $
  *
  */
 
@@ -72,8 +72,8 @@ adler32_t file_adler32( const char *fname, long buffsize = 256*1024  );
 /*###########################################################################*/
 /* FILE functions */
 
-long file_size( const char *fname );
-long file_size( FILE *f );
+off_t file_size( const char *fname );
+off_t file_size( FILE *f );
 
 int file_load( FILE *f, void *buff, int size = -1 );
 int file_save( FILE *f, void *buff, int size = -1 );

@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.19 2003/02/16 23:33:51 cade Exp $
+ *  $Id: vstrlib.h,v 1.20 2004/04/04 23:18:20 cade Exp $
  *
  */
 
@@ -114,8 +114,8 @@ long file_pattern_search( const char *p, int ps, const char* fn, const char* opt
 
 extern int file_grep_max_line;
 extern int file_grep_lines_read;
-long file_grep( const char *re_string, const char* file_name, int nocase, int spos = -1 );
-long file_grep( const char *re_string, FILE* f, int nocase, int spos = -1 );
+long file_grep( const char *re_string, const char* file_name, int nocase, off_t spos = -1 );
+long file_grep( const char *re_string, FILE* f, int nocase, off_t spos = -1 );
 
 /*****************************************************************************
 **

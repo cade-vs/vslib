@@ -4,7 +4,7 @@
  * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.26 2003/05/25 14:31:12 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.27 2004/04/04 23:18:20 cade Exp $
  *
  */
 
@@ -297,19 +297,19 @@ long file_pattern_search( const char *p, int ps, FILE* f, const char* opt,
    if ( nocase )
      mem_search = mem_quick_search_nc;
    
-   int pos = -1;
+   off_t pos = -1;
    while(4)
      {
      int bs = fread( buff, 1, BUFSIZE, f );
      int cpos = mem_search( np, ps, buff, bs );
      if ( cpos > -1 )
        {
-       pos = ftell(f) - bs + cpos;
+       pos = ftello(f) - bs + cpos;
        break;
        }
      else
        {
-       fseek( f, -ps, SEEK_CUR );
+       fseeko( f, -ps, SEEK_CUR );
        }
      if ( bs < BUFSIZE ) break;
      }
@@ -337,7 +337,7 @@ long file_pattern_search( const char *p, int ps, const char* fn, const char* opt
 
 /* FGrep -- regular expression search (I know `G' here stands for <nothing>:)) */
 
-long file_grep( const char *re_string, const char* file_name, int nocase, int spos )
+long file_grep( const char *re_string, const char* file_name, int nocase, off_t spos )
 {    
   FILE *f = fopen( file_name, "rb" );
   if (!f) return -1;
@@ -348,7 +348,7 @@ long file_grep( const char *re_string, const char* file_name, int nocase, int sp
 
 int file_grep_max_line = MAX_GREP_LINE;
 int file_grep_lines_read = 0;
-long file_grep( const char *re_string, FILE* f, int nocase, int spos )
+long file_grep( const char *re_string, FILE* f, int nocase, off_t spos )
 {
   if ( strlen(re_string) >= (size_t)file_grep_max_line ) return -2; // just in case, and for now...
 
@@ -360,10 +360,10 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos )
   if ( ! re.comp( newpat ) ) return -2;
   char *line = (char*)malloc( file_grep_max_line+1 );
 
-  int opos = ftell( f );
+  off_t opos = ftello( f );
   ASSERT( spos >= -1 );
-  if (spos != -1) fseek( f, spos, SEEK_SET );
-  int cpos = ftell( f );
+  if (spos != -1) fseeko( f, spos, SEEK_SET );
+  off_t cpos = ftello( f );
 
   file_grep_lines_read = 0;
   int found = 0;
@@ -375,12 +375,12 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos )
       found = 1;
       break;
       }
-    cpos = ftell( f );
+    cpos = ftello( f );
     file_grep_lines_read++;
     if (feof(f)) break;
     }
 
-  fseek( f, opos, SEEK_SET );
+  fseeko( f, opos, SEEK_SET );
   if (found)
     cpos += ( re.sub_sp( 0 ) );
 

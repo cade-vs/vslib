@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.11 2003/02/16 23:33:51 cade Exp $
+ * $Id: vsuti.cpp,v 1.12 2004/04/04 23:18:20 cade Exp $
  *
  */
 
@@ -111,7 +111,7 @@ adler32_t file_adler32( const char *fname, long buffsize  )
 /*###########################################################################*/
 /* FILE functions */
 
-long file_size( const char *fname )
+off_t file_size( const char *fname )
 {
   struct stat st;
   if (stat( fname, &st )) return -1;
@@ -120,15 +120,15 @@ long file_size( const char *fname )
 
 /*---------------------------------------------------------------------------*/
 
-long file_size( FILE *f )
+off_t file_size( FILE *f )
 {
   int res = 0;
-  long opos = ftell( f );
+  off_t opos = ftello( f );
   if (opos == -1) return -1;
-  if (fseek( f, 0, SEEK_END )) res++;
-  long size = ftell( f );
+  if (fseeko( f, 0, SEEK_END )) res++;
+  long size = ftello( f );
   res += (size == -1);
-  if (fseek( f, opos, SEEK_SET )) res++;
+  if (fseeko( f, opos, SEEK_SET )) res++;
   if (res) return -1;
   return size;
 };
