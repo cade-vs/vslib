@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.15 2003/01/19 16:14:54 cade Exp $
+ *  $Id: vstrlib.h,v 1.16 2003/01/19 16:44:03 cade Exp $
  *
  */
 
@@ -116,7 +116,7 @@ class VArray
   const char* get( int n ); // get at position `n'
 
   void undef() // clear the array (frees all elements)
-      { box->undef(); _ret_str = ""; }
+      { box->unref(); box = new VArrayBox(); _ret_str = ""; }
       
   int push( const char* s ); // add to the end of the array
   const char* pop(); // get and remove the last element
@@ -225,6 +225,7 @@ public:
   ~VTrieBox() { ASSERT( root ); delete root; }
   
   VTrieBox* clone();
+  void undef() { ASSERT( root ); delete root; root = new VTrieNode(); };
 };
 
 /***************************************************************************

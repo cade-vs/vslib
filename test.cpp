@@ -338,11 +338,31 @@ void test8()
   
   v1 = "this is simple test ";
   v1 *= 1024;
+  
+  printf( "v1 len: %d\n", str_len( v1 ) );
+  
+  v2.compact( 1 ); // makes v2 compact, i.e. it will get as much memory as it
+                   // needs. otherwise it will get fixed amount of blocks
+  
+  v2 = v1; // data is shared between v1 and v2. any change to v1 or v2 will
+           // detach this data and both will get own copy
+  
+  v2[0] = ' '; // this will create own data for v2
+  
+  str_tr( v2, "ti", "TI" ); // capitalize T and I
+  
+  v2 = ""; // this will free all data allocated by v2
+  
+  printf( "copy 7,6: [%s]", (const char*)str_copy( v2, v1, 8, 6 ) );
+  printf( "copy 10: [%s]", (const char*)str_copy( v2, v1, -10 ) );
+  
+  printf( "************************ test 5 ends here\n" );
 }
 
 int main( int argc, char* argv[] )
 {
-  /*test7();/**/
+  test8();/**/
+  /*
   test1();
   test2();
   test3();

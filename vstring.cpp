@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.15 2003/01/19 16:14:54 cade Exp $
+ *  $Id: vstring.cpp,v 1.16 2003/01/19 16:44:03 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -232,6 +232,12 @@
 
   VString &str_copy( VString &target, const char* source, int pos, int len ) // returns `len' chars from `pos'
   {
+    //FIXME: too many strlen()'s...
+    if ( pos < 0 ) 
+      {
+      pos = str_len( source ) + pos;
+      if ( pos < 0 ) pos = 0;
+      };
     if ( len == -1 ) len = str_len( source ) - pos;
     if ( len < 1 )
       {
@@ -573,7 +579,11 @@
   {
     target[0] = 0;
     int sl = str_len( source );
-    
+    if ( pos < 0 ) 
+      {
+      pos = sl + pos;
+      if ( pos < 0 ) pos = 0;
+      };
     if ( pos < 0 || pos >= sl ) return target;
     if ( len == -1 ) len = sl - pos;
     if ( len < 1 ) return target;

@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.15 2003/01/19 16:14:54 cade Exp $
+ *  $Id: vstring.h,v 1.16 2003/01/19 16:44:03 cade Exp $
  *
  */
 
@@ -125,9 +125,13 @@ public:
   ~VString() { box->unref(); };
 
   void compact( int a_compact ) // set this != 0 for compact (memory preserving) behaviour
-    { box->compact = a_compact; }; //FIXME: detach() first?
+       { box->compact = a_compact; }; //FIXME: detach() first?
 
-  void resize( int new_size ) { detach(); box->resize_buf( new_size ); };
+  void resize( int new_size ) 
+       { detach(); box->resize_buf( new_size ); };
+
+  void undef() 
+       { box->unref(); box = new VStringBox(); };
 
   const VString& operator  = ( const VString& str )
     {
