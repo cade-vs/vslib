@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: clusters.h,v 1.3 2002/04/14 10:14:44 cade Exp $
+ * $Id: clusters.h,v 1.4 2003/01/01 15:41:55 cade Exp $
  *
  */
 /*
@@ -23,6 +23,7 @@
 #include <string.h>
 #include <limits.h>
 #include <assert.h>
+
 #ifndef ASSERT
 #define ASSERT assert
 #endif
@@ -140,7 +141,6 @@ class DCluster : public BaseCluster
     void get( int pn, void* pe );
 
     const void* operator [] ( int pn ) { ASSERT( pn >= 0 && pn < cnt  ); return data + (pn*es); };
-
   };
 
 /****************************************************************************
@@ -156,7 +156,6 @@ class TDCluster : public DCluster
 
     const T* operator [] ( int pn ) const { ASSERT( pn >= 0 && pn < cnt  ); return (T*)(data + (pn*es)); };
     T operator [] ( int pn ) { ASSERT( pn >= 0 && pn < cnt  ); return (*((T*)(data + (pn*es)))); };
-
   };
 
 /****************************************************************************
@@ -295,8 +294,8 @@ class BSet
     
     void reverse() { for(int z = 0; z < datasize; z++) data[z] = ~data[z]; };
     void set( int pn, int val ) { if ( val ) set1( pn ); else set0( pn ); };
-    void set_all1() { if (data) memset( data, 0xff, datasize ); };
-    void set_all0() { if (data) memset( data, 0x00, datasize ); };
+    void set_all1() { if ( data ) memset( data, 0xff, datasize ); };
+    void set_all0() { if ( data ) memset( data, 0x00, datasize ); };
 
     const int operator [] ( int pn )
        { ASSERT( pn >= 0 && pn < size  ); return get( pn ); };
@@ -306,11 +305,10 @@ class BSet
     BSet& operator  = ( const BSet &b1 );
     BSet& operator &= ( const BSet &b1 );
     BSet& operator |= ( const BSet &b1 );
-    BSet  operator ~  ();
+    BSet  operator  ~ ();
 
     friend BSet operator & ( const BSet &b1, const BSet &b2 );
     friend BSet operator | ( const BSet &b1, const BSet &b2 );
-
   };
 
 #endif //_CLUSTERS_H_

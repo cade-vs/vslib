@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.11 2002/12/12 23:45:14 cade Exp $
+ *  $Id: vstring.cpp,v 1.12 2003/01/01 15:41:55 cade Exp $
  *
  */
 
@@ -25,11 +25,11 @@
 
 /****************************************************************************
 **
-** STRING Class
+** VString Class
 **
 ****************************************************************************/
 
-  void String::resize( int newsize )
+  void VString::resize( int newsize )
   {
     newsize++; /* for the trailing 0 */
     if ( !compact )
@@ -52,21 +52,21 @@
       }
   };
 
-  void String::i( const int n )
+  void VString::i( const int n )
   {
     char tmp[64];
     itoa( n, tmp, 10 );
     set( tmp );
   }
 
-  void String::l( const long n )
+  void VString::l( const long n )
   {
     char tmp[64];
     sprintf( tmp, "%ld", n );
     set( tmp );
   }
 
-  void String::f( const double d )
+  void VString::f( const double d )
   {
     char tmp[64];
     sprintf( tmp, "%.10f", d );
@@ -77,7 +77,7 @@
     set( tmp );
   }
 
-  void String::fi( const double d ) // sets double as int (w/o frac)
+  void VString::fi( const double d ) // sets double as int (w/o frac)
   {
     char tmp[64];
     sprintf( tmp, "%.0f", d );
@@ -86,7 +86,7 @@
     set( tmp );
   }
 
-  void String::set( const char* ps )
+  void VString::set( const char* ps )
   {
     if (ps == NULL || ps[0] == 0)
       {
@@ -103,7 +103,7 @@
       }
   };
 
-  void String::cat( const char* ps )
+  void VString::cat( const char* ps )
   {
     if (ps == NULL) return;
     if (ps[0] == 0) return;
@@ -114,7 +114,7 @@
     sl += psl;
   };
 
-  void String::setn( const char* ps, int len )
+  void VString::setn( const char* ps, int len )
   {
     int z = strlen( ps );
     if ( len < z ) z = len;
@@ -124,7 +124,7 @@
     s[z] = 0;
   };
 
-  void String::catn( const char* ps, int len )
+  void VString::catn( const char* ps, int len )
   {
     int z = strlen( ps );
     if ( len < z ) z = len;
@@ -136,11 +136,11 @@
 
 /****************************************************************************
 **
-** STRING Functions (for class String)
+** VString Functions (for class VString)
 **
 ****************************************************************************/
 
-  String &str_mul( String &target, int n ) // multiplies the string n times, i.e. `1'*5 = `11111'
+  VString &str_mul( VString &target, int n ) // multiplies the VString n times, i.e. `1'*5 = `11111'
   {
     target.resize( target.sl * n );
     str_mul( target.s, n );
@@ -148,14 +148,14 @@
     return target;
   }
 
-  String &str_del( String &target, int pos, int len ) // deletes `len' chars starting from `pos'
+  VString &str_del( VString &target, int pos, int len ) // deletes `len' chars starting from `pos'
   {
     str_del( target.s, pos, len );
     target.fix();
     return target;
   };
 
-  String &str_ins( String &target, int pos, const char* s ) // inserts `s' in position `pos'
+  VString &str_ins( VString &target, int pos, const char* s ) // inserts `s' in position `pos'
   {
     if ( pos > target.sl || pos < 0 ) return target;
     target.resize( target.sl + strlen(s) );
@@ -164,7 +164,7 @@
     return target;
   };
 
-  String &str_ins_ch( String &target, int pos, char ch ) // inserts `ch' in position `pos'
+  VString &str_ins_ch( VString &target, int pos, char ch ) // inserts `ch' in position `pos'
   {
     if ( pos > target.sl || pos < 0 ) return target;
     target.resize( target.sl + 1 );
@@ -173,7 +173,7 @@
     return target;
   };
 
-  String &str_replace( String &target, const char* out, const char* in ) // replace `out' w. `in'
+  VString &str_replace( VString &target, const char* out, const char* in ) // replace `out' w. `in'
   {
     int outl = strlen( out );
     int inl = strlen( in );
@@ -188,7 +188,7 @@
     return target;
   };
 
-  String &str_copy( String &target, const char* source, int pos, int len ) // returns `len' chars from `pos'
+  VString &str_copy( VString &target, const char* source, int pos, int len ) // returns `len' chars from `pos'
   {
     target.resize( len );
     str_copy( target.s, source, pos, len );
@@ -197,17 +197,17 @@
     return target;
   };
 
-  String &str_left( String &target, const char* source, int len ) // returns `len' chars from the left
+  VString &str_left( VString &target, const char* source, int len ) // returns `len' chars from the left
   {
     return str_copy( target, source, 0, len );
   };
 
-  String &str_right( String &target, const char* source, int len ) // returns `len' chars from the right
+  VString &str_right( VString &target, const char* source, int len ) // returns `len' chars from the right
   {
     return str_copy( target, source, strlen( source ) - len, len );
   };
 
-  String &str_sleft( String &target, int len ) // SelfLeft -- just as 'Left' but works on `this'
+  VString &str_sleft( VString &target, int len ) // SelfLeft -- just as 'Left' but works on `this'
   {
     if ( len < target.sl )
       {
@@ -217,7 +217,7 @@
     return target;
   };
 
-  String &str_sright( String &target, int len ) // SelfRight -- just as 'Right' but works on `this'
+  VString &str_sright( VString &target, int len ) // SelfRight -- just as 'Right' but works on `this'
   {
     str_sright( target.s, len );
     target.fix();
@@ -225,35 +225,35 @@
   };
 
 
-  String &str_trim_left( String &target, int len ) // trims `len' chars from the beginning (left)
+  VString &str_trim_left( VString &target, int len ) // trims `len' chars from the beginning (left)
   {
     str_trim_left( target.s, len );
     target.fix();
     return target;
   };
 
-  String &str_trim_right( String &target, int len ) // trim `len' chars from the end (right)
+  VString &str_trim_right( VString &target, int len ) // trim `len' chars from the end (right)
   {
     str_trim_right( target.s, len );
     target.fix();
     return target;
   };
 
-  String &str_cut_left( String &target, const char* charlist ) // remove all chars `charlist' from the beginning (i.e. from the left)
+  VString &str_cut_left( VString &target, const char* charlist ) // remove all chars `charlist' from the beginning (i.e. from the left)
   {
     str_cut_left( target.s, charlist );
     target.fix();
     return target;
   };
 
-  String &str_cut_right( String &target, const char* charlist ) // remove all chars `charlist' from the end (i.e. from the right)
+  VString &str_cut_right( VString &target, const char* charlist ) // remove all chars `charlist' from the end (i.e. from the right)
   {
     str_cut_right( target.s, charlist );
     target.fix();
     return target;
   };
 
-  String &str_cut( String &target, const char* charlist ) // does `CutR(charlist);CutL(charlist);'
+  VString &str_cut( VString &target, const char* charlist ) // does `CutR(charlist);CutL(charlist);'
   {
     str_cut_left( target.s, charlist );
     str_cut_right( target.s, charlist );
@@ -261,12 +261,12 @@
     return target;
   };
 
-  String &str_cut_spc( String &target ) // does `Cut(" ");'
+  VString &str_cut_spc( VString &target ) // does `Cut(" ");'
   {
     return str_cut( target, " " );
   };
 
-  String &str_pad( String &target, int len, char ch )
+  VString &str_pad( VString &target, int len, char ch )
   {
     target.resize( (len > 0)?len:-len );
     str_pad( target.s, len, ch );
@@ -274,7 +274,7 @@
     return target;
   };
 
-  String &str_comma( String &target, char delim )
+  VString &str_comma( VString &target, char delim )
   {
     int new_size = str_len( target ) / 3 + str_len( target );
     target.resize( new_size );
@@ -283,7 +283,7 @@
     return target;
   };
 
-  void str_set_ch( String &target, int pos, const char ch ) // sets `ch' char at position `pos'
+  void str_set_ch( VString &target, int pos, const char ch ) // sets `ch' char at position `pos'
   {
     if ( pos < 0 )
       pos = target.sl + pos;
@@ -291,7 +291,7 @@
     target.s[pos] = ch;
   };
 
-  char str_get_ch( String &target, int pos ) // return char at position `pos'
+  char str_get_ch( VString &target, int pos ) // return char at position `pos'
   {
     if ( pos < 0 )
       pos = target.sl + pos;
@@ -299,7 +299,7 @@
     return target.s[pos];
   };
 
-  void str_add_ch( String &target, const char ch ) // adds `ch' at the end
+  void str_add_ch( VString &target, const char ch ) // adds `ch' at the end
   {
     int sl = target.sl;
     target.resize( sl+1 );
@@ -308,14 +308,14 @@
     target.fix();
   };
 
-  char* str_word( String &target, const char* delimiters, char* result )
+  char* str_word( VString &target, const char* delimiters, char* result )
   {
     str_word( target.s, delimiters, result );
     target.fix();
     return result[0] ? result : NULL;
   };
 
-  char* str_rword( String &target, const char* delimiters, char* result )
+  char* str_rword( VString &target, const char* delimiters, char* result )
   {
     str_rword( target.s, delimiters, result );
     target.fix();
@@ -323,7 +323,7 @@
   };
 
 
-  int sprintf( int init_size, String &target, const char *format, ... )
+  int sprintf( int init_size, VString &target, const char *format, ... )
   {
     char *tmp = new char[init_size+1];
     va_list vlist;
@@ -335,7 +335,7 @@
     return res;
   };
 
-  int sprintf( String &target, const char *format, ... )
+  int sprintf( VString &target, const char *format, ... )
   {
     char tmp[1024];
     va_list vlist;
@@ -346,37 +346,37 @@
     return res;
   };
 
-  String& str_tr ( String& target, const char *from, const char *to ) 
+  VString& str_tr ( VString& target, const char *from, const char *to ) 
   { 
     str_tr( target.s, from, to ); 
     return target; 
   };
   
-  String& str_up ( String& target ) 
+  VString& str_up ( VString& target ) 
   { 
     str_up( target.s ); 
     return target; 
   };
   
-  String& str_low( String& target ) 
+  VString& str_low( VString& target ) 
   { 
     str_low( target.s ); 
     return target; 
   };
   
-  String& str_flip_case( String& target ) 
+  VString& str_flip_case( VString& target ) 
   { 
     str_flip_case( target.s ); 
     return target; 
   };
   
-  String& str_reverse  ( String& target ) 
+  VString& str_reverse  ( VString& target ) 
   { 
     str_reverse( target.s ); 
     return target; 
   };
 
-  String &str_squeeze( String &target, const char* sq_chars ) // squeeze repeating chars to one only
+  VString &str_squeeze( VString &target, const char* sq_chars ) // squeeze repeating chars to one only
   {
     str_squeeze( target.s, sq_chars );
     target.fix();
@@ -385,11 +385,11 @@
   
 /****************************************************************************
 **
-** STRING Functions (for char*)
+** VString Functions (for char*)
 **
 ****************************************************************************/
 
-  char* str_mul( char* target, int n ) // multiplies the string n times, i.e. `1'*5 = `11111'
+  char* str_mul( char* target, int n ) // multiplies the VString n times, i.e. `1'*5 = `11111'
   {
     if ( n < 0 ) return target;
     if ( n == 0 )
@@ -426,7 +426,7 @@
     return  pc - target;
   }
 
-  int str_find( const char* target, const char* s, int startpos ) // returns first zero-based position of string, or -1 if not found
+  int str_find( const char* target, const char* s, int startpos ) // returns first zero-based position of VString, or -1 if not found
   {
     int sl = strlen( target );
     if (startpos >= sl) return -1;
@@ -436,7 +436,7 @@
     return  pc - target;
   }
 
-  int str_rfind( const char* target, const char* s ) // returns last zero-based position of string, or -1 if not found
+  int str_rfind( const char* target, const char* s ) // returns last zero-based position of VString, or -1 if not found
   {
     int sl = strlen( target );
     int sls = strlen( s );
@@ -595,7 +595,7 @@
 
 
   // return first `word', i.e. from pos 0 to first found delimiter char
-  // after that deletes this `word' from the string
+  // after that deletes this `word' from the VString
   char* str_word( char* target, const char* delimiters, char* result )
   {
     int z = 0;
@@ -683,7 +683,7 @@
 
 
   // insert `commas' for 1000's delimiter or use another delimiter
-  // string supposed to be a integer or real w/o `e' format
+  // VString supposed to be a integer or real w/o `e' format
   char* str_comma( char* target, char delim )
   {
     int dot = str_rfind( target, '.' );
@@ -740,7 +740,7 @@
     return target;
   }
 
-  char* str_reverse( char* target ) // reverse the string: `abcde' becomes `edcba' :)
+  char* str_reverse( char* target ) // reverse the VString: `abcde' becomes `edcba' :)
   {
     int z = 0;
     int x = strlen(target)-1;
@@ -782,7 +782,7 @@
 
 /****************************************************************************
 **
-** STRING Functions -- common (String class will pass transparently)
+** VString Functions -- common (VString class will pass transparently)
 **
 ****************************************************************************/
 
@@ -798,7 +798,7 @@
     return cnt;
   }
 
-  int str_str_count( const char* target, const char* s, int startpos ) // returns match count of `s' string into target
+  int str_str_count( const char* target, const char* s, int startpos ) // returns match count of `s' VString into target
   {
     if (!target) return 0;
     int cnt = 0;
@@ -812,7 +812,7 @@
     return cnt;  
   }
   
-  int str_is_int( const char* target ) // check if string is correct int value
+  int str_is_int( const char* target ) // check if VString is correct int value
   {
     if (!target) return 0;
     char *tmp = strdup( target );
@@ -823,7 +823,7 @@
     return ( dc == sl );
   };
 
-  int str_is_double( const char* target ) // check if string is correct double (w/o `e' format :( )
+  int str_is_double( const char* target ) // check if VString is correct double (w/o `e' format :( )
   {
     if (!target) return 0;
     char *tmp = strdup( target );
@@ -837,7 +837,7 @@
 
 /****************************************************************************
 **
-** STRING Utilities -- functions and classes
+** VString Utilities -- functions and classes
 **
 ****************************************************************************/
 
@@ -852,7 +852,7 @@
     return dest;
   };
   
-  String& str_dot_reduce( const char* s, String& dest, int width )
+  VString& str_dot_reduce( const char* s, VString& dest, int width )
   {
     if ( s ) dest = s;
     int sl = str_len( dest );
@@ -865,7 +865,7 @@
 
 /****************************************************************************
 **
-** STRING file names utilities -- functions and classes
+** VString file names utilities -- functions and classes
 ** NOTE: does not use any external function calls!
 **
 ****************************************************************************/
@@ -881,7 +881,7 @@ char* str_fix_path( char* s, int slashtype )
   return s;
 }
 
-const char* str_fix_path( String &s, int slashtype )
+const char* str_fix_path( VString &s, int slashtype )
 {
   size_t sl = str_len( s );
   if ( s[sl-1] != slashtype )
@@ -891,11 +891,11 @@ const char* str_fix_path( String &s, int slashtype )
 
 char* str_file_ext( const char *ps, char *ext )
 {
-ext[0] = 0;
-int len = strlen(ps);
-int z = len - 1;
-while (ps[z] != '.' && ps[z] != '/' && z > 0) z--;
-if (ps[z] == '.')
+  ext[0] = 0;
+  int len = strlen(ps);
+  int z = len - 1;
+  while (ps[z] != '.' && ps[z] != '/' && z > 0) z--;
+  if (ps[z] == '.')
   if (!(z == 0 || (z > 0 && ps[z-1] == '/'))) // it is ".filename" --> no ext;
     strcpy( ext, ps + z + 1 );
   return ext;
@@ -941,7 +941,7 @@ char* str_file_path( const char *ps, char *path )
   return path;
 }
 
-String& str_file_ext( const char *ps, String& ext )
+VString& str_file_ext( const char *ps, VString& ext )
 {
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_ext( ps, t );
@@ -950,7 +950,7 @@ String& str_file_ext( const char *ps, String& ext )
   return ext;
 };
 
-String& str_file_name( const char *ps, String& name )
+VString& str_file_name( const char *ps, VString& name )
 {
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_name( ps, t );
@@ -959,7 +959,7 @@ String& str_file_name( const char *ps, String& name )
   return name;
 };
 
-String& str_file_name_ext( const char *ps, String& name )
+VString& str_file_name_ext( const char *ps, VString& name )
 {
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_name_ext( ps, t );
@@ -968,7 +968,7 @@ String& str_file_name_ext( const char *ps, String& name )
   return name;
 };
 
-String& str_file_path( const char *ps, String& path )
+VString& str_file_path( const char *ps, VString& path )
 {
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_path( ps, t );
@@ -1001,7 +1001,7 @@ char* str_reduce_path( const char* path, char* dest ) // removes ".."s
 
 /****************************************************************************
 **
-** STRING Conversions
+** VString Conversions
 **
 ****************************************************************************/
 
@@ -1054,6 +1054,8 @@ char* str_reduce_path( const char* path, char* dest ) // removes ".."s
   };
 
 /***************************************************************************
+**
 ** EOF
-***************************************************************************/
+**
+****************************************************************************/
 

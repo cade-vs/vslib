@@ -71,7 +71,7 @@ void test3()
   tr += va; // same as: tr.merge( &va );
 
   // clear the array--remove all elements
-  va.zap();
+  va.undef();
 
   // take keys from `tr' as array and store them into va, returns count
   // i.e. i = tr.count();
@@ -88,7 +88,7 @@ void test3()
   VArray v1;
 
   printf( "--------------------\n" );
-  v1 = tr;    // same as: v1.zap; v1.merge( &tr );
+  v1 = tr;    // same as: v1.undef; v1.merge( &tr );
   v1.print(); // print array data
 
   VRegexp re( "a([0-9]+)" ); // compiling new regexp
@@ -97,14 +97,14 @@ void test3()
     printf( "sub 1 = %s\n", re[1].data() ); // re[1] returns `85'
 
   printf( "--------------------\n" );
-  v1.zap(); // clear
+  v1.undef(); // clear
   v1.split( " +", "tralala  opala and another   one" ); // splits on spaces
   v1.print();
 
   printf( "joined: %s\n", v1.join( "---" ) ); // join the same data back
 
   printf( "--------------------\n" );
-  v1.zap();
+  v1.undef();
   v1.split( " +", "tralala  opala and another   one", 3 ); // splits data on spaces up to 3 elements
   v1.print();
 
@@ -147,7 +147,7 @@ void test4()
   i = ii;
   while( i-- )
     {
-    va.zap();
+    va.undef();
     va.split( ",", "this is, just a simple. but fixed, nonsense test, voila :)" );
     printf( "%d%% va count = %d\n", (100*i)/ii, va.count() );
     }
@@ -192,6 +192,17 @@ void test4()
     }
   printf( "set  = %s\n", set.data() );
   printf( "setn = %s\n", setn.data() );
+  
+  printf( "---array sort-------\n" );
+  va.undef();
+  va.split( "[, \t]+", "this is, just a simple. but fixed, nonsense test, voila :)" );
+  va.sort();
+  va.print();
+  printf( "--------------------\n" );
+  va.sort( 1 );
+  va.print();
+  printf( "--------------------\n" );
+  
 }
 
 void test5()
@@ -209,6 +220,22 @@ void test5()
   tr.print();
   tr.reverse();
   tr.print();
+
+  VCharSet cs;
+  
+  cs.push( 'a' );
+  printf( "char_set: %d, %d\n", cs.in( 'a' ), cs.in( 'z' ) );
+  cs.undef( 'a' );
+  printf( "char_set: %d, %d\n", cs.in( 'a' ), cs.in( 'z' ) );
+  cs.undef();
+
+  int i = 2000;
+  while( i-- )
+    {
+    cs.push( i );
+    }
+  cs.undef();  
+
   
   printf( "************************ test 5 ends here\n" );
 }
