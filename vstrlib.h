@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.10 2003/01/04 18:53:06 cade Exp $
+ *  $Id: vstrlib.h,v 1.11 2003/01/05 12:45:12 cade Exp $
  *
  */
 
@@ -24,8 +24,9 @@
 #endif
 
 #include <stdlib.h>
+#include <time.h>
 #include <pcre.h>
-#include "regexp3.h"
+
 #include "vstring.h"
 
 /***************************************************************************
@@ -43,6 +44,15 @@ class VRegexp; /* forward */
 
 #define VHash   VTrie;   /* using casual names... */
 #define VRegExp VRegexp; /* using casual names... */
+
+/****************************************************************************
+**
+** VString Conversions
+**
+****************************************************************************/
+
+char*  time2str( const time_t tim );
+time_t str2time( const char* timstr );
 
 /***************************************************************************
 **

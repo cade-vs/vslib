@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.15 2003/01/04 18:53:06 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.16 2003/01/05 12:45:12 cade Exp $
  *
  */
 
@@ -12,6 +12,41 @@
 #include "stdafx.h"
 #endif
 #include "vstrlib.h"
+
+/****************************************************************************
+**
+** VString Conversions
+**
+****************************************************************************/
+
+  char* time2str( const time_t tim )
+  {
+    time_t t = tim;
+    return ctime( &t );
+  };
+
+  time_t str2time( const char* timstr )
+  {
+    if (strlen( timstr ) < 24) return 0;
+    char ts[32];
+    struct tm m; memset( &m, 0, sizeof(m) );
+
+    strcpy( ts, timstr );
+    str_up( ts );
+    //  0    5   10    5   20   4
+    // "Wed Jun 30 21:49:08 1993\n"
+    ts[24] = 0; m.tm_year = atoi( ts + 20 ) - 1900;
+    ts[19] = 0; m.tm_sec  = atoi( ts + 17 );
+    ts[16] = 0; m.tm_min  = atoi( ts + 14 );
+    ts[13] = 0; m.tm_hour = atoi( ts + 11 );
+    ts[10] = 0; m.tm_mday = atoi( ts +  8 );
+    ts[ 7] = 0; m.tm_mon  = str_find( "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC", ts+4 ) / 3;
+    m.tm_yday = 0;
+    m.tm_wday = 0;
+    m.tm_isdst = -1;
+    time_t tim = mktime( &m );
+    return tim;
+  };
 
 /***************************************************************************
 **

@@ -6,7 +6,10 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.12 2003/01/01 15:41:55 cade Exp $
+ *  $Id: vstring.cpp,v 1.13 2003/01/05 12:45:12 cade Exp $
+ *
+ *  This file (vstring.h and vstring.cpp) implements plain string-only 
+ *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
  */
 
@@ -841,20 +844,10 @@
 **
 ****************************************************************************/
 
-  char*	str_dot_reduce( const char* s, char* dest, int width )
+  VString str_dot_reduce( const char* s, int width )
   {
-    if ( s ) strcpy( dest, s );
-    int sl = str_len( dest );
-    if ( sl <= width ) return dest;
-    int pos = (width-3) / 2;
-    str_del( dest, pos, sl - width + 3 );
-    str_ins( dest, pos, "..." );
-    return dest;
-  };
-  
-  VString& str_dot_reduce( const char* s, VString& dest, int width )
-  {
-    if ( s ) dest = s;
+    VString dest;
+    dest = s;
     int sl = str_len( dest );
     if ( sl <= width ) return dest;
     int pos = (width-3) / 2;
@@ -889,98 +882,65 @@ const char* str_fix_path( VString &s, int slashtype )
   return (const char*)s;
 }
 
-char* str_file_ext( const char *ps, char *ext )
+VString str_file_ext( const char *ps )
 {
-  ext[0] = 0;
+  VString ext;
   int len = strlen(ps);
   int z = len - 1;
-  while (ps[z] != '.' && ps[z] != '/' && z > 0) z--;
-  if (ps[z] == '.')
-  if (!(z == 0 || (z > 0 && ps[z-1] == '/'))) // it is ".filename" --> no ext;
-    strcpy( ext, ps + z + 1 );
+  while ( ps[z] != '.' && ps[z] != '/' && z > 0 ) z--;
+  if ( ps[z] == '.' )
+    if ( !(z == 0 || (z > 0 && ps[z-1] == '/')) ) // `.name' has no extension!
+      ext = ps + z + 1;
   return ext;
-}
+};
 
-char* str_file_name( const char *ps, char *name )
+VString str_file_name( const char *ps )
 {
-  int len = strlen(ps);
-  int z = len - 1;
-
-  while ( ps[z] != '/' && z >= 0) z--;
-  strcpy( name, ps + z + 1 );
-
-  z = strlen( name ) - 1;
-  while (name[z] != '.' && name[z] != '/' && z > 0) z--;
-  if (name[z] == '.')
-    name[z] = 0;
-  return name;
-}
-
-char* str_file_name_ext( const char *ps, char *path )
-{
-  int len = strlen(ps);
+  VString name;
+  
+  int len = strlen( ps );
   int z = len - 1;
 
   while ( z >= 0 && ps[z] != '/' ) z--;
-  strcpy( path, ps + z + 1 );
+  name = ps + z + 1;
 
-  return path;
-}
+  z = str_len( name ) - 1;
+  while ( z > 0 && name[z] != '.' && name[z] != '/' ) z--;
+  if ( z > 0 && name[z] == '.') // `.name' has no extension!
+    str_sleft( name, z );
+  return name;
+};
 
-char* str_file_path( const char *ps, char *path ) 
+VString str_file_name_ext( const char *ps )
 {
-  int len = strlen(ps);
+  VString name;
+  
+  int len = strlen( ps );
   int z = len - 1;
-  strcpy( path, ps );
 
-  while ( path[z] != '/' && z > 0) z--;
-  if (path[z] == '/')
-    path[z+1] = 0;
-  else
-    path[z] = 0;
-  return path;
-}
-
-VString& str_file_ext( const char *ps, VString& ext )
-{
-  char *t = new char[ strlen( ps ) + 1 ];
-  str_file_ext( ps, t );
-  ext = t;
-  delete [] t;
-  return ext;
-};
-
-VString& str_file_name( const char *ps, VString& name )
-{
-  char *t = new char[ strlen( ps ) + 1 ];
-  str_file_name( ps, t );
-  name = t;
-  delete [] t;
+  while ( z >= 0 && ps[z] != '/' ) z--;
+  name = ps + z + 1;
   return name;
 };
 
-VString& str_file_name_ext( const char *ps, VString& name )
+VString str_file_path( const char *ps )
 {
-  char *t = new char[ strlen( ps ) + 1 ];
-  str_file_name_ext( ps, t );
-  name = t;
-  delete [] t;
+  VString name;
+  
+  int len = strlen( ps );
+  int z = len;
+
+  while ( z >= 0 && ps[z] != '/' ) z--;
+  name = ps;
+  str_sleft( name, z+1 );
   return name;
 };
 
-VString& str_file_path( const char *ps, VString& path )
-{
-  char *t = new char[ strlen( ps ) + 1 ];
-  str_file_path( ps, t );
-  path = t;
-  delete [] t;
-  return path;
-};
 
-
-char* str_reduce_path( const char* path, char* dest ) // removes ".."s
+VString str_reduce_path( const char* path ) // removes ".."s
 {
-  if ( path != NULL ) strcpy( dest, path );
+  VString dest;
+  dest = path;
   str_replace( dest, "/./", "/" );
   int i = -1;
   while( (i = str_find( dest, "/../" ) ) != -1 )
@@ -1023,35 +983,6 @@ char* str_reduce_path( const char* path, char* dest ) // removes ".."s
       }
     return C;
   }
-
-  char* time2str( const time_t tim )
-  {
-    time_t t = tim;
-    return ctime( &t );
-  };
-
-  time_t str2time( const char* timstr )
-  {
-    if (strlen( timstr ) < 24) return 0;
-    char ts[32];
-    struct tm m; memset( &m, 0, sizeof(m) );
-
-    strcpy( ts, timstr );
-    str_up( ts );
-    //  0    5   10    5   20   4
-    // "Wed Jun 30 21:49:08 1993\n"
-    ts[24] = 0; m.tm_year = atoi( ts + 20 ) - 1900;
-    ts[19] = 0; m.tm_sec  = atoi( ts + 17 );
-    ts[16] = 0; m.tm_min  = atoi( ts + 14 );
-    ts[13] = 0; m.tm_hour = atoi( ts + 11 );
-    ts[10] = 0; m.tm_mday = atoi( ts +  8 );
-    ts[ 7] = 0; m.tm_mon  = str_find( "JANFEBMARAPRMAYJUNJULAUGSEPOCTNOVDEC", ts+4 ) / 3;
-    m.tm_yday = 0;
-    m.tm_wday = 0;
-    m.tm_isdst = -1;
-    time_t tim = mktime( &m );
-    return tim;
-  };
 
 /***************************************************************************
 **

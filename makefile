@@ -217,7 +217,9 @@ OBJ_3= \
 .OBJ.test: 
 	$(MKDIR) .OBJ.test
 
-test: .OBJ.test $(OBJ_3)
+test-extra-deps: libvslib.a
+
+test: .OBJ.test $(OBJ_3) test-extra-deps
 	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
 
 clean-test: 

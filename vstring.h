@@ -26,7 +26,10 @@
  *        `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.12 2003/01/01 15:41:55 cade Exp $
+ *  This file (vstring.h and vstring.cpp) implements plain string-only 
+ *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
+ *
+ *  $Id: vstring.h,v 1.13 2003/01/05 12:45:12 cade Exp $
  *
  */
 
@@ -36,7 +39,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #include <assert.h>
 #ifndef ASSERT
@@ -59,31 +61,33 @@
     int   size; // internal buffer size
     char* s;    // internal buffer
 
+    char retch; // used to return char& for off-range char index
+
     void resize( int newsize );
 
   public:
 
     int compact; // set this != 0 for compact (memory preserving) behaviour
 
-    VString()                     {  s = NULL; sl = size = compact = 0; resize(sl); };
+    VString()                      {  s = NULL; sl = size = compact = 0; resize(sl); };
     VString( const VString& str )  {  s = NULL; sl = size = compact = 0; set(str);   };
-    VString( const char*   ps  )  {  s = NULL; sl = size = compact = 0; set(ps);    };
-    VString( const int     n   )  {  s = NULL; sl = size = compact = 0; i(n);    };
-    VString( const long    n   )  {  s = NULL; sl = size = compact = 0; l(n);    };
-    VString( const double  n   )  {  s = NULL; sl = size = compact = 0; f(n);    };
+    VString( const char*    ps  )  {  s = NULL; sl = size = compact = 0; set(ps);    };
+    VString( const int      n   )  {  s = NULL; sl = size = compact = 0; i(n);    };
+    VString( const long     n   )  {  s = NULL; sl = size = compact = 0; l(n);    };
+    VString( const double   n   )  {  s = NULL; sl = size = compact = 0; f(n);    };
     ~VString() { if ( s ) free( s ); s = NULL; sl = size = compact = 0; };
 
-    const VString& operator = ( const VString& str ) { set(str.s); return *this; };
-    const VString& operator = ( const char*   ps  ) { set(ps); return *this; };
-    const VString& operator = ( const int     n   ) { i(n); return *this; };
-    const VString& operator = ( const long    n   ) { l(n); return *this; };
-    const VString& operator = ( const double  n   ) { f(n); return *this; };
+    const VString& operator  = ( const VString& str ) { set(str.s); return *this; };
+    const VString& operator  = ( const char*   ps   ) { set(ps); return *this; };
+    const VString& operator  = ( const int     n    ) { i(n); return *this; };
+    const VString& operator  = ( const long    n    ) { l(n); return *this; };
+    const VString& operator  = ( const double  n    ) { f(n); return *this; };
 
     const VString& operator += ( const VString& str ) { cat( str.s ); return *this; };
-    const VString& operator += ( const char*  ps   ) { cat( ps ); return *this; };
-    const VString& operator += ( const int    n    ) { VString tmp = n; cat(tmp); return *this; };
-    const VString& operator += ( const long   n    ) { VString tmp = n; cat(tmp); return *this; };
-    const VString& operator += ( const double n    ) { VString tmp = n; cat(tmp); return *this; };
+    const VString& operator += ( const char*  ps    ) { cat( ps ); return *this; };
+    const VString& operator += ( const int    n     ) { VString tmp = n; cat(tmp); return *this; };
+    const VString& operator += ( const long   n     ) { VString tmp = n; cat(tmp); return *this; };
+    const VString& operator += ( const double n     ) { VString tmp = n; cat(tmp); return *this; };
 
     friend VString operator + ( const VString& str1, const VString& str2 )
            { VString res = str1; res += str2; return res; };
@@ -131,7 +135,15 @@
 
     operator const char* ( ) const { return (const char*)s; }
     char& operator [] ( int n )
-         { ASSERT( n >= 0 && n <= sl ); return s[n]; }
+        { 
+        if ( n < 0 ) n = sl + n;
+        if ( n < 0 || n >= sl ) 
+          {
+          retch = 0;
+          return retch;
+          }
+        return s[n]; 
+        }
 
     const char* data() { return s; }
 
@@ -148,8 +160,8 @@
     double f() { return atof( s ); };
     double fi() { return atof( s ); };
 
-    void   set ( const char* ps );
-    void   cat ( const char* ps );
+    void   set( const char* ps );
+    void   cat( const char* ps );
     void   setn( const char* ps, int len );
     void   catn( const char* ps, int len );
 
@@ -311,15 +323,14 @@
 **
 ****************************************************************************/
 
-  /* str_chop() removes last char from a VString (perl-like) */
-  inline char* str_chop( char* target ) { return str_trim_right( target, 1 ); };
-  inline VString& str_chop( VString& target ) { return str_trim_right( target, 1 ); };
+/* str_chop() removes last char from a VString (perl-like) */
+inline char* str_chop( char* target ) { return str_trim_right( target, 1 ); };
+inline VString& str_chop( VString& target ) { return str_trim_right( target, 1 ); };
 
-  /* reduces VString to the given width using dots:
-     `this is long line' -> `this...ine'
-     `s' can be NULL, then target will be reduced */
-  char*	str_dot_reduce( const char* s, char* dest, int width );
-  VString& str_dot_reduce( const char* s, VString& dest, int width );
+/* reduces VString to the given width using dots:
+   `this is long line' -> `this...ine'
+   `s' can be NULL, then target will be reduced */
+VString str_dot_reduce( const char* s, int width );
 
 /****************************************************************************
 **
@@ -332,20 +343,13 @@
 char* str_fix_path( char* s, int slashtype = '/' );
 const char* str_fix_path( VString& s, int slashtype = '/' );
 
-// following func's return from `/path/filename.ext'
-char* str_file_ext( const char *ps, char *ext );       /* `ext'            */
-char* str_file_name( const char *ps, char *name );     /* `filename'       */
-char* str_file_name_ext( const char *ps, char *name ); /* `filename.ext'   */
-char* str_file_path( const char *ps, char *path );     /* `/path/'         */
-
-VString& str_file_ext( const char *ps, VString& ext );       /* `ext'            */
-VString& str_file_name( const char *ps, VString& name );     /* `filename'       */
-VString& str_file_name_ext( const char *ps, VString& name ); /* `filename.ext'   */
-VString& str_file_path( const char *ps, VString& path );     /* `/path/'         */
+VString str_file_ext( const char *ps );       /* `ext'            */
+VString str_file_name( const char *ps );     /* `filename'       */
+VString str_file_name_ext( const char *ps ); /* `filename.ext'   */
+VString str_file_path( const char *ps );     /* `/path/'         */
 
 /* removes "/../"s, `path' can be NULL, then dest is fixed */
-char* str_reduce_path( const char* path, char* dest );
-VString& str_reduce_path( const char* path, VString& dest );
+VString str_reduce_path( const char* path );
 
 /****************************************************************************
 **
@@ -354,13 +358,6 @@ VString& str_reduce_path( const char* path, VString& dest );
 ****************************************************************************/
 
 long hex2long( const char* s ); // hex to long
-
-#ifndef htol
-#define htol
-#endif
-
-char*  time2str( const time_t tim );
-time_t str2time( const char* timstr );
 
 #endif /* _VSTRING_H_ */
 

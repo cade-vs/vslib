@@ -246,6 +246,45 @@ void test5()
   printf( "************************ test 5 ends here\n" );
 }
 
+void test6()
+{
+  VRegexp re;
+  VArray va;
+  
+  re.comp( "^([^!]+)!(.+)=apquxz(.+)$" );
+  int i = re.m( "abc!pqr=apquxz.ixr.zzz.ac.uk" );
+  i--;
+  while( i >= 0 )
+    {
+    va.push( re[i] );
+    i--;
+    }
+  va.print();
+  
+  va.undef();
+  va += "/this/is/samle/file.tail";
+  va += "/file.tail";
+  va += "/this/is/./samle/file.tail/";
+  va += "/this/..../is/../samle/.file.tail";
+  va += "/.file.tail";
+  va += "/";
+  
+  const char* ps;
+  
+  va.reset();
+  while( ps = va.next() )
+    {
+    printf( "------------------------------------\n" );
+    printf( "file is: %s\n", ps );
+    printf( "path is: %s\n", (const char*)str_file_path( ps ) );
+    printf( "name is: %s\n", (const char*)str_file_name( ps ) );
+    printf( "ext  is: %s\n", (const char*)str_file_ext( ps ) );
+    printf( "n+ex is: %s\n", (const char*)str_file_name_ext( ps ) );
+    printf( "reduced path is: %s\n", (const char*)str_reduce_path( ps ) );
+    printf( "dot reduce sample is: %s\n", (const char*)str_dot_reduce( ps, 10 ) );
+    }
+}
+
 int main( int argc, char* argv[] )
 {
   test1();
@@ -253,5 +292,6 @@ int main( int argc, char* argv[] )
   test3();
   test4();
   test5();
+  test6();
   return 0;
 }
