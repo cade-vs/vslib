@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.9 2002/08/20 21:52:54 cade Exp $
+ * $Id: vstring.cpp,v 1.10 2002/10/29 04:09:03 cade Exp $
  *
  */
 
@@ -52,21 +52,21 @@
       }
   };
 
-  void String::seti( const int n )
+  void String::i( const int n )
   {
     char tmp[64];
     itoa( n, tmp, 10 );
     set( tmp );
   }
 
-  void String::setl( const long n )
+  void String::l( const long n )
   {
     char tmp[64];
     sprintf( tmp, "%ld", n );
     set( tmp );
   }
 
-  void String::setf( const double d )
+  void String::f( const double d )
   {
     char tmp[64];
     sprintf( tmp, "%.10f", d );
@@ -77,7 +77,7 @@
     set( tmp );
   }
 
-  void String::setfi( const double d ) // sets double as int (w/o frac)
+  void String::fi( const double d ) // sets double as int (w/o frac)
   {
     char tmp[64];
     sprintf( tmp, "%.0f", d );

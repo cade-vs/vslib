@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.8 2002/09/11 16:29:10 cade Exp $
+ * $Id: vstrlib.cpp,v 1.9 2002/10/29 04:06:21 cade Exp $
  *
  */
 #ifdef WIN32
@@ -297,6 +297,8 @@
   {
     regexp *re = regcomp( res );
     ASSERT( re );
+
+    zap();
 
     const char* ps = str;
 

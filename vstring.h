@@ -25,7 +25,7 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.7 2002/05/24 16:55:26 cade Exp $
+ * $Id: vstring.h,v 1.8 2002/10/29 04:09:03 cade Exp $
  *
  */
 
@@ -65,16 +65,16 @@
     String()                     { s = NULL; sl = size = compact = 0; resize(sl); };
     String( const String& str )  { s = NULL; sl = size = compact = 0; set(str);   };
     String( const char*   ps  )  { s = NULL; sl = size = compact = 0; set(ps);    };
-    String( const int     n   )  { s = NULL; sl = size = compact = 0; seti(n);    };
-    String( const long    n   )  { s = NULL; sl = size = compact = 0; setl(n);    };
-    String( const double  n   )  { s = NULL; sl = size = compact = 0; setf(n);    };
+    String( const int     n   )  { s = NULL; sl = size = compact = 0; i(n);    };
+    String( const long    n   )  { s = NULL; sl = size = compact = 0; l(n);    };
+    String( const double  n   )  { s = NULL; sl = size = compact = 0; f(n);    };
     ~String() { if ( s ) free( s );s = NULL; sl = size = compact = 0; };
 
     const String& operator = ( const String& str ) { set(str.s); return *this; };
     const String& operator = ( const char*   ps  ) { set(ps); return *this; };
-    const String& operator = ( const int     n   ) { seti(n); return *this; };
-    const String& operator = ( const long    n   ) { setl(n); return *this; };
-    const String& operator = ( const double  n   ) { setf(n); return *this; };
+    const String& operator = ( const int     n   ) { i(n); return *this; };
+    const String& operator = ( const long    n   ) { l(n); return *this; };
+    const String& operator = ( const double  n   ) { f(n); return *this; };
 
     const String& operator += ( const String& str ) { cat( str.s ); return *this; };
     const String& operator += ( const char*  ps   ) { cat( ps ); return *this; };
@@ -135,15 +135,15 @@
     void fixlen() { sl = strlen(s); ASSERT( sl < size ); };
     void fix() { sl = strlen(s); resize(sl); ASSERT( sl < size ); };
 
-    void   seti( const int n );
-    void   setl( const long n );
-    void   setf( const double d );
-    void   setfi( const double d ); // sets double as int (w/o frac)
+    void   i( const int n );
+    void   l( const long n );
+    void   f( const double d );
+    void   fi( const double d ); // sets double as int (w/o frac)
 
-    int    geti() { return atoi( s ); };
-    long   getl() { return atol( s ); };
-    double getf() { return atof( s ); };
-    double getfi() { return atof( s ); };
+    int    i() { return atoi( s ); };
+    long   l() { return atol( s ); };
+    double f() { return atof( s ); };
+    double fi() { return atof( s ); };
 
     void   set ( const char* ps );
     void   cat ( const char* ps );
