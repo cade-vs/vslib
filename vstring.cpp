@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.3 2002/04/13 11:12:53 cade Exp $
+ * $Id: vstring.cpp,v 1.4 2002/04/14 10:14:44 cade Exp $
  *
  */
 
@@ -108,8 +108,8 @@
     if (ps == NULL) return;
     if (ps[0] == 0) return;
     int psl = strlen( ps );
-    resize( sl+psl );
-    for( int z = 0; z < psl; z++ ) s[sl+z] = ps[z];
+    resize( sl + psl );
+    memcpy( s + sl, ps, psl );
     s[sl+psl] = 0;
     sl += psl;
   };
@@ -120,7 +120,7 @@
     if ( len < z ) z = len;
     sl = z;
     resize( sl );
-    for ( z = 0; z < sl; z++ ) s[z] = ps[z];
+    memcpy( s, ps, z );
     s[z] = 0;
   };
 
@@ -128,9 +128,9 @@
   {
     int z = strlen( ps );
     if ( len < z ) z = len;
+    resize( sl + z );
+    memcpy( s + sl, ps, z );
     sl += z;
-    resize( z );
-    strncat( s, ps, z );
     s[sl] = 0;
   };
 
@@ -397,7 +397,6 @@
       target[0] = 0;
       return target;
       }
-    // ReAllocBuffer( m_nLength * n );
     int sl = strlen( target );
     int z = (n - 1) * sl;
     while( z > 0 )
@@ -405,7 +404,6 @@
       strncpy( target + z, target, sl );
       z -= sl;
       }
-    // m_nLength = m_nLength * n;
     target[sl*n] = 0;
     return target;
   }
@@ -461,8 +459,6 @@
       strncpy(target+pos, target+pos+len, z+1);
     else
       target[pos] = 0;
-    // m_nLength = strlen(m_pszText);
-    // ReAllocBuffer( m_nLength );
     return target;
   }
 
@@ -844,97 +840,26 @@
 **
 ****************************************************************************/
 
-    StrSplitter::StrSplitter( const char* a_delimiter )
-    {
-      m_delimiter = a_delimiter;
-      m_words = 0;
-      m_str = NULL;
-      m_strarr = NULL;
-    };
-    
-    StrSplitter::~StrSplitter()
-    {
-      if (m_str) free(m_str);
-      if (m_strarr) free(m_strarr);
-      m_str = NULL;
-      m_strarr = NULL; // not required really
-    };
-    
-    int StrSplitter::set( const char* a_str )
-    {
-      if (m_str) free(m_str);
-      if (m_strarr) free(m_strarr);
-      m_str = NULL;
-      m_strarr = NULL;
-	  
-      m_words = 0;
-      
-      if (!a_str) return m_words;
-      m_str = strdup( a_str );
-      m_max_words = str_str_count( m_str, m_delimiter ) + 1;
-      m_strarr = (char**)malloc( sizeof(char*) * m_max_words );
-      
-      ASSERT(m_strarr);
-      ASSERT(m_str);
-	  
-      int dl = strlen( m_delimiter );
-      char *pc = m_str;
-      
-      m_strarr[m_words++] = pc;
-      while( (pc = strstr( pc, m_delimiter )) )
-        {
-        *pc = 0;
-        pc += dl;
-        m_strarr[m_words++] = pc;
-        if ( m_words == m_max_words ) break;
-        }
-      
-      return m_words;
-    };
-
-    String& StrSplitter::pop( String &str )
-    {
-      if ( m_words > 0 )
-        str = m_strarr[ m_words-- - 1];
-      else
-        str = "";
-      return str;
-    };
-    
-    char* StrSplitter::pop( char* ps )
-    {
-      if ( m_words > 0 )
-        {
-        strcpy( ps, m_strarr[ m_words-- - 1 ] );
-        return ps;
-        }
-      else
-        {
-        ps[0] = 0;
-        return NULL;
-        }
-    };
-
   char*	str_dot_reduce( const char* s, char* dest, int width )
   {
-	if ( s ) strcpy( dest, s );
+    if ( s ) strcpy( dest, s );
     int sl = str_len( dest );
-	if ( sl <= width ) return dest;
-	int pos = (width-3) / 2;
-	str_del( dest, pos, sl - width + 3 );
-	str_ins( dest, pos, "..." );
-	return dest;
+    if ( sl <= width ) return dest;
+    int pos = (width-3) / 2;
+    str_del( dest, pos, sl - width + 3 );
+    str_ins( dest, pos, "..." );
+    return dest;
   };
   
   String& str_dot_reduce( const char* s, String& dest, int width )
   {
-	if ( s ) dest = s;
+    if ( s ) dest = s;
     int sl = str_len( dest );
-	if ( sl <= width ) return dest;
-	int pos = (width-3) / 2;
-	str_del( dest, pos, sl - width + 3 );
-	str_ins( dest, pos, "..." );
-	return dest;
+    if ( sl <= width ) return dest;
+    int pos = (width-3) / 2;
+    str_del( dest, pos, sl - width + 3 );
+    str_ins( dest, pos, "..." );
+    return dest;
   };
 
 /****************************************************************************

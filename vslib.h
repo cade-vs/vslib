@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.h,v 1.3 2002/04/13 11:12:53 cade Exp $
+ * $Id: vslib.h,v 1.4 2002/04/14 10:14:44 cade Exp $
  *
  */
 
@@ -13,7 +13,6 @@
 
 #include <target.h> // this must set _TARGET_XXX_ define
 
-#include <clusters.h>
 #include <vstring.h>
 #include <vstrlib.h>
 #include <fnmatch2.h>

@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.3 2002/04/13 11:12:53 cade Exp $
+ * $Id: vstrlib.cpp,v 1.4 2002/04/14 10:14:44 cade Exp $
  *
  */
 
@@ -220,7 +220,7 @@
       {
       str += buf;
       if ( str_get_ch( str, -1 ) != '\n' ) continue;
-      str_trim_right( str, 1 );
+      while ( str_get_ch( str, -1 ) == '\n' ) str_trim_right( str, 1 );
       push( str );
       str = "";
       }
@@ -302,6 +302,8 @@
 
   void VArray::split( const char* res, const char* str, int maxcount )
   {
+    zap();
+    
     regexp *re = regcomp( res );
     ASSERT( re );
 
@@ -329,6 +331,8 @@
   {
     const char* ps = str;
     const char* fs;
+    
+    zap();
     
     int rl = strlen( res );
     

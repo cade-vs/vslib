@@ -4,14 +4,14 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: conmenu.h,v 1.3 2002/04/14 10:14:44 cade Exp $
  *
  */
 
 #ifndef _CONMENU_H_
 #define _CONMENU_H_
 
-#include <clusters.h>
+#include <vstrlib.h>
 
 struct  ToggleEntry
 {
@@ -42,9 +42,9 @@ struct ConMenuInfo
 extern ConMenuInfo con_default_menu_info;
 
 int con_toggle_box( int x, int y, const char *title, ToggleEntry* toggles, ConMenuInfo *menu_info );
-int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, ConMenuInfo *menu_info );
+int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConMenuInfo *menu_info );
 
-/* show full screen pszcluster list (w/o last two lines of the screen) */
-int con_full_psz_box( int x, int y, const char *title, PSZCluster *sc, ConMenuInfo *menu_info );
+/* show full screen varray list (w/o last two lines of the screen) */
+int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu_info );
 
 #endif //_CONMENU_H_

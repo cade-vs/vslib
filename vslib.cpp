@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.cpp,v 1.4 2002/04/13 11:12:53 cade Exp $
+ * $Id: vslib.cpp,v 1.5 2002/04/14 10:14:44 cade Exp $
  *
  */
 
@@ -109,8 +109,9 @@ int main( int argc, char* argv[] )
   v1.zap();
   */
   
+  /*
   va.zap();
-  int ii = 100000;
+  int ii = 200000;
   int i = ii;
   while( i-- )
     {
@@ -118,7 +119,52 @@ int main( int argc, char* argv[] )
     va.split( ",", "this is, just a simple. but fixed, nonsense test, voila :)" );
     printf( "%d%% va count = %d\n", (100*i)/ii, va.count() );
     }
-	 
+  */
+  
+  String set;
+  String cat;
+  String setn;
+  String catn;
+  String sete;
+  String setp;
+
+  int ii = 1000000;
+  int i = ii;
+  
+  /*
+  while( i-- )
+    {
+    set.set( "this is, just a simple. but fixed, nonsense test, voila :)" );
+    cat.cat( "this is, just a simple. but fixed, nonsense test, voila :)" );
+    setn.setn( "this is, just a simple. but fixed, nonsense test, voila :)", 20 );
+    catn.catn( "this is, just a simple. but fixed, nonsense test, voila :)", 20 );
+    
+    sete = "this is, just a simple. but fixed, nonsense test, voila :)";
+    setp += "this is, just a simple. but fixed, nonsense test, voila :)";
+    }
+
+  printf( "set = %d\n", str_len( set ) );
+  printf( "cat = %d\n", str_len( cat ) );
+  printf( "setn = %d\n", str_len( setn ) );
+  printf( "catn = %d\n", str_len( catn ) );
+  printf( "sete = %d\n", str_len( sete ) );
+  printf( "setp = %d\n", str_len( setp ) );
+
+  printf( "--------------------\n" );
+  */
+  
+  i = 1000000;
+  while( i-- )
+    {
+    set = "this is, just a simple. but fixed, nonsense test, voila :)";
+    setn = set;
+    str_del( set, 20, 10 );
+    str_ins( set, 30, "***opa***" );
+    str_replace( setn, "i", "[I]" );
+    }
+  printf( "set  = %s\n", set.data() );
+  printf( "setn = %s\n", setn.data() );
+  	 
   return 0;
 }
 #endif

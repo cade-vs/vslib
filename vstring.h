@@ -25,7 +25,7 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: vstring.h,v 1.3 2002/04/14 10:14:44 cade Exp $
  *
  */
 
@@ -299,33 +299,7 @@
 **
 ****************************************************************************/
 
-  class StrSplitter
-  {
-    String m_delimiter;
-    int m_max_words;
-    int m_words;
-    char *m_str;
-    char **m_strarr;
-
-    public:
-    StrSplitter( const char* a_delimiter );
-    ~StrSplitter();
-
-    int set( const char* a_target );
-	void set_delimiter( const char* a_delimiter ) { m_delimiter = a_delimiter; };
-	
-    void operator = ( const String& str ) { set( (const char*)(str) ); };
-    void operator = ( const char*   ps  ) { set( ps ); };
-
-    const char* operator [] ( int n )
-       { if( n >= 0 && n < m_words && m_strarr ) return m_strarr[n]; else return NULL; }
-
-    int count() { return m_words; }
-
-    /* get top element and remove it from the list */
-    String& pop( String& str );
-    char* pop( char* ps );
-  };
+/* StrSplitter was removed, see VArray::split() in vstrlib.h */
 
 /****************************************************************************
 **

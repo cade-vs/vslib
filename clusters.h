@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: clusters.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: clusters.h,v 1.3 2002/04/14 10:14:44 cade Exp $
  *
  */
 /*
@@ -312,62 +312,5 @@ class BSet
     friend BSet operator | ( const BSet &b1, const BSet &b2 );
 
   };
-
-/****************************************************************************
-**
-** V cluster (this is a versatile cluster that holds data as strings)
-**
-****************************************************************************/
-  
-  #ifndef SIZE_T_MAX
-  #define SIZE_T_MAX    INT_MAX
-  #endif
-
-  class PSZCluster : public PCluster
-    {
-    size_t max_str_len;
-    size_t min_str_len;
-
-    public:
-    PSZCluster() : PCluster() { max_str_len = 0; min_str_len = SIZE_T_MAX; };
-
-    size_t maxlen() { return max_str_len; };
-
-    int add( const char* pe );
-    int ins( int pn, const char* pe );
-    void put( int pn, const char* pe );
-    void get( int pn, char* pe );
-    char* get( int pn );
-
-    void sort( int ascending = 1 );
-    
-    void freeall() { max_str_len = min_str_len = 0; BaseCluster::freeall(); };
-
-    char* operator [] ( int pn ) { ASSERT( pn >= 0 && pn < cnt  ); return (char*)((void**)data)[pn]; };
-
-    protected:
-    void q_sort( int l, int h );
-    
-    virtual void destroy_element( void* pe )
-      { delete (char*)(((void**)pe)[0]); };
-
-    };
-
-////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-
-////////////////////////////////////////////////////////////////////////////
-//
-// misc support functions
-//
-
-int SaveToFile( FILE *f, PSZCluster *szc );
-int SaveToFile( const char *fname, PSZCluster *szc );
-int LoadFromFile( FILE *f, PSZCluster *szc, size_t maxlen );
-int LoadFromFile( const char *fname, PSZCluster *szc, size_t maxlen );
-
-////////////////////////////////////////////////////////////////////////////
 
 #endif //_CLUSTERS_H_

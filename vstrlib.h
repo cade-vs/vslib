@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.h,v 1.4 2002/04/13 11:12:53 cade Exp $
+ * $Id: vstrlib.h,v 1.5 2002/04/14 10:14:44 cade Exp $
  *
  */
 
@@ -232,6 +232,8 @@ class VRegexp
 
   int comp( const char* rs ) // compile re, return 1 for success
     { if ( re ) free(re); re = regcomp( rs ); return re != NULL; };
+  int comp_ok() // return 1 if regexp is compiled ok, 0 if not
+    { return re != NULL; }
   int exec( const char* line ) // execute re against line, return 1 for match
     { ASSERT( re ); if (!re) return 0; return regexec( re, line ); };
   int m( const char* line ) // same as exec
@@ -243,6 +245,14 @@ class VRegexp
   String& operator []( int n ) { substr = ""; sub( n ); return substr; }
 };
 
+/***************************************************************************
+**
+** MISC FUNCTIONS
+**
+****************************************************************************/
+
+		
+		
 #endif /* _VSTRLIB_H_ */
 
 /*

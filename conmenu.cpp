@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.cpp,v 1.3 2001/11/20 19:09:55 cade Exp $
+ * $Id: conmenu.cpp,v 1.4 2002/04/14 10:14:44 cade Exp $
  *
  */
 
@@ -146,7 +146,7 @@ int con_toggle_box( int x, int y, const char *title, ToggleEntry* toggles, ConMe
   return -1;
 }
 
-int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, ConMenuInfo *menu_info  )
+int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConMenuInfo *menu_info  )
 {
   TScrollPos scroll;
   int z;
@@ -154,12 +154,12 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
   int w = -1;
   int h = -1;
 
-  if (w == -1) w = (int)sc->maxlen();
-  if (h == -1) h = sc->count();
+  if (w == -1) w = va->max_len();
+  if (h == -1) h = va->count();
 
   z = strlen(title);
   if (w < z) w = z;
-  if (h > sc->count()) h = sc->count();
+  if (h > va->count()) h = va->count();
   if (h == 0) h = 1;
 
   // FIXME: those should be fixed!!!
@@ -170,9 +170,9 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
   String hots = "";
   if ( hotkeys > -1 )
     {
-    for(z = 0; z < sc->count(); z++)
-      if (strncmp("--", sc->get(z), 2))
-        str_add_ch( hots,int((const char*)(sc->get(z))[hotkeys]) );
+    for(z = 0; z < va->count(); z++)
+      if (strncmp("--", va->get(z), 2))
+        str_add_ch( hots,int((const char*)(va->get(z))[hotkeys]) );
       else
         str_add_ch( hots,' ' );
     str_up(hots);
@@ -194,7 +194,7 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
 
   scroll.type = 1;
   scroll.wrap = 1;
-  scroll.min = 0; scroll.max = sc->count()-1;
+  scroll.min = 0; scroll.max = va->count()-1;
   scroll.pagesize = h;
   scroll.pos = 0; scroll.page = 0;
   scroll.gotopos(0);
@@ -203,7 +203,7 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
     {
     for( z = 0; z < scroll.pagesize; z++ )
       {
-      str = (scroll.page+z >= sc->count())? "~" : sc->get(scroll.page+z);
+      str = (scroll.page+z >= va->count())? "~" : va->get(scroll.page+z);
 
       if ( menu_info->hide_magic[0] )
         {
@@ -247,7 +247,7 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
       }
     if ( ch == 13 )
       {
-      if (strncmp("--", sc->get(scroll.pos), 2) != 0) // ako e "--" e separator
+      if (strncmp("--", va->get(scroll.pos), 2) != 0) // ako e "--" e separator
         {
         menu_info->ec = hots[scroll.pos];
         menu_info->ac = -1;
@@ -256,7 +256,7 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
       }
     if ( menu_info->ac > -1 && ch == menu_info->ac )
       {
-      if (strncmp("--", sc->get(scroll.pos), 2) != 0) // ako e "--" e separator
+      if (strncmp("--", va->get(scroll.pos), 2) != 0) // ako e "--" e separator
         {
         menu_info->ec = hots[scroll.pos];
         menu_info->ac = -2;
@@ -275,13 +275,13 @@ int con_menu_box( int x, int y, const char *title, PSZCluster *sc, int hotkeys, 
   return -1;
 };
 
-int con_full_psz_box( int x, int y, const char *title, PSZCluster *sc, ConMenuInfo *menu_info )
+int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu_info )
 {
   TScrollPos scroll;
   scroll.type = menu_info->st;
   scroll.wrap = 0;
   scroll.min = 0;
-  scroll.max = sc->count()-1;
+  scroll.max = va->count()-1;
   scroll.pagesize = con_max_y() - 3; /* one title and two status */
   scroll.pos = 0;
   scroll.page = 0;
@@ -298,8 +298,8 @@ int con_full_psz_box( int x, int y, const char *title, PSZCluster *sc, ConMenuIn
     int z;
     for( z = 0; z < scroll.pagesize; z++ )
       {
-      if ( scroll.page + z < sc->count() )
-        str = sc->get( scroll.page + z );
+      if ( scroll.page + z < va->count() )
+        str = va->get( scroll.page + z );
       else
         str = "~";
       str_dot_reduce( NULL, str, con_max_x()-1 );
