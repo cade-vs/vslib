@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.h,v 1.6 2003/02/08 02:48:50 cade Exp $
+ * $Id: vsuti.h,v 1.7 2003/02/08 17:31:04 cade Exp $
  *
  */
 
@@ -166,6 +166,8 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos = -1 );
 
 long file_string_search( const char *p, const char* fn, const char* opt );
 long file_string_search( const char *p, FILE *f, const char* opt );
+
+int mem_string_search( const char *p, const char* d, const char* opt );
 
 /*****************************************************************************
 **

@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.9 2003/02/08 02:48:50 cade Exp $
+ * $Id: vsuti.cpp,v 1.10 2003/02/08 17:31:04 cade Exp $
  *
  */
 
@@ -610,6 +610,43 @@ long file_string_search( const char *p, FILE *f, const char* opt )
   else
     {
     pos = file_pattern_search( p, strlen(p), f, nocase ? "i" : "" );
+    }
+  
+  return pos;  
+};
+
+int mem_string_search( const char *p, const char* d, const char* opt )
+{
+  int ps = strlen(p);
+  ASSERT( ps < MAX_PATTERN );
+
+  int nocase = str_find( opt, 'i' ) > -1;
+  
+  long pos = -1;
+  
+  if( str_find( opt, 'r' ) > -1 )
+    {
+    VRegexp re;
+    if ( ! re.comp( p ) ) return -1;
+    if ( ! re.m( d ) ) return -1;
+    pos = re.sub_sp( 0 );
+    } else
+  if( str_find( opt, 'h' ) > -1 )
+    {
+  	char new_p[MAX_PATTERN+1];
+  	int pl = hex_string_to_pattern( p, new_p );
+  	if (pl > 0)
+  	  if ( nocase )
+        pos = mem_quick_search_nc( new_p, pl, d, strlen(d) );
+      else  
+        pos = mem_quick_search( new_p, pl, d, strlen(d) );
+    } 
+  else
+    {
+    if ( nocase )
+      pos = mem_quick_search_nc( p, ps, d, strlen(d) );
+    else  
+      pos = mem_quick_search( p, ps, d, strlen(d) );
     }
   
   return pos;  
