@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.cpp,v 1.5 2002/04/14 10:14:44 cade Exp $
+ * $Id: vslib.cpp,v 1.6 2002/12/15 17:46:46 cade Exp $
  *
  */
 
@@ -18,7 +18,6 @@ int main( int argc, char* argv[] )
   VTrie tr;
   VArray va;
   
-  /*
   // eto kak se mushka v hash-a (t.e. trie-to de:))
   tr[ "tralala" ] = "data1";
   tr[ "opala"   ] = "data2";
@@ -107,19 +106,18 @@ int main( int argc, char* argv[] )
     }
 
   v1.zap();
-  */
   
-  /*
+  int ii;
+  
   va.zap();
-  int ii = 200000;
-  int i = ii;
+  ii = 2000;
+  i = ii;
   while( i-- )
     {
     va.zap();
     va.split( ",", "this is, just a simple. but fixed, nonsense test, voila :)" );
     printf( "%d%% va count = %d\n", (100*i)/ii, va.count() );
     }
-  */
   
   String set;
   String cat;
@@ -128,10 +126,9 @@ int main( int argc, char* argv[] )
   String sete;
   String setp;
 
-  int ii = 1000000;
-  int i = ii;
+  ii = 1000;
+  i = ii;
   
-  /*
   while( i-- )
     {
     set.set( "this is, just a simple. but fixed, nonsense test, voila :)" );
@@ -151,9 +148,8 @@ int main( int argc, char* argv[] )
   printf( "setp = %d\n", str_len( setp ) );
 
   printf( "--------------------\n" );
-  */
   
-  i = 1000000;
+  i = 1000;
   while( i-- )
     {
     set = "this is, just a simple. but fixed, nonsense test, voila :)";
