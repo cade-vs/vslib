@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: vstring.cpp,v 1.3 2002/04/13 11:12:53 cade Exp $
  *
  */
 
@@ -39,20 +39,16 @@
       }
     if( s == NULL ) 
       { /* first time alloc */
-      s = new char[ newsize ];
-      ASSERT( s );
-      memset( s, 0, newsize );
+      s = (char*)malloc( newsize );
+      ASSERT(s);
+      s[0] = 0;
       size = newsize;
       } else
     if ( size != newsize ) 
       { /* expand/shrink */
-      char* new_s = new char[ newsize ];
-      ASSERT( new_s );
-      memset( new_s, 0, newsize );
-      memcpy( new_s, s, newsize < size ? newsize : size );
+      s = (char*)realloc( s, newsize );
+      s[newsize-1] = 0;
       size = newsize;
-      delete s;
-      s = new_s;
       }
   };
 
@@ -102,7 +98,8 @@
       {
       sl = strlen(ps);
       resize( sl );
-      strcpy( s, ps );
+      memcpy( s, ps, sl );
+      s[sl] = 0;
       }
   };
 

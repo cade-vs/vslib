@@ -43,7 +43,7 @@ SRC_0= \
      eval.cpp \
      fnmatch2.cpp \
      getopt2.cpp \
-     regexp2.cpp \
+     regexp3.cpp \
      scroll.cpp \
      vscrc.cpp \
      vslib.cpp \
@@ -59,7 +59,7 @@ OBJ_0= \
      .OBJ.0.libvslib.a/eval.o \
      .OBJ.0.libvslib.a/fnmatch2.o \
      .OBJ.0.libvslib.a/getopt2.o \
-     .OBJ.0.libvslib.a/regexp2.o \
+     .OBJ.0.libvslib.a/regexp3.o \
      .OBJ.0.libvslib.a/scroll.o \
      .OBJ.0.libvslib.a/vscrc.o \
      .OBJ.0.libvslib.a/vslib.o \
@@ -97,8 +97,8 @@ link-libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c fnmatch2.cpp -o .OBJ.0.libvslib.a/fnmatch2.o
 .OBJ.0.libvslib.a/getopt2.o:  getopt2.cpp getopt2.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c getopt2.cpp -o .OBJ.0.libvslib.a/getopt2.o
-.OBJ.0.libvslib.a/regexp2.o:  regexp2.cpp regexp2.h
-	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c regexp2.cpp -o .OBJ.0.libvslib.a/regexp2.o
+.OBJ.0.libvslib.a/regexp3.o:  regexp3.cpp regexp3.h
+	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c regexp3.cpp -o .OBJ.0.libvslib.a/regexp3.o
 .OBJ.0.libvslib.a/scroll.o:  scroll.cpp scroll.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c scroll.cpp -o .OBJ.0.libvslib.a/scroll.o
 .OBJ.0.libvslib.a/vscrc.o:  vscrc.cpp vsuti.h vstring.h
@@ -107,9 +107,9 @@ link-libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vslib.cpp -o .OBJ.0.libvslib.a/vslib.o
 .OBJ.0.libvslib.a/vstring.o:  vstring.cpp vstring.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vstring.cpp -o .OBJ.0.libvslib.a/vstring.o
-.OBJ.0.libvslib.a/vstrlib.o:  vstrlib.cpp vstrlib.h regexp2.h vstring.h
+.OBJ.0.libvslib.a/vstrlib.o:  vstrlib.cpp vstrlib.h regexp3.h vstring.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vstrlib.cpp -o .OBJ.0.libvslib.a/vstrlib.o
-.OBJ.0.libvslib.a/vsuti.o:  vsuti.cpp vsuti.h vstring.h regexp2.h
+.OBJ.0.libvslib.a/vsuti.o:  vsuti.cpp vsuti.h vstring.h regexp3.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vsuti.cpp -o .OBJ.0.libvslib.a/vsuti.o
 
 ### TARGET 1: libvscon.a #########################################

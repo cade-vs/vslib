@@ -4,12 +4,12 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.3 2002/02/24 13:05:10 cade Exp $
+ * $Id: vsuti.cpp,v 1.4 2002/04/13 11:12:53 cade Exp $
  *
  */
 
 #include "vsuti.h"
-#include "regexp2.h"
+#include "regexp3.h"
 #include "vstring.h"
 
 /*###########################################################################*/

@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.h,v 1.3 2001/11/20 19:09:55 cade Exp $
+ * $Id: vstrlib.h,v 1.4 2002/04/13 11:12:53 cade Exp $
  *
  */
 
@@ -17,7 +17,7 @@
 #endif
 
 #include <stdlib.h>
-#include "regexp2.h"
+#include "regexp3.h"
 #include "vstring.h"
 
 /***************************************************************************
@@ -91,7 +91,10 @@ class VArray
   void reverse(); // reverse elements order
   void shuffle(); // randomize element order
 
+  // split with regexp
   void split( const char* res, const char* str, int maxcount = -1 );
+  // split with exact stringc
+  void split_str( const char* res, const char* str, int maxcount = -1 );
   const char* join( const char* glue );
 
   String& operator []( int n )

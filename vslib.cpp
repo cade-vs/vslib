@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.cpp,v 1.3 2001/11/20 19:09:55 cade Exp $
+ * $Id: vslib.cpp,v 1.4 2002/04/13 11:12:53 cade Exp $
  *
  */
 
@@ -17,7 +17,8 @@ int main( int argc, char* argv[] )
 
   VTrie tr;
   VArray va;
-
+  
+  /*
   // eto kak se mushka v hash-a (t.e. trie-to de:))
   tr[ "tralala" ] = "data1";
   tr[ "opala"   ] = "data2";
@@ -105,6 +106,19 @@ int main( int argc, char* argv[] )
     aa[i].print();
     }
 
+  v1.zap();
+  */
+  
+  va.zap();
+  int ii = 100000;
+  int i = ii;
+  while( i-- )
+    {
+    va.zap();
+    va.split( ",", "this is, just a simple. but fixed, nonsense test, voila :)" );
+    printf( "%d%% va count = %d\n", (100*i)/ii, va.count() );
+    }
+	 
   return 0;
 }
 #endif

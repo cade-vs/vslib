@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: vstrlib.cpp,v 1.3 2002/04/13 11:12:53 cade Exp $
  *
  */
 
@@ -307,6 +307,7 @@
 
     const char* ps = str;
 
+    String s;
     while( regexec( re, ps ) )
       {
       if ( maxcount != -1 )
@@ -314,7 +315,6 @@
         maxcount--;
         if ( maxcount == 0 ) break;
         }
-      String s;
       int l = re->startp[0] - ps;
       s.setn( ps, l );
       push( s );
@@ -323,6 +323,29 @@
     push( ps );
 
     free( re );
+  };
+
+  void VArray::split_str( const char* res, const char* str, int maxcount )
+  {
+    const char* ps = str;
+    const char* fs;
+    
+    int rl = strlen( res );
+    
+    String s;
+    while( fs = strstr( ps, res ) )
+      {
+      if ( maxcount != -1 )
+        {
+        maxcount--;
+        if ( maxcount == 0 ) break;
+        }
+      int l = fs - ps;
+      s.setn( ps, l );
+      push( s );
+      ps = s + rl;
+      }
+    push( ps );
   };
 
   const char* VArray::join( const char* glue )
