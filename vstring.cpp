@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.5 2002/04/26 06:40:08 cade Exp $
+ * $Id: vstring.cpp,v 1.6 2002/04/30 20:45:37 cade Exp $
  *
  */
 
@@ -90,7 +90,7 @@
   {
     if (ps == NULL || ps[0] == 0)
       {
-      resize(0);
+      resize( 0 );
       sl = 0;
       s[0] = 0;
       }
@@ -302,7 +302,7 @@
   void str_add_ch( String &target, const char ch ) // adds `ch' at the end
   {
     int sl = target.sl;
-    target.resize(sl+1);
+    target.resize( sl+1 );
     target.s[sl] = ch;
     target.s[sl+1] = 0;
     target.fix();

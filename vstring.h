@@ -25,7 +25,7 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.4 2002/04/26 07:20:36 cade Exp $
+ * $Id: vstring.h,v 1.5 2002/04/30 20:45:37 cade Exp $
  *
  */
 
@@ -68,7 +68,7 @@
     String( const int     n   )  { s = NULL; sl = size = compact = 0; seti(n);    };
     String( const long    n   )  { s = NULL; sl = size = compact = 0; setl(n);    };
     String( const double  n   )  { s = NULL; sl = size = compact = 0; setf(n);    };
-    ~String() { if ( s ) delete s; s = NULL; sl = size = compact = 0; };
+    ~String() { if ( s ) free( s );s = NULL; sl = size = compact = 0; };
 
     const String& operator = ( const String& str ) { set(str.s); return *this; };
     const String& operator = ( const char*   ps  ) { set(ps); return *this; };
