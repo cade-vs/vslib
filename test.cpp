@@ -9,8 +9,7 @@ void test1()
   str_reverse( str ); // str is `dlroW olleH' now
   str_low( str ); // lower case
 
-  VArray va;
-  va.split( " +", str ); // array contains `dlroW' at pos 0 and `olleH' at 1
+  VArray va = str_split( " +", str ); // array contains `dlroW' at pos 0 and `olleH' at 1
   
   va.reverse(); // array reversed: `dlroW' at pos 1 and `olleH' at 0
   
@@ -21,7 +20,7 @@ void test1()
     }
   
   
-  str = va.join( " " ); // joins into temporary string
+  str = str_join( va, " " ); // joins into temporary string
 
   printf( "************************ test 1 result is: %s\n", str.data() ); // this should print `hello world'
 }
@@ -39,7 +38,7 @@ void test2()
   
   String str = va.pop(); // pops last element, str is now `!'
   
-  va.join( "-", &str ); // joins to given string
+  str = str_join( va, "-" ); // joins to given string
   
   str_tr( str, "-", " " ); // replaces dashes with spaces
   
@@ -104,15 +103,13 @@ void test3()
     }
 
   printf( "--------------------\n" );
-  v1.undef(); // clear
-  v1.split( " +", "tralala  opala and another   one" ); // splits on spaces
+  v1 = str_split( " +", "tralala  opala and another   one" ); // splits on spaces
   v1.print();
 
-  printf( "joined: %s\n", v1.join( "---" ) ); // join the same data back
+  printf( "joined: %s\n", (const char*)str_join( v1, "---" ) ); // join the same data back
 
   printf( "--------------------\n" );
-  v1.undef();
-  v1.split( " +", "tralala  opala and another   one", 3 ); // splits data on spaces up to 3 elements
+  v1 = str_split( " +", "tralala  opala and another   one", 3 ); // splits data on spaces up to 3 elements
   v1.print();
 
   printf( "--------------------\n" );
@@ -124,9 +121,9 @@ void test3()
   printf( "--------------------\n" );
   VArray aa[3]; // array of arrays
 
-  aa[0].split( " ", "this is just a simple test" );
-  aa[1].split( " ", "never ending story" );
-  aa[2].split( " ", "star-wars rulez" );
+  aa[0] = str_split( " ", "this is just a simple test" );
+  aa[1] = str_split( " ", "never ending story" );
+  aa[2] = str_split( " ", "star-wars rulez" );
 
   aa[0][1] = "was"; // first array, second element, replaces `is' with `was'
   aa[2][0] = "slackware"; // third array, first element, `star-wars' is now `slackware'
@@ -170,8 +167,7 @@ void test4()
   i = ii;
   while( i-- )
     {
-    va.undef();
-    va.split( ",", "this is, just a simple. but fixed, nonsense test, voila :)" );
+    va = str_split( ",", "this is, just a simple. but fixed, nonsense test, voila :)" );
     printf( "%d%% va count = %d\n", (100*i)/ii, va.count() );
     }
   
@@ -218,7 +214,7 @@ void test4()
   
   printf( "---array sort-------\n" );
   va.undef();
-  va.split( "[, \t]+", "this is, just a simple. but fixed, nonsense test, voila :)" );
+  va = str_split( "[, \t]+", "this is, just a simple. but fixed, nonsense test, voila :)" );
   va.sort();
   va.print();
   printf( "--------------------\n" );
@@ -302,9 +298,42 @@ void test6()
     }
 }
 
+void test7()
+{
+  VTrie tr; // hash-like
+  VTrie tr2; // hash-like
+  VArray va;
+  
+  // inserting keys and values
+  tr[ "key1" ] = "data1";
+  tr[ "key2" ] = "data2";
+  tr[ "key3" ] = "data3";
+  
+  tr.print();
+  printf( "------------------------------------\n" );
+  tr.reverse();
+  tr.print();
+  printf( "------------------------------------\n" );
+  tr.reverse();
+  tr.print();
+  printf( "------------------------------------\n" );
+  
+  tr2 = str_split( " ", "this is simple one way test" );
+  tr2.print();
+  printf( "------------------------------------\n" );
+  
+  tr2 += tr;
+  tr2.print();
+  printf( "------------------------------------\n" );
+  
+  va = tr2;
+  va.print();
+  printf( "------------------------------------\n" );
+}
+
 int main( int argc, char* argv[] )
 {
-  test3();
+  test7();
   /*
   test1();
   test2();

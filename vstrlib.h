@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.13 2003/01/08 01:04:01 cade Exp $
+ *  $Id: vstrlib.h,v 1.14 2003/01/16 10:12:16 cade Exp $
  *
  */
 
@@ -67,18 +67,17 @@ int str_rfind_regexp( const char* target, const char* pattern );
 
 class VRef
 {
-  
   int _ref;
   
 public:
 
-  VRef() { _ref = 1; }
-  ~VRef() { ASSERT( _ref == 1 ); }
+  VRef() { _ref = 1; }  // creator get first reference
+  virtual ~VRef() { ASSERT( _ref == 0 ); }
 
-  int ref() { return ++_ref; }
-  int unref() { ASSERT( _ref > 0 ); return --_ref; }
+  void ref() { _ref++; }
+  void unref() { ASSERT( _ref > 0 ); _ref--; if ( _ref == 0 ) delete this; }
   
-  int getref() { return _ref; }
+  int refs() { return _ref; }
 };
 
 /***************************************************************************
@@ -137,8 +136,9 @@ class VArray
   void set( int n, const char* s ); // set/replace at position `n'
   const char* get( int n ); // get at position `n'
 
-  void undef(); // clear the array (frees all elements)
-
+  void undef() // clear the array (frees all elements)
+      { box->undef(); _ret_str = ""; }
+      
   int push( const char* s ); // add to the end of the array
   const char* pop(); // get and remove the last element
 
@@ -159,27 +159,19 @@ class VArray
   void reverse(); // reverse elements order
   void shuffle(); // randomize element order with Fisher-Yates shuffle
 
-  // split `str' with `res' regexp
-  void split( const char* regexp_str, const char* source, int maxcount = -1 );
-  // split `str' with exact string `spl'
-  void split_str( const char* delimiter_str, const char* source, int maxcount = -1 );
-  // join array data to single string with `glue' string
-  // returns the result string or store to optional `dest'
-  const char* join( const char* glue = "", String* dest = NULL );
-
   String& operator []( int n )
     {
       if ( n < 0 ) { _ret_str = ""; return _ret_str; }
-      if ( n >= box->_count ) set( n, "" );
+      if ( n >= box->_count ) 
+        set( n, "" );
+      else
+        detach(); // I don't know if user will change returned VString?!  
       return *box->_data[n];
     }
 
   const VArray& operator = ( const VArray& arr )
     {
-    if ( box->getref() == 1 ) 
-      delete box;
-    else  
-      box->unref();
+    box->unref();
     box = arr.box;
     box->ref();
     return *this; 
@@ -214,37 +206,63 @@ class VArray
 
 /***************************************************************************
 **
-** VTRIE
+** VTRIENODE
 **
 ****************************************************************************/
 
-struct VTrieNode
+class VTrieNode
 {
-  VTrieNode() { next = down = NULL; c = 0; data = NULL; }
+public:
+
+  VTrieNode();
+  ~VTrieNode();
 
   VTrieNode *next;
   VTrieNode *down;
   char      c;
   String    *data;
+
+  void detach() { next = down = NULL; }
+  void del_node( const char *key, int branch = 0 );
+  VTrieNode* find_node( const char* key, int create = 0 );
+  
+  VTrieNode *clone();
+  void print();
 };
+
+/***************************************************************************
+**
+** VTRIEBOX
+**
+****************************************************************************/
+
+class VTrieBox : public VRef
+{
+public:
+  
+  VTrieNode *root;
+  
+  VTrieBox()  { root = new VTrieNode(); }
+  ~VTrieBox() { ASSERT( root ); delete root; }
+  
+  VTrieBox* clone();
+};
+
+/***************************************************************************
+**
+** VTRIE
+**
+****************************************************************************/
 
 class VTrie
 {
-  VTrieNode *root;
-  int _count;
-  int _depth;
-  int _nodes;
+  VTrieBox *box;
+  
+  void detach();
+  void trace_node( VTrieNode *node, VArray* keys, VArray *vals );
 
-  void undef_node( VTrieNode *node );
-  void del_node( VTrieNode *parent, VTrieNode *node, const char* key );
-  void key_node( VTrieNode *node,  VArray* arr );
-  void value_node( VTrieNode *node,  VArray* arr );
-  void print_node( VTrieNode* node );
-
-  VTrieNode* find_node( const char* key );
-
-  String temp_key; /* used for keys() */
-
+  VString temp_key;
+  
   public:
 
   int compact;
@@ -254,29 +272,27 @@ class VTrie
   VTrie( const VTrie& tr );
   ~VTrie();
 
-  int count() { return _count; } // return count of elements
-  // the following 2 functions are used for profiling purposes mostly
-  int depth() { return _depth; } // return current tree depth
-  int nodes() { return _nodes; } // return number of used nodes
-
-  int set( const char* key, const char* data ); // set data, same as []
+  void set( const char* key, const char* data ); // set data, same as []
   void del( const char* key ); // remove data associated with `key'
   const char* get( const char* key ); // get data by `key'
 
   int exists( const char* key ) // return != 0 if key exist (with data)
-      { return find_node( key ) != NULL; }
+      { return box->root->find_node( key ) != NULL; }
 
-  void undef(); // delete all key+data pairs
+  void undef() // delete all key+data pairs
+    { box->unref(); box = new VTrieBox(); }
+  
+  void keys_and_values( VArray *keys, VArray *values );
   
   VArray keys(); // store keys to `arr', return keys count
-  int values( VArray* arr ); // store values to `arr',  return values count
+  VArray values(); // store values to `arr',  return values count
 
   void reverse(); // reverse keys <-> values
 
-  int merge( VTrie *tr ); // return new keys count (same as +=)
-  int merge( VArray *arr ); // return new keys count (same as +=)
+  void merge( VTrie *tr ); // return new keys count (same as +=)
+  void merge( VArray *arr ); // return new keys count (same as +=)
 
-  void print_nodes() { print_node( root ); }; // for debug only
+  //void print_nodes() { print_node( root ); }; // for debug only
   void print(); // print trie data to stdout (console)
 
   int fload( const char* fname ); // return 0 for ok
@@ -286,20 +302,13 @@ class VTrie
 
   String& operator []( const char* key )
     {
-    //FIXME: this is not optimal implementation...
-    VTrieNode *node = find_node( key );
-    if ( node ) return *(node->data);
-    set( key, "" );
-    node = find_node( key );
+    detach(); // I don't know if user will change returned VString?!
+    VTrieNode *node = box->root->find_node( key, 1 );
     ASSERT( node );
+    if ( ! node->data )
+      node->data = new VString();
     return *(node->data);
     }
-  /* FIXME: not needed
-  String& operator []( String& key )
-    {
-    return (*this)[key.data()];
-    }
-  */
   
   const VTrie& operator = ( const VArray& arr )
     { undef(); merge( (VArray*)&arr ); return *this; };
@@ -433,6 +442,21 @@ class VCharSet
     friend VCharSet operator | ( const VCharSet &b1, const VCharSet &b2 );
 */  
   };
+
+/***************************************************************************
+**
+** UTILITIES
+**
+****************************************************************************/
+
+  // split `source' with `regexp_str' regexp
+  VArray str_split( const char* regexp_str, const char* source, int maxcount = -1 );
+  // split `source' with exact string `delimiter_str'
+  VArray str_split_simple( const char* delimiter_str, const char* source, int maxcount = -1 );
+  // join array data to single string with `glue' string
+  // returns the result string or store to optional `dest'
+  VString str_join( VArray array, const char* glue = "" );
+
 
 /***************************************************************************
 **

@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.18 2003/01/08 01:04:01 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.19 2003/01/16 10:12:16 cade Exp $
  *
  */
 
@@ -163,20 +163,14 @@
 
   VArray::~VArray()
   {
-    if ( box->getref() == 1 ) 
-      delete box;
-    else  
-      box->unref();
+    box->unref();
   }
 
   void VArray::detach()
   {
-    if ( box->getref() == 1 ) return;
+    if ( box->refs() == 1 ) return;
     VArrayBox *new_box = box->clone();
-    if ( box->getref() == 1 ) 
-      delete box;
-    else  
-      box->unref();
+    box->unref();
     box = new_box;
   }
 
@@ -226,12 +220,6 @@
       return NULL;
     else
       return box->_data[n]->data();
-  }
-
-  void VArray::undef()
-  {
-    box->undef();
-    _ret_str = "";
   }
 
   int VArray::push( const char* s )
@@ -392,71 +380,6 @@
       }
   };
 
-  void VArray::split( const char* regexp_str, const char* source, int maxcount )
-  {
-    VRegexp re;
-    int z = re.comp( regexp_str );
-    ASSERT( z );
-    undef();
-    if ( ! z ) return;
-
-    const char* ps = source;
-
-    while( ps && ps[0] && re.m( ps ) )
-      {
-      if ( maxcount != -1 )
-        {
-        maxcount--;
-        if ( maxcount == 0 ) break;
-        }
-      String s;
-      s.setn( ps, re.sub_sp( 0 ) );
-      push( s );
-      ps += re.sub_ep( 0 );
-      }
-    if ( ps && ps[0] ) 
-      push( ps );
-  };
-
-  void VArray::split_str(  const char* delimiter_str, const char* source, int maxcount )
-  {
-    const char* ps = source;
-    const char* fs;
-    
-    undef();
-    
-    int rl = strlen( delimiter_str );
-    
-    String s;
-    while( (fs = strstr( ps, delimiter_str )) )
-      {
-      if ( maxcount != -1 )
-        {
-        maxcount--;
-        if ( maxcount == 0 ) break;
-        }
-      int l = fs - ps;
-      s.setn( ps, l );
-      push( s );
-      ps = s + rl;
-      }
-    push( ps );
-  };
-
-  const char* VArray::join( const char* glue, String* dest )
-  {
-    if( ! dest ) dest = &_ret_str;
-    
-    *dest = "";
-    for( int z = 0; z < box->_count-1; z++ )
-      {
-      *dest += get( z );
-      *dest += glue;
-      }
-    *dest += get( box->_count-1 );
-    return dest->data();
-  };
-
   void VArray::print()
   {
     int z;
@@ -491,7 +414,160 @@
       }
     return l;  
   };
+
+/***************************************************************************
+**
+** VTRIENODE
+**
+****************************************************************************/
+ 
+  VTrieNode::VTrieNode()
+  { 
+    next = NULL;
+    down = NULL; 
+    c = 0; 
+    data = NULL;
+  }
+ 
+  VTrieNode::~VTrieNode()
+  {
+    if ( next ) delete next;
+    if ( down ) delete down;
+    if ( data ) delete data;
+  }
+
+  void VTrieNode::del_node( const char *key, int branch = 0 )
+  {
+    if ( !key ) return;
+    if ( !key[0] ) return;
+    
+    if ( key[1] == 0 )
+      { // last char reached 
+      if ( key[0] != c ) return;  // not found
+      // key found
+      if ( data ) delete data; // release key's value
+      data = NULL;
+      if ( down )
+        { // there are more keys below
+        if ( branch )
+          { 
+          delete down; // delete all keys below
+          c = 0; // mark current as `not used'
+          }
+        }
+      else
+        { // there is no more keys below
+        c = 0; // mark current as `not used'
+        }
+      }
+    else
+      { // last char is not reached
+      if ( key[0] == c )
+        { // current char is in the key
+        if ( down )
+          { // try key down
+          down->del_node( key + 1, branch );
+          if ( down->c == 0 )
+            { // down node is not used--remove it
+            ASSERT( down->down == NULL );
+            VTrieNode *tmp = down;
+            down = down->next;
+            delete tmp;
+            }
+          }
+        else
+          return; // not found
+        }
+      else
+        { 
+        if ( next ) // char is not in the key, try next
+          {
+          next->del_node( key, branch );
+          if ( next->c == 0 )
+            { // down node is not used--remove it
+            ASSERT( next->down == NULL );
+            VTrieNode *tmp = next;
+            next = next->next;
+            delete tmp;
+            }
+          }
+        else
+          return; // not found  
+        }
+      }
+  };
+
+  VTrieNode* VTrieNode::find_node( const char* key, int create )
+  {
+    if ( !key || !key[0] ) return NULL;
+    if ( key[0] == c )
+      { // char in the current key
+      if ( key[1] == 0 )
+        { // last char and is in the key--found!
+        return this;
+        }
+      else
+        { // not last char...
+        if ( ! down && create )
+          { // nothing below but should create
+          down = new VTrieNode();
+          down->c = key[1];
+          }
+        if ( down )
+          return down->find_node( key + 1, create ); // search below
+        else
+          return NULL; // not found
+        }
+      }
+    else
+      { // char not in the current key--try next
+      if ( ! next && create )
+        { // no next but should create
+        next = new VTrieNode();
+        next->c = key[0];
+        }
+      if ( next )
+        return next->find_node( key, create ); // search next
+      else  
+        return NULL; // not found
+      }
+  };
+
+  VTrieNode *VTrieNode::clone()
+  {
+    VTrieNode *tmp = new VTrieNode();
+    tmp->c = c;
+    if ( next ) tmp->next = next->clone();
+    if ( down ) tmp->down = down->clone();
+    if ( data ) tmp->data = new VString( *data );
+    return tmp;  
+  };
+
+  void VTrieNode::print()
+  {
+    printf( "---------------------------------\n" );
+    printf( "this = %p\n", this );
+    printf( "key  = %c\n", c );
+    printf( "next = %p\n", next );
+    printf( "down = %p\n", down );
+    printf( "data = %s\n", data ? data->data() : "(null)" );
+    if (next) next->print();
+    if (down) down->print();
+  };
   
+/***************************************************************************
+**
+** VTRIEBOX
+**
+****************************************************************************/
+
+  VTrieBox* VTrieBox::clone()
+  {
+    VTrieBox *new_box = new VTrieBox();
+    delete new_box->root;
+    new_box->root = root->clone();
+  };
+
 /***************************************************************************
 **
 ** VTRIE
@@ -500,217 +576,65 @@
 
   VTrie::VTrie()
   {
-    _count = 0;
-    _depth = 0;
-    _nodes = 0;
-    compact = 1;
-    root = new VTrieNode();
-    _nodes++;
+    box = new VTrieBox();
   }
 
   VTrie::VTrie( const VArray& arr )
   {
-    _count = 0;
-    _depth = 0;
-    _nodes = 0;
-    compact = 1;
-    root = new VTrieNode();
-    _nodes++;
-    *this = arr;
+    box = new VTrieBox();
+    merge( (VArray*)&arr );
   };
 
   VTrie::VTrie( const VTrie& tr )
   {
-    _count = 0;
-    _depth = 0;
-    _nodes = 0;
-    compact = 1;
-    root = new VTrieNode();
-    _nodes++;
-    *this = tr;
+    box = tr.box;
+    box->ref();
   };
 
 
   VTrie::~VTrie()
   {
-    undef_node( root );
+    box->unref();
   }
 
-  void VTrie::undef_node( VTrieNode *node )
+  void VTrie::detach()
   {
-    if ( node->next ) undef_node( node->next );
-    if ( node->down ) undef_node( node->down );
-    if ( node->data ) delete node->data;
-    delete node;
-    _nodes--;
+    if ( box->refs() == 1 ) return;
+    VTrieBox *new_box = box->clone();
+    box->unref();
+    box = new_box;
   }
 
-  void VTrie::del_node( VTrieNode *parent, VTrieNode *node, const char* key )
-  {
-    ASSERT( key[0] );
-    if ( key[1] == 0 )
-      {
-      if ( key[0] == node->c )
-        {
-        if ( node->data )
-          delete node->data;
-        node->data = NULL;
-        }
-      else
-        {
-        if ( node->next )
-          del_node( node, node->next, key );
-        else
-          return; /* not found */
-        }  
-      }
-    else
-      {
-      if ( key[0] == node->c )
-        {
-        if ( node->down )
-          del_node( node, node->down, key+1 );
-        else
-          return; /* not found */
-        }
-      else
-        {
-        if ( node->next )
-          del_node( node, node->next, key );
-        else
-          return; /* not found */
-        }
-      }
-
-      if ( node->data ) return;
-      if ( node->down ) return;
-      if ( node->next )
-        {
-        if ( parent->down == node )
-          parent->down = node->next;
-        else
-          parent->next = node->next;
-        }
-      else
-        {
-        if ( parent->down == node )
-          parent->down = NULL;
-        else
-          parent->next = NULL;
-        }
-      delete node;
-      _nodes--;
-  }
-
-  void VTrie::key_node( VTrieNode *node,  VArray* arr )
+  void VTrie::trace_node( VTrieNode *node, VArray* keys, VArray *vals )
   {
     int kl = str_len( temp_key );
     if ( node->c ) str_add_ch( temp_key, node->c );
-    if ( node->data ) arr->push( temp_key );
-    if ( node->down ) key_node( node->down, arr );
+    if ( node->data ) 
+      {
+      if ( keys ) keys->push( temp_key );
+      if ( vals ) vals->push( node->data->data() );
+      }
+    if ( node->down ) trace_node( node->down, keys, vals );
     str_sleft( temp_key, kl );
-    if ( node->next ) key_node( node->next, arr );
+    if ( node->next ) trace_node( node->next, keys, vals );
   };
 
-  void VTrie::value_node( VTrieNode *node,  VArray* arr )
+  void VTrie::set( const char* key, const char* value )
   {
-    if ( node->data ) arr->push( node->data->data() );
-    if ( node->down ) value_node( node->down, arr );
-    if ( node->next ) value_node( node->next, arr );
-  };
-
-  VTrieNode* VTrie::find_node( const char* key )
-  {
-    if ( !key || !key[0] ) return NULL;
-
-    VTrieNode *current = root;
-    const char* keyp = key;
-    while( *keyp )
-      {
-      current = current->down;
-      if ( !current )
-        {
-        return NULL;
-        }
-      else
-        {
-        while( current && current->c != *keyp )
-          {
-          current = current->next;
-          }
-        if ( !current )
-          {
-          return NULL;
-          }
-        }
-      keyp++;
-      }
-    if ( current )
-      {
-      if ( !current->data ) 
-        {
-        current->data = new String();
-        current->data->compact = compact;
-        }
-      return current;
-      }
-    return NULL;
-  };
-
-  int VTrie::set( const char* key, const char* data )
-  {
-    if ( !key || !key[0] ) return _count;
-    int sl = strlen( key );
-    if ( sl > _depth )
-      _depth = sl;
-
-    VTrieNode *current = root;
-    const char* keyp = key;
-    while( *keyp )
-      {
-      VTrieNode *parent = current;
-      current = current->down;
-      if ( !current )
-        {
-        current = new VTrieNode();
-        parent->down = current;
-        current->c = *keyp;
-        _nodes++;
-        }
-      else
-        {
-        while( current && current->c != *keyp )
-          {
-          parent = current;
-          current = current->next;
-          }
-        if ( !current )
-          {
-          current = new VTrieNode();
-          parent->next = current;
-          current->c = *keyp;
-          _nodes++;
-          }
-        }
-      keyp++;
-      }
-    if ( current->data )
-      delete current->data;
-    else
-      _count++;
-    current->data = new String;
-    current->data->compact = compact;
-    current->data->set( data );
-    
-    sl = str_len( *current->data );
-    
-    return _count;
-  };
-
+    if ( !value || !key || !key[0] ) return;
+    detach();
+    VTrieNode *node = box->root->find_node( key, 1 );
+    ASSERT( node );
+    if ( ! node->data ) 
+      node->data = new VString();
+    node->data->set( value );
+  }
+  
   const char* VTrie::get( const char* key )
   {
-    VTrieNode* node = find_node( key );
-    if ( node )
+    if ( !key || !key[0] ) return NULL;
+    VTrieNode *node = box->root->find_node( key );
+    if ( node && node->data )
       return node->data->data();
     else
       return NULL;
@@ -718,73 +642,63 @@
 
   void VTrie::del( const char* key )
   {
-    if ( !key || !key[0] || !root->down ) return;
-    del_node( root, root->down, key );
+    if ( !key || !key[0] ) return;
+    detach();
+    box->root->del_node( key );
   };
 
-  void VTrie::undef()
+  void VTrie::keys_and_values( VArray *keys, VArray *values )
   {
-    undef_node( root );
-    root = new VTrieNode();
-    _nodes++;
+    trace_node( box->root, keys, values );
   };
 
   VArray VTrie::keys()
   {
     VArray arr;
-    temp_key = "";
-    key_node( root, &arr );
+    keys_and_values( &arr, NULL );
     return arr;
   };
 
-  int VTrie::values( VArray* arr )
+  VArray VTrie::values()
   {
-    arr->undef();
-    temp_key = "";
-    value_node( root, arr );
-    return arr->count();
+    VArray arr;
+    keys_and_values( NULL, &arr );
+    return arr;
   };
 
   void VTrie::reverse()
   {
-    VArray va;
-    va = *this;
+    VArray ka = keys();
+    VArray va = values();
+    ASSERT( ka.count() == va.count() );
     undef();
-    while( va.count() )
+    int z = ka.count();
+    while( z-- )
       {
-      set( va[1], va[0] );
-      va.shift();
-      va.shift();
+      set( va.get( z ), ka.get( z ) );
       }
   }
 
-  int VTrie::merge( VTrie *tr )
+  void VTrie::merge( VTrie *tr )
   {
-    VArray arr;
-    arr = tr->keys();
-    int cnt = count();
-    for( int z = 0; z < cnt; z++ )
-      set( arr[z], tr->get( arr[z] ) );
-    return _count;
+    VArray ka = tr->keys();
+    VArray va = tr->values();
+    ASSERT( ka.count() == va.count() );
+    int z = ka.count();
+    while( z-- )
+      {
+      set( ka.get( z ), va.get( z ) );
+      }
   };
 
-  int VTrie::merge( VArray *arr )
+  void VTrie::merge( VArray *arr )
   {
-    while( arr->get( 0 ) )
+    int z = 0;
+    while( z < arr->count() )
       {
-      if ( arr->get( 1 ) )
-        {
-        set( arr->get( 0 ), arr->get( 1 ) );
-        arr->del( 0 );
-        arr->del( 0 );
-        }
-      else
-        {
-        set( arr->get( 0 ), "" );
-        arr->del( 0 );
-        }
+      set( arr->get( z ), arr->get( z + 1 ) );
+      z += 2;
       }
-    return _count;
   };
 
   int VTrie::fload( const char* fname )
@@ -820,26 +734,16 @@
     arr.merge( this );
     return arr.fsave( f );
   };
-
-  void VTrie::print_node( VTrieNode* node )
-  {
-    if (!node) return;
-    printf( "---------------------------------\n" );
-    printf( "this = %p\n", node );
-    printf( "key  = %c\n", node->c );
-    printf( "next = %p\n", node->next );
-    printf( "down = %p\n", node->down );
-    printf( "data = %s\n", node->data->data() );
-    print_node( node->next );
-    print_node( node->down );
-  };
-
+  
   void VTrie::print()
   {
-    VArray va = keys();
-    int z;
-    for( z = 0; z < va.count(); z++ )
-      printf( "%s=%s\n", va[z].data(), get( va[z] ) );
+    VArray ka = keys();
+    VArray va = values();
+    ASSERT( ka.count() == va.count() );
+    while( ka.count() && va.count() )
+      {
+      printf( "%s=%s\n", ka.pop(), va.pop() );
+      }
   }
 
 /***************************************************************************
@@ -1160,6 +1064,81 @@
     return b;
   };
 */
+
+/***************************************************************************
+**
+** UTILITIES
+**
+****************************************************************************/
+
+  // split `source' with `regexp_str' regexp
+  VArray str_split( const char* regexp_str, const char* source, int maxcount = -1 )
+  {
+    VArray arr;
+    VRegexp re;
+    int z = re.comp( regexp_str );
+    ASSERT( z );
+    if ( ! z ) return arr;
+
+    const char* ps = source;
+
+    while( ps && ps[0] && re.m( ps ) )
+      {
+      if ( maxcount != -1 )
+        {
+        maxcount--;
+        if ( maxcount == 0 ) break;
+        }
+      String s;
+      s.setn( ps, re.sub_sp( 0 ) );
+      arr.push( s );
+      ps += re.sub_ep( 0 );
+      }
+    if ( ps && ps[0] ) 
+      arr.push( ps );
+    return arr;  
+  };
+  
+  // split `source' with exact string `delimiter_str'
+  VArray str_split_simple( const char* delimiter_str, const char* source, int maxcount = -1 )
+  {
+    VArray arr;
+    const char* ps = source;
+    const char* fs;
+    
+    int rl = strlen( delimiter_str );
+    
+    String s;
+    while( (fs = strstr( ps, delimiter_str )) )
+      {
+      if ( maxcount != -1 )
+        {
+        maxcount--;
+        if ( maxcount == 0 ) break;
+        }
+      int l = fs - ps;
+      s.setn( ps, l );
+      arr.push( s );
+      ps = s + rl;
+      }
+    if ( ps && ps[0] ) 
+      arr.push( ps );
+    return arr;  
+  };
+
+  // join array data to single string with `glue' string
+  // returns the result string or store to optional `dest'
+  VString str_join( VArray array, const char* glue = "" )
+  {
+    VString str;
+    for( int z = 0; z < array.count()-1; z++ )
+      {
+      str += array.get( z );
+      str += glue;
+      }
+    str += array.get( array.count()-1 );
+    return str;
+  };
 
 /***************************************************************************
 **
