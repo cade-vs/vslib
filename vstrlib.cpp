@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.5 2002/04/26 06:40:08 cade Exp $
+ * $Id: vstrlib.cpp,v 1.6 2002/06/30 13:35:17 cade Exp $
  *
  */
 
@@ -219,7 +219,7 @@
     while( fgets( buf, sizeof(buf)-1, f ) )
       {
       str += buf;
-      if ( str_get_ch( str, -1 ) != '\n' ) continue;
+      if ( str_get_ch( str, -1 ) != '\n' && ! feof( f ) ) continue;
       while ( str_get_ch( str, -1 ) == '\n' ) str_trim_right( str, 1 );
       push( str );
       str = "";
@@ -518,7 +518,11 @@
       }
     if ( current )
       {
-      if ( ! current->data ) current->data = new String();
+      if ( ! current->data ) 
+        {
+        current->data = new String();
+        current->data->compact = 1;
+        }
       return current;
       }
     return NULL;
@@ -566,6 +570,7 @@
     else
       _count++;
     current->data = new String;
+    current->data->compact = 1;
     current->data->set( data );
     return _count;
   };
