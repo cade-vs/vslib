@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.14 2003/01/06 00:37:49 cade Exp $
+ *  $Id: vstring.h,v 1.15 2003/01/19 16:14:54 cade Exp $
  *
  */
 
@@ -47,183 +47,256 @@
 
 #define String VString
 
-/****************************************************************************
+/***************************************************************************
 **
-** VString Class
+** VREF
 **
 ****************************************************************************/
 
-  #define STR_BLOCK_SIZE    256
+class VRef
+{
+  int _ref;
+  
+public:
 
-  class VString
-  {
-    int   sl;   // VString length
-    int   size; // internal buffer size
-    char* s;    // internal buffer
+  VRef() { _ref = 1; }  // creator get first reference
+  virtual ~VRef() { ASSERT( _ref == 0 ); }
 
-    char retch; // used to return char& for off-range char index
+  void ref() { _ref++; }
+  void unref() { ASSERT( _ref > 0 ); _ref--; if ( _ref == 0 ) delete this; }
+  
+  int refs() { return _ref; }
+};
 
-    void resize( int newsize );
+/****************************************************************************
+**
+** VSTRING BOX
+**
+****************************************************************************/
 
-  public:
+class VStringBox: public VRef
+{
+public:
 
-    int compact; // set this != 0 for compact (memory preserving) behaviour
+  int   sl;   // string buffer length
+  int   size; // internal buffer size
+  char* s;    // internal buffer
 
-    VString()                      {  s = NULL; sl = size = compact = 0; resize(sl); };
-    VString( const VString& str )  {  s = NULL; sl = size = compact = 0; set(str);   };
-    VString( const char*    ps  )  {  s = NULL; sl = size = compact = 0; set(ps);    };
-    VString( const int      n   )  {  s = NULL; sl = size = compact = 0; i(n);    };
-    VString( const long     n   )  {  s = NULL; sl = size = compact = 0; l(n);    };
-    VString( const double   n   )  {  s = NULL; sl = size = compact = 0; f(n);    };
-    ~VString() { if ( s ) free( s ); s = NULL; sl = size = compact = 0; };
+  int   compact;
 
-    const VString& operator  = ( const VString& str ) { set(str.s); return *this; };
-    const VString& operator  = ( const char*   ps   ) { set(ps); return *this; };
-    const VString& operator  = ( const int     n    ) { i(n); return *this; };
-    const VString& operator  = ( const long    n    ) { l(n); return *this; };
-    const VString& operator  = ( const double  n    ) { f(n); return *this; };
+  VStringBox() { s = NULL; sl = size = compact = 0; };
+  ~VStringBox() { undef(); };
+  
+  VStringBox* clone();
+  
+  void resize_buf( int new_size );
+  void undef() { resize_buf( 0 ); };
+};
 
-    const VString& operator += ( const VString& str ) { cat( str.s ); return *this; };
-    const VString& operator += ( const char*  ps    ) { cat( ps ); return *this; };
-    const VString& operator += ( const int    n     ) { VString tmp = n; cat(tmp); return *this; };
-    const VString& operator += ( const long   n     ) { VString tmp = n; cat(tmp); return *this; };
-    const VString& operator += ( const double n     ) { VString tmp = n; cat(tmp); return *this; };
 
-    friend VString operator + ( const VString& str1, const VString& str2 )
-           { VString res = str1; res += str2; return res; };
-    friend VString operator + ( const VString& str1, const char* ps )
-           { VString res = str1; res += ps; return res; };
-    friend VString operator + ( const char* ps, const VString& str2 )
-           { VString res = ps; res += str2; return res; };
+/****************************************************************************
+**
+** VSTRING
+**
+****************************************************************************/
 
-    friend VString operator + ( const VString& str1, const int    n )
-           { VString res = str1; res +=    n; return res; };
-    friend VString operator + ( const int    n, const VString& str2 )
-           { VString res =    n; res += str2; return res; };
-    friend VString operator + ( const VString& str1, const long   n )
-           { VString res = str1; res +=    n; return res; };
-    friend VString operator + ( const long   n, const VString& str2 )
-           { VString res =    n; res += str2; return res; };
-    friend VString operator + ( const VString& str1, const double n )
-           { VString res = str1; res +=    n; return res; };
-    friend VString operator + ( const double n, const VString& str2 )
-           { VString res =    n; res += str2; return res; };
+#define STR_BLOCK_SIZE    256
 
-    friend int operator == ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) == 0; };
-    friend int operator == ( const char*   s1, const VString& s2 ) { return strcmp( s1, s2 ) == 0; };
-    friend int operator == ( const VString& s1, const char*   s2 ) { return strcmp( s1, s2 ) == 0; };
+class VString
+{
+  VStringBox* box;
+  char retch; // used to return char& for off-range char index
 
-    friend int operator != ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) != 0; };
-    friend int operator != ( const char*   s1, const VString& s2 ) { return strcmp( s1, s2 ) != 0; };
-    friend int operator != ( const VString& s1, const char*   s2 ) { return strcmp( s1, s2 ) != 0; };
+  void detach();
 
-    friend int operator >  ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) >  0; };
-    friend int operator >  ( const char*   s1, const VString& s2 ) { return strcmp( s1, s2 ) >  0; };
-    friend int operator >  ( const VString& s1, const char*   s2 ) { return strcmp( s1, s2 ) >  0; };
+public:
 
-    friend int operator >= ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) >= 0; };
-    friend int operator >= ( const char*   s1, const VString& s2 ) { return strcmp( s1, s2 ) >= 0; };
-    friend int operator >= ( const VString& s1, const char*   s2 ) { return strcmp( s1, s2 ) >= 0; };
+  VString( const VString& str )
+    {
+    box = str.box;
+    box->ref();
+    };
+  
+  VString()                      {  box = new VStringBox(); };
+  VString( const char*    ps  )  {  box = new VStringBox(); set( ps);  };
+  VString( const int      n   )  {  box = new VStringBox(); i(n);     };
+  VString( const long     n   )  {  box = new VStringBox(); l(n);     };
+  VString( const double   n   )  {  box = new VStringBox(); f(n);     };
+  ~VString() { box->unref(); };
 
-    friend int operator <  ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) <  0; };
-    friend int operator <  ( const char*   s1, const VString& s2 ) { return strcmp( s1, s2 ) <  0; };
-    friend int operator <  ( const VString& s1, const char*   s2 ) { return strcmp( s1, s2 ) <  0; };
+  void compact( int a_compact ) // set this != 0 for compact (memory preserving) behaviour
+    { box->compact = a_compact; }; //FIXME: detach() first?
 
-    friend int operator <= ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) <= 0; };
-    friend int operator <= ( const char*   s1, const VString& s2 ) { return strcmp( s1, s2 ) <= 0; };
-    friend int operator <= ( const VString& s1, const char*   s2 ) { return strcmp( s1, s2 ) <= 0; };
+  void resize( int new_size ) { detach(); box->resize_buf( new_size ); };
 
-    operator const char* ( ) const { return (const char*)s; }
-    char& operator [] ( int n )
-        { 
-        if ( n < 0 ) n = sl + n;
-        if ( n < 0 || n >= sl ) 
-          {
-          retch = 0;
-          return retch;
-          }
-        return s[n]; 
+  const VString& operator  = ( const VString& str )
+    {
+    box->unref();
+    box = str.box;
+    box->ref();
+    return *this; 
+    };
+  
+  const VString& operator  = ( const char*   ps   ) { set(ps);return *this; };
+  const VString& operator  = ( const int     n    ) { i(n);   return *this; };
+  const VString& operator  = ( const long    n    ) { l(n);   return *this; };
+  const VString& operator  = ( const double  n    ) { f(n);   return *this; };
+
+  const VString& operator += ( const VString& str ) 
+        { cat( str.box->s ); return *this; };
+  const VString& operator += ( const char*  ps    ) 
+        { cat( ps ); return *this; };
+  const VString& operator += ( const int    n     ) 
+        { VString tmp = n; cat(tmp); return *this; };
+  const VString& operator += ( const long   n     ) 
+        { VString tmp = n; cat(tmp); return *this; };
+  const VString& operator += ( const double n     ) 
+        { VString tmp = n; cat(tmp); return *this; };
+
+  const VString& operator *= ( const int    n     ) 
+        { return str_mul( *this, n ); };
+
+  friend VString operator + ( const VString& str1, const VString& str2 )
+         { VString res = str1; res += str2; return res; };
+  friend VString operator + ( const VString& str1, const char* ps )
+         { VString res = str1; res += ps; return res; };
+  friend VString operator + ( const char* ps, const VString& str2 )
+         { VString res = ps; res += str2; return res; };
+
+  friend VString operator + ( const VString& str1, const int    n )
+         { VString res = str1; res +=    n; return res; };
+  friend VString operator + ( const int    n, const VString& str2 )
+         { VString res =    n; res += str2; return res; };
+  friend VString operator + ( const VString& str1, const long   n )
+         { VString res = str1; res +=    n; return res; };
+  friend VString operator + ( const long   n, const VString& str2 )
+         { VString res =    n; res += str2; return res; };
+  friend VString operator + ( const VString& str1, const double n )
+         { VString res = str1; res +=    n; return res; };
+  friend VString operator + ( const double n, const VString& str2 )
+         { VString res =    n; res += str2; return res; };
+
+  friend int operator == ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) == 0; };
+  friend int operator == ( const char*    s1, const VString& s2 ) { return strcmp( s1, s2 ) == 0; };
+  friend int operator == ( const VString& s1, const char*    s2 ) { return strcmp( s1, s2 ) == 0; };
+
+  friend int operator != ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) != 0; };
+  friend int operator != ( const char*    s1, const VString& s2 ) { return strcmp( s1, s2 ) != 0; };
+  friend int operator != ( const VString& s1, const char*    s2 ) { return strcmp( s1, s2 ) != 0; };
+
+  friend int operator >  ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) >  0; };
+  friend int operator >  ( const char*    s1, const VString& s2 ) { return strcmp( s1, s2 ) >  0; };
+  friend int operator >  ( const VString& s1, const char*    s2 ) { return strcmp( s1, s2 ) >  0; };
+
+  friend int operator >= ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) >= 0; };
+  friend int operator >= ( const char*    s1, const VString& s2 ) { return strcmp( s1, s2 ) >= 0; };
+  friend int operator >= ( const VString& s1, const char*    s2 ) { return strcmp( s1, s2 ) >= 0; };
+
+  friend int operator <  ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) <  0; };
+  friend int operator <  ( const char*    s1, const VString& s2 ) { return strcmp( s1, s2 ) <  0; };
+  friend int operator <  ( const VString& s1, const char*    s2 ) { return strcmp( s1, s2 ) <  0; };
+
+  friend int operator <= ( const VString& s1, const VString& s2 ) { return strcmp( s1, s2 ) <= 0; };
+  friend int operator <= ( const char*    s1, const VString& s2 ) { return strcmp( s1, s2 ) <= 0; };
+  friend int operator <= ( const VString& s1, const char*    s2 ) { return strcmp( s1, s2 ) <= 0; };
+
+  operator const char* ( ) const { return (const char*)box->s; }
+  const char* data() { return box->s; }
+  
+  char& operator [] ( int n )
+      {
+      if ( n < 0 ) n = box->sl + n;
+      if ( n < 0 || n >= box->sl ) 
+        {
+        retch = 0;
+        return retch;
         }
+      detach();  
+      return box->s[n]; 
+      }
 
-    const char* data() { return s; }
+  void fixlen() 
+       { box->sl = strlen(box->s); 
+         ASSERT( box->sl ? box->sl < box->size : box->sl == box->size ); };
+  void fix() 
+       { box->sl = strlen(box->s); 
+         box->resize_buf(box->sl); 
+         ASSERT( box->sl ? box->sl < box->size : box->sl == box->size ); };
 
-    void fixlen() { sl = strlen(s); ASSERT( sl < size ); };
-    void fix() { sl = strlen(s); resize(sl); ASSERT( sl < size ); };
+  void   i( const int n );
+  void   l( const long n );
+  void   f( const double d );
+  void   fi( const double d ); // sets double as int (w/o frac)
 
-    void   i( const int n );
-    void   l( const long n );
-    void   f( const double d );
-    void   fi( const double d ); // sets double as int (w/o frac)
+  int    i() { return atoi( box->s ); };
+  long   l() { return atol( box->s ); };
+  double f() { return atof( box->s ); };
+  double fi() { return atof( box->s ); };
 
-    int    i() { return atoi( s ); };
-    long   l() { return atol( s ); };
-    double f() { return atof( s ); };
-    double fi() { return atof( s ); };
+  void   set( const char* ps );
+  void   cat( const char* ps );
+  void   setn( const char* ps, int len );
+  void   catn( const char* ps, int len );
 
-    void   set( const char* ps );
-    void   cat( const char* ps );
-    void   setn( const char* ps, int len );
-    void   catn( const char* ps, int len );
+  /* for debugging only */
+  int check() { int len = strlen(box->s); return ((len == box->sl)&&(len<box->size)); };
 
-    /* for debugging only */
-    int check() { int len = strlen(s); return ((len == sl)&&(len<size)); };
+  /****************************************************************************
+  ** VString Friend Functions (for class VString)
+  ****************************************************************************/
 
-    /****************************************************************************
-    ** VString Friend Functions (for class VString)
-    ****************************************************************************/
+  inline friend int str_len( VString& target ) { return target.box->sl; };
+  inline friend VString& str_set( VString& target, const char* ps ) { target.set( ps ); return target; };
 
-    inline friend int str_len( VString& target ) { return target.sl; };
-    inline friend VString& str_set( VString& target, const char* ps ) { target.set( ps ); return target; };
+  friend VString& str_mul( VString& target, int n ); // multiplies the VString n times, i.e. `1'*5 = `11111'
+  friend VString& str_del    ( VString& target, int pos, int len ); // deletes `len' chars starting from `pos'
+  friend VString& str_ins    ( VString& target, int pos, const char* s ); // inserts `s' in position `pos'
+  friend VString& str_ins_ch ( VString& target, int pos, char ch ); // inserts `ch' in position `pos'
+  friend VString& str_replace( VString& target, const char* out, const char* in ); // replace `out' w. `in'
 
-    friend VString& str_mul( VString& target, int n ); // multiplies the VString n times, i.e. `1'*5 = `11111'
-    friend VString& str_del    ( VString& target, int pos, int len ); // deletes `len' chars starting from `pos'
-    friend VString& str_ins    ( VString& target, int pos, const char* s ); // inserts `s' in position `pos'
-    friend VString& str_ins_ch ( VString& target, int pos, char ch ); // inserts `ch' in position `pos'
-    friend VString& str_replace( VString& target, const char* out, const char* in ); // replace `out' w. `in'
+  friend VString& str_copy  ( VString& target, const char* source, int pos, int len = -1 ); // returns `len' chars from `pos'
+  friend VString& str_left  ( VString& target, const char* source, int len ); // returns `len' chars from the left
+  friend VString& str_right ( VString& target, const char* source, int len ); // returns `len' chars from the right
+  friend VString& str_sleft ( VString& target, int len ); // SelfLeft -- just as 'Left' but works on `this'
+  friend VString& str_sright( VString& target, int len ); // SelfRight -- just as 'Right' but works on `this'
 
-    friend VString& str_copy  ( VString& target, const char* source, int pos, int len = -1 ); // returns `len' chars from `pos'
-    friend VString& str_left  ( VString& target, const char* source, int len ); // returns `len' chars from the left
-    friend VString& str_right ( VString& target, const char* source, int len ); // returns `len' chars from the right
-    friend VString& str_sleft ( VString& target, int len ); // SelfLeft -- just as 'Left' but works on `this'
-    friend VString& str_sright( VString& target, int len ); // SelfRight -- just as 'Right' but works on `this'
+  friend VString& str_trim_left ( VString& target, int len ); // trims `len' chars from the beginning (left)
+  friend VString& str_trim_right( VString& target, int len ); // trim `len' chars from the end (right)
 
-    friend VString& str_trim_left ( VString& target, int len ); // trims `len' chars from the beginning (left)
-    friend VString& str_trim_right( VString& target, int len ); // trim `len' chars from the end (right)
+  friend VString& str_cut_left ( VString& target, const char* charlist ); // remove all chars `charlist' from the beginning (i.e. from the left)
+  friend VString& str_cut_right( VString& target, const char* charlist ); // remove all chars `charlist' from the end (i.e. from the right)
+  friend VString& str_cut      ( VString& target, const char* charlist ); // does `CutR(charlist);CutL(charlist);'
+  friend VString& str_cut_spc  ( VString& target ); // does `Cut(" ");'
 
-    friend VString& str_cut_left ( VString& target, const char* charlist ); // remove all chars `charlist' from the beginning (i.e. from the left)
-    friend VString& str_cut_right( VString& target, const char* charlist ); // remove all chars `charlist' from the end (i.e. from the right)
-    friend VString& str_cut      ( VString& target, const char* charlist ); // does `CutR(charlist);CutL(charlist);'
-    friend VString& str_cut_spc  ( VString& target ); // does `Cut(" ");'
+  friend VString& str_pad  ( VString& target, int len, char ch = ' ' );
+  friend VString& str_comma( VString& target, char delim = ',' );
 
-    friend VString& str_pad  ( VString& target, int len, char ch = ' ' );
-    friend VString& str_comma( VString& target, char delim = ',' );
+  // next 3 functions are safe! so if you get/set out f the VString range!
+  friend void str_set_ch( VString& target, int pos, const char ch ); // sets `ch' char at position `pos'
+  friend char str_get_ch( VString& target, int pos ); // return char at position `pos', -1 for the last char etc...
+  friend void str_add_ch( VString& target, const char ch ); // adds `ch' at the end
 
-    // next 3 functions are safe! so if you get/set out f the VString range!
-    friend void str_set_ch( VString& target, int pos, const char ch ); // sets `ch' char at position `pos'
-    friend char str_get_ch( VString& target, int pos ); // return char at position `pos', -1 for the last char etc...
-    friend void str_add_ch( VString& target, const char ch ); // adds `ch' at the end
+  friend char*  str_word( VString& target, const char* delimiters, char* result );
+  friend char*  str_rword( VString& target, const char* delimiters, char* result );
+  // check VArray::split() instead of word() funtions...
+  
+  // this `sprintf'-like function works as follows:
+  // 1. set `this.VString' length to `init_size'
+  // 2. call `sprintf' with `format' and `...'
+  // NOTE: You have to supply enough `init_size'! sorry...
+  friend int sprintf( int init_size, VString& target, const char *format, ... );
+  // this is equal to `printf( 1024, format, ... )', i.e. `init_size=1024'
+  friend int sprintf( VString& target, const char *format, ... );
 
-    friend char*  str_word( VString& target, const char* delimiters, char* result );
-    friend char*  str_rword( VString& target, const char* delimiters, char* result );
-    // check VArray::split() instead of word() funtions...
-    
-    // this `sprintf'-like function works as follows:
-    // 1. set `this.VString' length to `init_size'
-    // 2. call `sprintf' with `format' and `...'
-    // NOTE: You have to supply enough `init_size'! sorry...
-    friend int sprintf( int init_size, VString& target, const char *format, ... );
-    // this is equal to `printf( 1024, format, ... )', i.e. `init_size=1024'
-    friend int sprintf( VString& target, const char *format, ... );
+  friend VString& str_tr ( VString& target, const char *from, const char *to );
+  friend VString& str_up ( VString& target );
+  friend VString& str_low( VString& target );
+  friend VString& str_flip_case( VString& target );
+  
+  friend VString& str_reverse  ( VString& target ); // reverse the VString: `abcde' becomes `edcba'
+  friend VString& str_squeeze( VString& target, const char* sq_chars ); // squeeze repeating chars to one only
 
-    friend VString& str_tr ( VString& target, const char *from, const char *to );
-    friend VString& str_up ( VString& target );
-    friend VString& str_low( VString& target );
-    friend VString& str_flip_case( VString& target );
-    
-    friend VString& str_reverse  ( VString& target ); // reverse the VString: `abcde' becomes `edcba'
-    friend VString& str_squeeze( VString& target, const char* sq_chars ); // squeeze repeating chars to one only
-
-  }; /* end of VString class */
+}; /* end of VString class */
 
 /****************************************************************************
 **

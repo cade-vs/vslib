@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.14 2003/01/16 10:12:16 cade Exp $
+ *  $Id: vstrlib.h,v 1.15 2003/01/19 16:14:54 cade Exp $
  *
  */
 
@@ -58,27 +58,6 @@ int str_find_regexp( const char* target, const char* pattern, int startpos = 0 )
 // warning: str_rfind_regexp() is slow! it can execute pattern matching to `n'
 // times where n is the target string length...
 int str_rfind_regexp( const char* target, const char* pattern );
-
-/***************************************************************************
-**
-** VREF
-**
-****************************************************************************/
-
-class VRef
-{
-  int _ref;
-  
-public:
-
-  VRef() { _ref = 1; }  // creator get first reference
-  virtual ~VRef() { ASSERT( _ref == 0 ); }
-
-  void ref() { _ref++; }
-  void unref() { ASSERT( _ref > 0 ); _ref--; if ( _ref == 0 ) delete this; }
-  
-  int refs() { return _ref; }
-};
 
 /***************************************************************************
 **
@@ -310,10 +289,16 @@ class VTrie
     return *(node->data);
     }
   
+  const VTrie& operator = ( const VTrie& tr )
+    {
+    box->unref();
+    box = tr.box;
+    box->ref();
+    return *this; 
+    };
+  
   const VTrie& operator = ( const VArray& arr )
     { undef(); merge( (VArray*)&arr ); return *this; };
-  const VTrie& operator = ( const VTrie& tr )
-    { undef(); merge( (VTrie*)&tr ); return *this; };
   const VTrie& operator += ( const VArray& arr )
     { merge( (VArray*)&arr ); return *this; };
   const VTrie& operator += ( const VTrie& tr )

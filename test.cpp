@@ -310,37 +310,46 @@ void test7()
   tr[ "key3" ] = "data3";
   
   tr.print();
-  printf( "------------------------------------\n" );
+  printf( "---------------------------------1---\n" );
   tr.reverse();
   tr.print();
-  printf( "------------------------------------\n" );
+  printf( "---------------------------------2---\n" );
   tr.reverse();
   tr.print();
-  printf( "------------------------------------\n" );
+  printf( "---------------------------------3---\n" );
   
   tr2 = str_split( " ", "this is simple one way test" );
   tr2.print();
-  printf( "------------------------------------\n" );
+  printf( "---------------------------------4---\n" );
   
   tr2 += tr;
   tr2.print();
-  printf( "------------------------------------\n" );
+  printf( "---------------------------------5---\n" );
   
   va = tr2;
   va.print();
-  printf( "------------------------------------\n" );
+  printf( "---------------------------------6---\n" );
+}
+
+void test8()
+{
+  VString v1;
+  VString v2;
+  
+  v1 = "this is simple test ";
+  v1 *= 1024;
 }
 
 int main( int argc, char* argv[] )
 {
-  test7();
-  /*
+  /*test7();/**/
   test1();
   test2();
   test3();
   test4();
   test5();
   test6();
-  */
+  test7();
+  /**/
   return 0;
 }

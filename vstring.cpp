@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.14 2003/01/06 00:37:49 cade Exp $
+ *  $Id: vstring.cpp,v 1.15 2003/01/19 16:14:54 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -28,32 +28,64 @@
 
 /****************************************************************************
 **
-** VString Class
+** VSTRING BOX
 **
 ****************************************************************************/
 
-  void VString::resize( int newsize )
+  VStringBox* VStringBox::clone()
   {
-    newsize++; /* for the trailing 0 */
+    VStringBox* box = new VStringBox();
+    box->resize_buf( size );
+    box->sl = sl;
+    box->compact = compact;
+    memcpy( box->s, s, size );
+    return box;
+  };
+  
+  void VStringBox::resize_buf( int new_size )
+  {
+    if ( new_size == 0 )
+      {
+      sl = 0;
+      if ( s ) free( s );
+      s = NULL;
+      size = 0;
+      return;
+      }
+    new_size++; /* for the trailing 0 */
     if ( !compact )
       {
-      newsize = newsize / STR_BLOCK_SIZE  + ( newsize % STR_BLOCK_SIZE != 0 );
-      newsize *= STR_BLOCK_SIZE;
+      new_size = new_size / STR_BLOCK_SIZE  + ( new_size % STR_BLOCK_SIZE != 0 );
+      new_size *= STR_BLOCK_SIZE;
       }
     if( s == NULL ) 
       { /* first time alloc */
-      s = (char*)malloc( newsize );
+      s = (char*)malloc( new_size );
       ASSERT(s);
       s[0] = 0;
-      size = newsize;
+      size = new_size;
       } else
-    if ( size != newsize ) 
+    if ( size != new_size ) 
       { /* expand/shrink */
-      s = (char*)realloc( s, newsize );
-      s[newsize-1] = 0;
-      size = newsize;
+      s = (char*)realloc( s, new_size );
+      s[new_size-1] = 0;
+      size = new_size;
       }
   };
+
+/****************************************************************************
+**
+** VSTRING
+**
+****************************************************************************/
+
+  void VString::detach()
+  {
+    if ( box->refs() == 1 ) return;
+    VStringBox *new_box = box->clone();
+    box->unref();
+    box = new_box;
+  }
 
   void VString::i( const int n )
   {
@@ -94,15 +126,14 @@
     if (ps == NULL || ps[0] == 0)
       {
       resize( 0 );
-      sl = 0;
-      s[0] = 0;
       }
     else
       {
-      sl = strlen(ps);
+      int sl = strlen(ps);
       resize( sl );
-      memcpy( s, ps, sl );
-      s[sl] = 0;
+      memcpy( box->s, ps, sl );
+      box->sl = sl;
+      box->s[sl] = 0;
       }
   };
 
@@ -111,10 +142,10 @@
     if (ps == NULL) return;
     if (ps[0] == 0) return;
     int psl = strlen( ps );
-    resize( sl + psl );
-    memcpy( s + sl, ps, psl );
-    s[sl+psl] = 0;
-    sl += psl;
+    resize( box->sl + psl );
+    memcpy( box->s + box->sl, ps, psl );
+    box->s[ box->sl + psl ] = 0;
+    box->sl += psl;
   };
 
   void VString::setn( const char* ps, int len )
@@ -126,10 +157,10 @@
       }
     int z = strlen( ps );
     if ( len < z ) z = len;
-    sl = z;
-    resize( sl );
-    memcpy( s, ps, z );
-    s[z] = 0;
+    resize( z );
+    box->sl = z;
+    memcpy( box->s, ps, z );
+    box->s[z] = 0;
   };
 
   void VString::catn( const char* ps, int len )
@@ -137,10 +168,10 @@
     if ( !ps || len < 1 ) return;
     int z = strlen( ps );
     if ( len < z ) z = len;
-    resize( sl + z );
-    memcpy( s + sl, ps, z );
-    sl += z;
-    s[sl] = 0;
+    resize( box->sl + z );
+    memcpy( box->s + box->sl, ps, z );
+    box->sl += z;
+    box->s[ box->sl ] = 0;
   };
 
 /****************************************************************************
@@ -151,33 +182,35 @@
 
   VString &str_mul( VString &target, int n ) // multiplies the VString n times, i.e. `1'*5 = `11111'
   {
-    target.resize( target.sl * n );
-    str_mul( target.s, n );
+    target.resize( target.box->sl * n );
+    str_mul( target.box->s, n );
     target.fix();
     return target;
   }
 
   VString &str_del( VString &target, int pos, int len ) // deletes `len' chars starting from `pos'
   {
-    str_del( target.s, pos, len );
+    if ( pos > target.box->sl || pos < 0 ) return target;
+    target.detach();
+    str_del( target.box->s, pos, len );
     target.fix();
     return target;
   };
 
   VString &str_ins( VString &target, int pos, const char* s ) // inserts `s' in position `pos'
   {
-    if ( pos > target.sl || pos < 0 ) return target;
-    target.resize( target.sl + strlen(s) );
-    str_ins( target.s, pos, s );
+    if ( pos > target.box->sl || pos < 0 ) return target;
+    target.resize( target.box->sl + strlen(s) );
+    str_ins( target.box->s, pos, s );
     target.fixlen();
     return target;
   };
 
   VString &str_ins_ch( VString &target, int pos, char ch ) // inserts `ch' in position `pos'
   {
-    if ( pos > target.sl || pos < 0 ) return target;
-    target.resize( target.sl + 1 );
-    str_ins_ch( target.s, pos, ch );
+    if ( pos > target.box->sl || pos < 0 ) return target;
+    target.resize( target.box->sl + 1 );
+    str_ins_ch( target.box->s, pos, ch );
     target.fixlen();
     return target;
   };
@@ -206,7 +239,7 @@
       return target;
       }
     target.resize( len );
-    str_copy( target.s, source, pos, len );
+    str_copy( target.box->s, source, pos, len );
     target.fix();
     ASSERT( target.check() );
     return target;
@@ -224,9 +257,10 @@
 
   VString &str_sleft( VString &target, int len ) // SelfLeft -- just as 'Left' but works on `this'
   {
-    if ( len < target.sl )
+    if ( len < target.box->sl )
       {
-      target.s[len] = 0;
+      target.detach();
+      target.box->s[len] = 0;
       target.fix();
       }
     return target;
@@ -234,7 +268,8 @@
 
   VString &str_sright( VString &target, int len ) // SelfRight -- just as 'Right' but works on `this'
   {
-    str_sright( target.s, len );
+    target.detach();
+    str_sright( target.box->s, len );
     target.fix();
     return target;
   };
@@ -242,36 +277,41 @@
 
   VString &str_trim_left( VString &target, int len ) // trims `len' chars from the beginning (left)
   {
-    str_trim_left( target.s, len );
+    target.detach();
+    str_trim_left( target.box->s, len );
     target.fix();
     return target;
   };
 
   VString &str_trim_right( VString &target, int len ) // trim `len' chars from the end (right)
   {
-    str_trim_right( target.s, len );
+    target.detach();
+    str_trim_right( target.box->s, len );
     target.fix();
     return target;
   };
 
   VString &str_cut_left( VString &target, const char* charlist ) // remove all chars `charlist' from the beginning (i.e. from the left)
   {
-    str_cut_left( target.s, charlist );
+    target.detach();
+    str_cut_left( target.box->s, charlist );
     target.fix();
     return target;
   };
 
   VString &str_cut_right( VString &target, const char* charlist ) // remove all chars `charlist' from the end (i.e. from the right)
   {
-    str_cut_right( target.s, charlist );
+    target.detach();
+    str_cut_right( target.box->s, charlist );
     target.fix();
     return target;
   };
 
   VString &str_cut( VString &target, const char* charlist ) // does `CutR(charlist);CutL(charlist);'
   {
-    str_cut_left( target.s, charlist );
-    str_cut_right( target.s, charlist );
+    target.detach();
+    str_cut_left( target.box->s, charlist );
+    str_cut_right( target.box->s, charlist );
     target.fix();
     return target;
   };
@@ -283,8 +323,8 @@
 
   VString &str_pad( VString &target, int len, char ch )
   {
-    target.resize( (len > 0)?len:-len );
-    str_pad( target.s, len, ch );
+    target.resize( (len > 0) ? len : -len );
+    str_pad( target.box->s, len, ch );
     target.fixlen();
     return target;
   };
@@ -293,50 +333,50 @@
   {
     int new_size = str_len( target ) / 3 + str_len( target );
     target.resize( new_size );
-    str_comma( target.s, delim );
+    str_comma( target.box->s, delim );
     target.fix();
     return target;
   };
 
   void str_set_ch( VString &target, int pos, const char ch ) // sets `ch' char at position `pos'
   {
-    if ( pos < 0 )
-      pos = target.sl + pos;
-    if ( pos < 0 || pos >= target.sl ) return;
-    target.s[pos] = ch;
+    if ( pos < 0 ) pos = target.box->sl + pos;
+    if ( pos < 0 || pos >= target.box->sl ) return;
+    if (target.box->s[pos] != ch) target.detach();
+    target.box->s[pos] = ch;
   };
 
   char str_get_ch( VString &target, int pos ) // return char at position `pos'
   {
-    if ( pos < 0 )
-      pos = target.sl + pos;
-    if ( pos < 0 || pos >= target.sl ) return 0;
-    return target.s[pos];
+    if ( pos < 0 ) pos = target.box->sl + pos;
+    if ( pos < 0 || pos >= target.box->sl ) return 0;
+    return target.box->s[pos];
   };
 
   void str_add_ch( VString &target, const char ch ) // adds `ch' at the end
   {
-    int sl = target.sl;
+    int sl = target.box->sl;
     target.resize( sl+1 );
-    target.s[sl] = ch;
-    target.s[sl+1] = 0;
+    target.box->s[sl] = ch;
+    target.box->s[sl+1] = 0;
     target.fix();
   };
 
   char* str_word( VString &target, const char* delimiters, char* result )
   {
-    str_word( target.s, delimiters, result );
+    target.detach();
+    str_word( target.box->s, delimiters, result );
     target.fix();
     return result[0] ? result : NULL;
   };
 
   char* str_rword( VString &target, const char* delimiters, char* result )
   {
-    str_rword( target.s, delimiters, result );
+    target.detach();
+    str_rword( target.box->s, delimiters, result );
     target.fix();
     return result;
   };
-
 
   int sprintf( int init_size, VString &target, const char *format, ... )
   {
@@ -353,7 +393,7 @@
   int sprintf( VString &target, const char *format, ... )
   {
     #define VSPRINTF_BUF_SIZE 1024
-    char tmp[VSPRINTF_BUF_SIZE];
+    char tmp[VSPRINTF_BUF_SIZE+1];
     va_list vlist;
     va_start( vlist, format );
     int res = vsnprintf( tmp, VSPRINTF_BUF_SIZE, format, vlist );
@@ -364,37 +404,43 @@
 
   VString& str_tr ( VString& target, const char *from, const char *to ) 
   { 
-    str_tr( target.s, from, to ); 
+    target.detach();
+    str_tr( target.box->s, from, to ); 
     return target; 
   };
   
   VString& str_up ( VString& target ) 
   { 
-    str_up( target.s ); 
+    target.detach();
+    str_up( target.box->s ); 
     return target; 
   };
   
   VString& str_low( VString& target ) 
   { 
-    str_low( target.s ); 
+    target.detach();
+    str_low( target.box->s ); 
     return target; 
   };
   
   VString& str_flip_case( VString& target ) 
   { 
-    str_flip_case( target.s ); 
+    target.detach();
+    str_flip_case( target.box->s ); 
     return target; 
   };
   
-  VString& str_reverse  ( VString& target ) 
+  VString& str_reverse( VString& target ) 
   { 
-    str_reverse( target.s ); 
+    target.detach();
+    str_reverse( target.box->s ); 
     return target; 
   };
 
   VString &str_squeeze( VString &target, const char* sq_chars ) // squeeze repeating chars to one only
   {
-    str_squeeze( target.s, sq_chars );
+    target.detach();
+    str_squeeze( target.box->s, sq_chars );
     target.fix();
     return target;
   }

@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sun Jan  5 23:54:54 2003 #########################
+### Created by makemake.pl on Sat Jan 18 15:29:34 2003 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -41,7 +41,7 @@ CC_1       = g++
 LD_1       = g++
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I. -Ipcre $(CCDEF) 
+CCFLAGS_1  = -I. -Ipcre -O2 $(CCDEF) 
 LDFLAGS_1  = $(LDDEF)
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -82,7 +82,7 @@ OBJ_1= \
 .OBJ.libvslib.a: 
 	$(MKDIR) .OBJ.libvslib.a
 
-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
+libvslib.a:  .OBJ.libvslib.a $(OBJ_1)
 	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
 	$(RANLIB_1) $(TARGET_1)
 
@@ -130,7 +130,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -I/usr/include/ncurses $(CCDEF) 
+CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF) 
 LDFLAGS_2  = $(LDDEF)
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -157,7 +157,7 @@ OBJ_2= \
 .OBJ.libvscon.a: 
 	$(MKDIR) .OBJ.libvscon.a
 
-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
+libvscon.a:  .OBJ.libvscon.a $(OBJ_2)
 	$(AR_2) $(ARFLAGS_2) $(TARGET_2) $(OBJ_2)
 	$(RANLIB_2) $(TARGET_2)
 
@@ -213,7 +213,7 @@ OBJ_3= \
 .OBJ.test: 
 	$(MKDIR) .OBJ.test
 
-test: .OBJ.test $(OBJ_3) libvslib.a
+test: libvslib.a .OBJ.test $(OBJ_3)
 	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
 
 clean-test: 

@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.19 2003/01/16 10:12:16 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.20 2003/01/19 16:14:54 cade Exp $
  *
  */
 
@@ -185,7 +185,7 @@
     box->_count++;
 
     box->_data[n] = new String;
-    box->_data[n]->compact = compact;
+    box->_data[n]->compact( compact );
     box->_data[n]->set( s );
   }
 
@@ -252,15 +252,7 @@
 
   int VArray::merge( VTrie *tr )
   {
-    VArray va;
-    va = tr->keys();
-    int cnt = count();
-    for( int z = 0; z < cnt; z++ )
-      {
-      const char* key = va[z];
-      push( key );
-      push( tr->get( key ) );
-      }
+    tr->keys_and_values( this, this );
     return box->_count;
   };
 
