@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Tue May  6 13:59:30 2003 #########################
+### Created by makemake.pl on Wed Dec 29 04:46:52 2004 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -101,27 +101,27 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 ### TARGET OBJECTS FOR TARGET 1: libvslib.a ####################################
 
 .OBJ.libvslib.a/clusters.o: clusters.cpp  clusters.cpp clusters.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c clusters.cpp -o .OBJ.libvslib.a/clusters.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c clusters.cpp         -o .OBJ.libvslib.a/clusters.o
 .OBJ.libvslib.a/dlog.o: dlog.cpp  dlog.cpp dlog.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c dlog.cpp -o .OBJ.libvslib.a/dlog.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c dlog.cpp             -o .OBJ.libvslib.a/dlog.o
 .OBJ.libvslib.a/eval.o: eval.cpp  eval.cpp eval.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c eval.cpp -o .OBJ.libvslib.a/eval.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c eval.cpp             -o .OBJ.libvslib.a/eval.o
 .OBJ.libvslib.a/fnmatch2.o: fnmatch2.cpp  fnmatch2.cpp fnmatch2.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c fnmatch2.cpp -o .OBJ.libvslib.a/fnmatch2.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c fnmatch2.cpp         -o .OBJ.libvslib.a/fnmatch2.o
 .OBJ.libvslib.a/getopt2.o: getopt2.cpp  getopt2.cpp getopt2.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c getopt2.cpp -o .OBJ.libvslib.a/getopt2.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c getopt2.cpp          -o .OBJ.libvslib.a/getopt2.o
 .OBJ.libvslib.a/scroll.o: scroll.cpp  scroll.cpp scroll.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c scroll.cpp -o .OBJ.libvslib.a/scroll.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c scroll.cpp           -o .OBJ.libvslib.a/scroll.o
 .OBJ.libvslib.a/vslib.o: vslib.cpp  vslib.cpp
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vslib.cpp -o .OBJ.libvslib.a/vslib.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vslib.cpp            -o .OBJ.libvslib.a/vslib.o
 .OBJ.libvslib.a/vstring.o: vstring.cpp  vstring.cpp vstring.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstring.cpp -o .OBJ.libvslib.a/vstring.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstring.cpp          -o .OBJ.libvslib.a/vstring.o
 .OBJ.libvslib.a/vstrlib.o: vstrlib.cpp  vstrlib.cpp vstrlib.h vstring.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstrlib.cpp -o .OBJ.libvslib.a/vstrlib.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstrlib.cpp          -o .OBJ.libvslib.a/vstrlib.o
 .OBJ.libvslib.a/vsuti.o: vsuti.cpp  vsuti.cpp vsuti.h target.h vstring.h vstrlib.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vsuti.cpp -o .OBJ.libvslib.a/vsuti.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vsuti.cpp            -o .OBJ.libvslib.a/vsuti.o
 .OBJ.libvslib.a/vscrc.o: vscrc.cpp  vscrc.cpp vsuti.h target.h vstring.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vscrc.cpp -o .OBJ.libvslib.a/vscrc.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vscrc.cpp            -o .OBJ.libvslib.a/vscrc.o
 
 
 ### TARGET 2: libvscon.a #######################################################
@@ -176,14 +176,14 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 ### TARGET OBJECTS FOR TARGET 2: libvscon.a ####################################
 
 .OBJ.libvscon.a/ansiterm.o: ansiterm.cpp  ansiterm.cpp ansiterm.h
-	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c ansiterm.cpp -o .OBJ.libvscon.a/ansiterm.o
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c ansiterm.cpp         -o .OBJ.libvscon.a/ansiterm.o
 .OBJ.libvscon.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
-	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c conmenu.cpp -o .OBJ.libvscon.a/conmenu.o
-.OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h \
- clusters.h scroll.h
-	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp -o .OBJ.libvscon.a/form_in.o
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c conmenu.cpp          -o .OBJ.libvscon.a/conmenu.o
+.OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
+  scroll.h
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
 .OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
-	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp -o .OBJ.libvscon.a/unicon.o
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
 
 
 ### TARGET 3: test #############################################################
@@ -230,7 +230,7 @@ link-test: .OBJ.test $(OBJ_3)
 ### TARGET OBJECTS FOR TARGET 3: test ##########################################
 
 .OBJ.test/test.o: test.cpp  test.cpp vstrlib.h vstring.h
-	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp -o .OBJ.test/test.o
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp             -o .OBJ.test/test.o
 
 
 ### MODULES ####################################################################

@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sat Jan  4 20:30:40 2003 #########################
+### Created by makemake.pl on Wed Dec 29 04:47:29 2004 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -69,7 +69,7 @@ OBJ_1= \
 .OBJ.libpcre.a: 
 	$(MKDIR) .OBJ.libpcre.a
 
-libpcre.a: .OBJ.libpcre.a $(OBJ_1)
+libpcre.a:  .OBJ.libpcre.a $(OBJ_1)
 	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
 	$(RANLIB_1) $(TARGET_1)
 
@@ -88,15 +88,15 @@ link-libpcre.a: .OBJ.libpcre.a $(OBJ_1)
 ### TARGET OBJECTS FOR TARGET 1: libpcre.a #####################################
 
 .OBJ.libpcre.a/chartables.o: chartables.c  chartables.c
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c chartables.c -o .OBJ.libpcre.a/chartables.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c chartables.c         -o .OBJ.libpcre.a/chartables.o
 .OBJ.libpcre.a/get.o: get.c  get.c internal.h config.h pcre.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c get.c -o .OBJ.libpcre.a/get.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c get.c                -o .OBJ.libpcre.a/get.o
 .OBJ.libpcre.a/pcre.o: pcre.c  pcre.c internal.h config.h pcre.h chartables.c
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre.c -o .OBJ.libpcre.a/pcre.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre.c               -o .OBJ.libpcre.a/pcre.o
 .OBJ.libpcre.a/pcreposix.o: pcreposix.c  pcreposix.c internal.h config.h pcre.h pcreposix.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcreposix.c -o .OBJ.libpcre.a/pcreposix.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcreposix.c          -o .OBJ.libpcre.a/pcreposix.o
 .OBJ.libpcre.a/study.o: study.c  study.c internal.h config.h pcre.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c study.c -o .OBJ.libpcre.a/study.o
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c study.c              -o .OBJ.libpcre.a/study.o
 
 
 ### MAKEMAKE ENDS HERE #########################################################
