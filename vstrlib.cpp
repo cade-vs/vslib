@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.11 2002/12/12 23:45:14 cade Exp $
+ * $Id: vstrlib.cpp,v 1.12 2002/12/15 20:18:03 cade Exp $
  *
  */
 #ifdef WIN32
@@ -347,16 +347,18 @@
     push( ps );
   };
 
-  const char* VArray::join( const char* glue )
+  const char* VArray::join( const char* glue, String* dest )
   {
-    _ret_str = "";
+    if( ! dest ) dest = &_ret_str;
+    
+    *dest = "";
     for( int z = 0; z < _count-1; z++ )
       {
-      _ret_str += get( z );
-      _ret_str += glue;
+      *dest += get( z );
+      *dest += glue;
       }
-    _ret_str += get( _count-1 );
-    return _ret_str.data();
+    *dest += get( _count-1 );
+    return dest->data();
   };
 
   void VArray::print()

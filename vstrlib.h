@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.h,v 1.6 2002/08/17 12:30:37 cade Exp $
+ * $Id: vstrlib.h,v 1.7 2002/12/15 20:18:03 cade Exp $
  *
  */
 
@@ -92,7 +92,7 @@ class VArray
   void split( const char* res, const char* str, int maxcount = -1 );
   // split with exact string
   void split_str( const char* res, const char* str, int maxcount = -1 );
-  const char* join( const char* glue = "" );
+  const char* join( const char* glue = "", String* dest = NULL );
 
   String& operator []( int n )
     {

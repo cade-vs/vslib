@@ -2,7 +2,7 @@
  * slightly modified to become .cpp and be used as part of vslib
  * modifications by (c) Vladi Belperchinov-Shabanski "Cade" 2002
  * <cade@biscom.net> [http://soul.datamax.bg/~cade]
- * $Id: regexp3.cpp,v 1.3 2002/11/27 21:41:52 cade Exp $
+ * $Id: regexp3.cpp,v 1.4 2002/12/15 20:18:03 cade Exp $
  */
 
 /*
@@ -33,7 +33,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <regexp3.h>
+
+#include "regexp3.h"
 
 /*
  * The first byte of the regexp internal "program" is actually this magic
