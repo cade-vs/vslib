@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sat Jan 18 15:29:34 2003 #########################
+### Created by makemake.pl on Tue May  6 13:59:30 2003 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -41,7 +41,7 @@ CC_1       = g++
 LD_1       = g++
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I. -Ipcre -g $(CCDEF) 
+CCFLAGS_1  = -I. -Ipcre -O2 $(CCDEF) 
 LDFLAGS_1  = $(LDDEF)
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -130,7 +130,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -I/usr/include/ncurses -g $(CCDEF) 
+CCFLAGS_2  = -I. -Ipcre -I/usr/include/ncurses -O2 $(CCDEF) 
 LDFLAGS_2  = $(LDDEF)
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -192,7 +192,7 @@ CC_3       = g++
 LD_3       = g++
 AR_3       = ar rv
 RANLIB_3   = ranlib
-CCFLAGS_3  = -g -I. $(CCDEF) -DTEST 
+CCFLAGS_3  = -g -I. -Ipcre $(CCDEF) -DTEST 
 LDFLAGS_3  = -g -L. -Lpcre -lvslib -lvscon -lpcre -lncurses $(LDDEF)
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
@@ -229,7 +229,7 @@ link-test: .OBJ.test $(OBJ_3)
 
 ### TARGET OBJECTS FOR TARGET 3: test ##########################################
 
-.OBJ.test/test.o: test.cpp  test.cpp vstring.h vstrlib.h
+.OBJ.test/test.o: test.cpp  test.cpp vstrlib.h vstring.h
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp -o .OBJ.test/test.o
 
 
