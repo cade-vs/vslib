@@ -4,10 +4,12 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.6 2002/06/30 13:35:17 cade Exp $
+ * $Id: vstrlib.cpp,v 1.7 2002/08/17 12:30:37 cade Exp $
  *
  */
-
+#ifdef WIN32
+#include "stdafx.h"
+#endif
 #include "vstrlib.h"
 
 /***************************************************************************
@@ -21,9 +23,8 @@
     _data = NULL;
     _size = 0;
     _count = 0;
-    _max_len = 0;
-    _min_len = (unsigned int)-1; /* should underflow to max value :) */
-    _ret_str = (char*)NULL;
+    compact = 1;
+    _ret_str = "";
   }
 
   VArray::VArray( const VArray& arr )
@@ -31,9 +32,8 @@
     _data = NULL;
     _size = 0;
     _count = 0;
-    _max_len = 0;
-    _min_len = (unsigned int)-1; /* should underflow to max value :) */
-    _ret_str = (char*)NULL;
+    compact = 1;
+    _ret_str = "";
     *this = arr;
   }
 
@@ -42,9 +42,8 @@
     _data = NULL;
     _size = 0;
     _count = 0;
-    _max_len = 0;
-    _min_len = (unsigned int)-1; /* should underflow to max value :) */
-    _ret_str = (char*)NULL;
+    compact = 1;
+    _ret_str = "";
     *this = tr;
   }
 
@@ -90,12 +89,8 @@
     _count++;
 
     _data[n] = new String;
-    _data[n]->compact = 1;
+    _data[n]->compact = compact;
     _data[n]->set( s );
-
-    int sl = str_len( *_data[n] );
-    if ( sl < _min_len )  _min_len = sl;
-    if ( sl > _max_len )  _max_len = sl;
   }
 
   void VArray::del( int n )
@@ -140,8 +135,6 @@
     _data = NULL;
     _size = 0;
     _count = 0;
-    _max_len = 0;
-    _min_len = (unsigned int)-1; /* should underflow to max value :) */
     _ret_str = "";
   }
 
@@ -219,7 +212,7 @@
     while( fgets( buf, sizeof(buf)-1, f ) )
       {
       str += buf;
-      if ( str_get_ch( str, -1 ) != '\n' && ! feof( f ) ) continue;
+      if ( str_get_ch( str, -1 ) != '\n' && !feof(f) ) continue;
       while ( str_get_ch( str, -1 ) == '\n' ) str_trim_right( str, 1 );
       push( str );
       str = "";
@@ -302,21 +295,19 @@
 
   void VArray::split( const char* res, const char* str, int maxcount )
   {
-    zap();
-    
     regexp *re = regcomp( res );
     ASSERT( re );
 
     const char* ps = str;
 
-    String s;
-    while( regexec( re, ps ) )
+    while( ps && ps[0] && regexec( re, ps ) )
       {
       if ( maxcount != -1 )
         {
         maxcount--;
         if ( maxcount == 0 ) break;
         }
+      String s;
       int l = re->startp[0] - ps;
       s.setn( ps, l );
       push( s );
@@ -371,6 +362,34 @@
       printf( "%d=%s\n", z, get(z) );
   }
 
+  int VArray::max_len()
+  {
+    if ( count() == 0 ) return 0;
+    int l = 0;
+    int z;
+    for( z = 0; z < count(); z++ )
+      {
+      int sl = strlen(get(z));
+      if ( sl < l )
+        l = sl;
+      }
+    return l;  
+  };
+  
+  int VArray::min_len()
+  {
+    if ( count() == 0 ) return 0;
+    int l = strlen(get(0));
+    int z;
+    for( z = 0; z < count(); z++ )
+      {
+      int sl = strlen(get(z));
+      if ( sl < l )
+        l = sl;
+      }
+    return l;  
+  };
+  
 /***************************************************************************
 **
 ** VTRIE
@@ -382,6 +401,7 @@
     _count = 0;
     _depth = 0;
     _nodes = 0;
+    compact = 1;
     root = new VTrieNode();
     _nodes++;
   }
@@ -391,6 +411,7 @@
     _count = 0;
     _depth = 0;
     _nodes = 0;
+    compact = 1;
     root = new VTrieNode();
     _nodes++;
     *this = arr;
@@ -401,6 +422,7 @@
     _count = 0;
     _depth = 0;
     _nodes = 0;
+    compact = 1;
     root = new VTrieNode();
     _nodes++;
     *this = tr;
@@ -433,7 +455,12 @@
         node->data = NULL;
         }
       else
-        return; /* not found */
+        {
+        if ( node->next )
+          del_node( node, node->next, key );
+        else
+          return; /* not found */
+        }  
       }
     else
       {
@@ -518,10 +545,10 @@
       }
     if ( current )
       {
-      if ( ! current->data ) 
+      if ( !current->data ) 
         {
         current->data = new String();
-        current->data->compact = 1;
+        current->data->compact = compact;
         }
       return current;
       }
@@ -570,8 +597,11 @@
     else
       _count++;
     current->data = new String;
-    current->data->compact = 1;
+    current->data->compact = compact;
     current->data->set( data );
+    
+    sl = str_len( *current->data );
+    
     return _count;
   };
 

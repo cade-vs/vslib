@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.h,v 1.5 2002/04/14 10:14:44 cade Exp $
+ * $Id: vstrlib.h,v 1.6 2002/08/17 12:30:37 cade Exp $
  *
  */
 
@@ -42,9 +42,6 @@ class VArray
   int       _size;
   int       _count;
 
-  int       _min_len;
-  int       _max_len;
-  
   int       _fe;
 
   String    _ret_str;
@@ -55,14 +52,14 @@ class VArray
 
   public:
 
+  int compact;
+  
   VArray();
   VArray( const VArray& arr );
   VArray( const VTrie& tr );
   ~VArray();
 
   int count() { return _count; }
-  int max_len() { return _max_len; }
-  int min_len() { return _min_len; }
 
   void ins( int n, const char* s );
   void del( int n );
@@ -93,13 +90,13 @@ class VArray
 
   // split with regexp
   void split( const char* res, const char* str, int maxcount = -1 );
-  // split with exact stringc
+  // split with exact string
   void split_str( const char* res, const char* str, int maxcount = -1 );
-  const char* join( const char* glue );
+  const char* join( const char* glue = "" );
 
   String& operator []( int n )
     {
-      ASSERT( n >= 0 );
+      if ( n < 0 ) { _ret_str = ""; return _ret_str; }
       if ( n >= _count ) set( n, "" );
       return *_data[n];
     }
@@ -124,6 +121,9 @@ class VArray
     { return _fe < _count ? _data[_fe]->data() : NULL; };
   int current_idx() // current index
     { return _fe; };
+    
+  int max_len();  
+  int min_len();  
 };
 
 /***************************************************************************
@@ -161,6 +161,8 @@ class VTrie
 
   public:
 
+  int compact;
+  
   VTrie();
   VTrie( const VArray& arr );
   VTrie( const VTrie& tr );
@@ -170,11 +172,11 @@ class VTrie
   int depth() { return _depth; }
   int nodes() { return _nodes; }
 
-  int set( const char* key, const char* data ); // return new count
+  int set( const char* key, const char* data );
   void del( const char* key );
   const char* get( const char* key );
 
-  int exist( const char* key ) // return != 0 if key exist (with data)
+  int exists( const char* key ) // return != 0 if key exist (with data)
       { return find_node( key ) != NULL; }
 
   void zap(); // delete all key+data pairs
@@ -199,7 +201,12 @@ class VTrie
     if ( node ) return *(node->data);
     set( key, "" );
     node = find_node( key );
+    ASSERT( node );
     return *(node->data);
+    }
+  String& operator []( String& key )
+    {
+    return (*this)[key.data()];
     }
 
   const VTrie& operator = ( const VArray& arr )
@@ -220,6 +227,7 @@ class VTrie
 
 class VRegexp
 {
+
   regexp* re;
   String substr;
 
