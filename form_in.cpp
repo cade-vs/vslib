@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: form_in.cpp,v 1.3 2002/08/17 11:48:37 cade Exp $
+ * $Id: form_in.cpp,v 1.4 2002/10/09 22:02:33 cade Exp $
  *
  */
 
@@ -56,7 +56,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, Strin
       }
     con_xy( x + scroll.pos - scroll.page + 1 , y );
     ch = con_getch();
-    if(ch > 31 && ch < 127 && str_len(str) < 70)
+    if( ch >= 32 && ch <= 255 && str_len(str) < 70 )
       {
       if (firsthit)
         {
@@ -85,7 +85,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, Strin
       res = 1;
       break;
       } else
-    if( (ch == KEY_BACKSPACE || ch == 8 || ch == 127 ) && (scroll.pos > 0) )
+    if( (ch == KEY_BACKSPACE || ch == 8 ) && (scroll.pos > 0) )
       {
       scroll.up();
       str_del( str, scroll.pos, 1 );
