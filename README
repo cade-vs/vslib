@@ -1,0 +1,20 @@
+
+  VSLIB MAY.2000
+  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
+ 
+  This library is collection of some structures/functions/etc.
+  that I need to write my programs a bit faster and to avoid
+  inventing the wheel every time again :)
+
+  Some files are taken "as is" from other packages and/or software
+  implementations. All the appropriate credits are intact. All files
+  are under the GPL license. Some file names and/or function names
+  are changed just to keep this library namespace clean where needed.
+ 
+  LICENSE AGREEMENT: GPL, SEE `COPYING' FOR THE FULL TEXT.
+
+                              Vladi Belperchinov-Shabanski "Cade"
+                              http://www.biscom.net/~cade
+                              <cade@biscom.net>
+                              <cade@datamax.bg>
+

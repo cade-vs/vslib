@@ -1,0 +1,71 @@
+[COMPILER]
+MACRO=\n
+FILTEREXPANSION=1 1 1 1 1
+compile=concur|capture|:Compile:&Compile,make %n.o CCDEF="-DTEST"
+make=concur|capture|saveall|:Build:&Build,make CCDEF="-DTEST"
+rebuild=concur|capture|:Rebuild:&Rebuild,
+debug=:Debug:&Debug,xxgdb [exename-here]
+execute=concur|capture|saveall|:Execute:E&xecute,make CCDEF="-DTEST" && vslib
+user1=hide|:User 1:User 1,
+user2=hide|:User 2:User 2,
+workingdir=/home/cade/pro/vslib
+includedirs=%(INCLUDE)
+tagfiles=
+reffile=
+[ASSOCIATION]
+[FILES]
+/home/cade/pro/vslib/ansiterm.cpp
+/home/cade/pro/vslib/ansiterm.h
+/home/cade/pro/vslib/clusters.cpp
+/home/cade/pro/vslib/clusters.h
+/home/cade/pro/vslib/conmenu.cpp
+/home/cade/pro/vslib/conmenu.h
+/home/cade/pro/vslib/dlog.cpp
+/home/cade/pro/vslib/dlog.h
+/home/cade/pro/vslib/eval.cpp
+/home/cade/pro/vslib/eval.h
+/home/cade/pro/vslib/fnmatch2.cpp
+/home/cade/pro/vslib/fnmatch2.h
+/home/cade/pro/vslib/form_in.cpp
+/home/cade/pro/vslib/form_in.h
+/home/cade/pro/vslib/getopt2.cpp
+/home/cade/pro/vslib/getopt2.h
+/home/cade/pro/vslib/main.cpp
+/home/cade/pro/vslib/pos.cpp
+/home/cade/pro/vslib/pos.h
+/home/cade/pro/vslib/regexp2.cpp
+/home/cade/pro/vslib/regexp2.h
+/home/cade/pro/vslib/scroll.cpp
+/home/cade/pro/vslib/scroll.h
+/home/cade/pro/vslib/sets.cpp
+/home/cade/pro/vslib/sets.h
+/home/cade/pro/vslib/target.h
+/home/cade/pro/vslib/unicon.cpp
+/home/cade/pro/vslib/unicon.h
+/home/cade/pro/vslib/vslib.cpp
+/home/cade/pro/vslib/vslib.h
+/home/cade/pro/vslib/vstring.cpp
+/home/cade/pro/vslib/vstring.h
+/home/cade/pro/vslib/vstrlib.cpp
+/home/cade/pro/vslib/vstrlib.h
+/home/cade/pro/vslib/vsuti.cpp
+/home/cade/pro/vslib/vsuti.h
+[STATE]
+SCREEN: 800 600 -4 -4 800 549 0 0 N 0 0 0 0 651 493
+CWD: /home/cade/pro/twins
+BUFFER: BN="/home/cade/pro/twins/twins.pl"
+BI: MA=1 74 1  TABS=1 3  WWS=1 IWT=0 ST=0 IN=1 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=Perl	HM=0 MF=544
+VIEW: LN=.0 CL=1 LE=0 CX=0 CY=1 WI=5 BI=15 HT=0 HN=0 HF=0 HC=4
+WINDOW: 0 0 439 332 0 0 M  WF=0 WT=2 "alias-vga,10,0,1"
+BUFFER: BN="/home/cade/pro/twins/twins.pl"
+VIEW: LN=.875 CL=12 LE=0 CX=11 CY=3 WI=66 BI=15 HT=0 HN=0 HF=0 HC=4
+FILEHIST: 9
+/home/cade/public_html/hl/index.html
+/home/cade/public_html/mw/mw.pl
+/home/cade/public_html/hl/data/.mime.types
+/home/cade/pro/seek.pl/ls-1R.pl
+/home/cade/pro/seek.pl/loc.pl
+/home/cade/bin/xvpic.pl
+/home/cade/pro/palm-fe3/pro/p3_conf.pm
+/home/cade/public_html/hl/hl.pl
+/home/cade/pro/twins/twins.pl
