@@ -4,14 +4,12 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vslib.h,v 1.4 2002/04/14 10:14:44 cade Exp $
+ * $Id: vslib.h,v 1.5 2002/08/17 11:48:37 cade Exp $
  *
  */
 
 #ifndef _VLIB_H_
 #define _VLIB_H_
-
-#include <target.h> // this must set _TARGET_XXX_ define
 
 #include <vstring.h>
 #include <vstrlib.h>
@@ -24,6 +22,8 @@
 #include <scroll.h>
 #include <form_in.h>
 #include <conmenu.h>
+
+#include "target.h"
 
 #endif //_VLIB_H_
 

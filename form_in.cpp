@@ -1,10 +1,10 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-1999
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2002
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: form_in.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: form_in.cpp,v 1.3 2002/08/17 11:48:37 cade Exp $
  *
  */
 
@@ -56,7 +56,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, Strin
       }
     con_xy( x + scroll.pos - scroll.page + 1 , y );
     ch = con_getch();
-    if(ch > 31 && ch < 129 && str_len(str) < 70)
+    if(ch > 31 && ch < 127 && str_len(str) < 70)
       {
       if (firsthit)
         {
@@ -85,7 +85,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, Strin
       res = 1;
       break;
       } else
-    if( (ch == KEY_BACKSPACE || ch == 8) && (scroll.pos > 0) )
+    if( (ch == KEY_BACKSPACE || ch == 8 || ch == 127 ) && (scroll.pos > 0) )
       {
       scroll.up();
       str_del( str, scroll.pos, 1 );
@@ -94,9 +94,9 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, Strin
     if ( ch == KEY_IC  ) insert = !insert; else
     if ( ch == KEY_LEFT  ) scroll.up(); else
     if ( ch == KEY_RIGHT && scroll.pos < str_len(str) ) scroll.down(); else
-    if ( ch == KEY_HOME ) scroll.gotopos(0); else
-    if ( ch == KEY_END  ) scroll.gotopos(str_len(str)); else
-    if ( ch == KEY_DC  && scroll.pos < str_len(str) )
+    if ( ch == KEY_HOME || ch == KEY_CTRL_A ) scroll.gotopos(0); else
+    if ( ch == KEY_END || ch == KEY_CTRL_E ) scroll.gotopos(str_len(str)); else
+    if ( ( ch == KEY_DC || ch == KEY_CTRL_D ) && scroll.pos < str_len(str) )
       {
       str_del( str, scroll.pos, 1 );
       show = 1;
@@ -120,105 +120,5 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, char 
   strcpy( strres, str.data() );
   return res;
 }
-
-/*
-int InputStr( int x, int y, const char *prompt, int maxlen, int fieldlen, String *strres )
-{
-int res = 0;
-String str;
-String tmp;
-
-ConOut( x, y, prompt, CONCOLOR(EditStrFG, EditStrBG) );
-str = *strres;
-int pos = str.GetLength();
-int ch;
-
-int sx = x + strlen( prompt );
-int sy = y;
-
-int show = 2;
-
-ConCShow();
-// ConOut(sx, sy, str.Right(fieldlen), EditStrFG, EditStrBG);
-int firsthit = 1;
-while(1)
-  {
-  if (show)
-    {
-    int page = pos / fieldlen;
-//    if (page == 0) page = fieldlen / 2;
-    if (show == 2)
-      {
-      tmp = " ";
-      int z = fieldlen - (str.len() - page);
-      tmp *= z;
-      tmp = " " + str.Copy( page, fieldlen ) + tmp + " ";
-      if ( page > 0 ) tmp.SetCh( 0, '<' );
-      if ( str.len() - page > fieldlen ) tmp.SetCh( fieldlen+1, '>' );
-      ConOut( sx, sy, tmp, CONCOLOR(EditStrFG, EditStrBG) );
-      }
-    ConXY( sx+pos-page+1, sy );
-    show = 0;
-    }
-
-  ch = ConGetch();
-  if(ch > 31 && ch < 129 && str.GetLength() < 70)
-    {
-    if (firsthit)
-      {
-      str = "";
-      pos = 0;
-      firsthit = 0;
-      }
-      str.InsertCh( pos, ch );
-      pos++;
-    show = 2;
-    };
-  firsthit = 0;
-  if( ch == 27 )
-    {
-    res = 0;
-    break;
-    } else
-  if( ch == 13 )
-    {
-    *strres = str;
-    res = 1;
-    break;
-    } else
-  if( (ch == KEY_BACKSPACE || ch == 8) && (pos > 0) )    
-    {
-    pos--;
-    str.Delete( pos, 1 );
-    show = 2;
-    } else
-  if( ch == KEY_LEFT  ) // <- 
-    {
-    if (pos > 0)
-      {
-      pos--;
-      show = 1;
-      }
-    } else
-  if( ch == KEY_RIGHT ) // -> 
-    {
-    if ( pos < str.GetLength() )
-      {
-      pos++;
-      show = 1;
-      }
-    } else
-  if ( ch == KEY_HOME ) { pos = 0; show = 1; } else
-  if ( ch == KEY_END  ) { pos = str.GetLength(); show = 1; } else
-  if ( ch == KEY_DC  && pos < str.GetLength() )
-    {
-    str.Delete( pos, 1 );
-    show = 2;
-    }
-  }
-ConCHide();
-return res;
-}
-*/
 
 // eof form_in.cpp

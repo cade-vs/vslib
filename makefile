@@ -1,6 +1,6 @@
 ### MAKEMAKE STARTS HERE #########################################
 #
-# Created by makemake.pl on Sun Feb 24 15:04:39 2002
+# Created by makemake.pl on Thu Jun  6 01:22:47 2002
 #
 ##################################################################
 
@@ -28,7 +28,8 @@ RMFILE     = rm -f
 
 CC_0      = g++
 LD_0      = g++
-AR_0      = ar rvs
+AR_0      = ar rv
+RANLIB_0  = ranlib
 CFLAGS_0  = 
 CCFLAGS_0 = -I. -O2 $(CCDEF)
 LDFLAGS_0 = $(LDDEF)
@@ -74,6 +75,7 @@ OBJ_0= \
 
 libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
 	$(AR_0) $(ARFLAGS_0) $(TARGET_0) $(OBJ_0)
+	$(RANLIB_0) $(TARGET_0)
 
 clean-libvslib.a: 
 	$(RMFILE) $(TARGET_0)
@@ -84,6 +86,7 @@ rebuild-libvslib.a: clean-libvslib.a libvslib.a
 link-libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
 	$(RMFILE) libvslib.a
 	$(AR_0) $(ARFLAGS_0) $(TARGET_0) $(OBJ_0)
+	$(RANLIB_0) $(TARGET_0)
 
 ### TARGET OBJECTS FOR TARGET 0: libvslib.a ##########################
 
@@ -97,11 +100,11 @@ link-libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c fnmatch2.cpp -o .OBJ.0.libvslib.a/fnmatch2.o
 .OBJ.0.libvslib.a/getopt2.o:  getopt2.cpp getopt2.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c getopt2.cpp -o .OBJ.0.libvslib.a/getopt2.o
-.OBJ.0.libvslib.a/regexp3.o:  regexp3.cpp regexp3.h
+.OBJ.0.libvslib.a/regexp3.o:  regexp3.cpp
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c regexp3.cpp -o .OBJ.0.libvslib.a/regexp3.o
 .OBJ.0.libvslib.a/scroll.o:  scroll.cpp scroll.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c scroll.cpp -o .OBJ.0.libvslib.a/scroll.o
-.OBJ.0.libvslib.a/vscrc.o:  vscrc.cpp vsuti.h vstring.h
+.OBJ.0.libvslib.a/vscrc.o:  vscrc.cpp vsuti.h target.h vstring.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vscrc.cpp -o .OBJ.0.libvslib.a/vscrc.o
 .OBJ.0.libvslib.a/vslib.o:  vslib.cpp
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vslib.cpp -o .OBJ.0.libvslib.a/vslib.o
@@ -109,14 +112,15 @@ link-libvslib.a: .OBJ.0.libvslib.a $(OBJ_0)
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vstring.cpp -o .OBJ.0.libvslib.a/vstring.o
 .OBJ.0.libvslib.a/vstrlib.o:  vstrlib.cpp vstrlib.h regexp3.h vstring.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vstrlib.cpp -o .OBJ.0.libvslib.a/vstrlib.o
-.OBJ.0.libvslib.a/vsuti.o:  vsuti.cpp vsuti.h vstring.h regexp3.h
+.OBJ.0.libvslib.a/vsuti.o:  vsuti.cpp vsuti.h target.h vstring.h regexp3.h
 	$(CC_0) $(CFLAGS_0) $(CCFLAGS_0) -c vsuti.cpp -o .OBJ.0.libvslib.a/vsuti.o
 
 ### TARGET 1: libvscon.a #########################################
 
 CC_1      = g++
 LD_1      = g++
-AR_1      = ar rvs
+AR_1      = ar rv
+RANLIB_1  = ranlib
 CFLAGS_1  = 
 CCFLAGS_1 = -I. -I/usr/include/ncurses -O2 $(CCDEF)
 LDFLAGS_1 = $(LDDEF)
@@ -146,6 +150,7 @@ OBJ_1= \
 
 libvscon.a: .OBJ.1.libvscon.a $(OBJ_1)
 	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
+	$(RANLIB_1) $(TARGET_1)
 
 clean-libvscon.a: 
 	$(RMFILE) $(TARGET_1)
@@ -156,6 +161,7 @@ rebuild-libvscon.a: clean-libvscon.a libvscon.a
 link-libvscon.a: .OBJ.1.libvscon.a $(OBJ_1)
 	$(RMFILE) libvscon.a
 	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
+	$(RANLIB_1) $(TARGET_1)
 
 ### TARGET OBJECTS FOR TARGET 1: libvscon.a ##########################
 
@@ -163,17 +169,18 @@ link-libvscon.a: .OBJ.1.libvscon.a $(OBJ_1)
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c ansiterm.cpp -o .OBJ.1.libvscon.a/ansiterm.o
 .OBJ.1.libvscon.a/conmenu.o:  conmenu.cpp conmenu.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c conmenu.cpp -o .OBJ.1.libvscon.a/conmenu.o
-.OBJ.1.libvscon.a/form_in.o:  form_in.cpp form_in.h unicon.h vstring.h clusters.h \
- scroll.h
+.OBJ.1.libvscon.a/form_in.o:  form_in.cpp form_in.h unicon.h target.h vstring.h \
+ clusters.h scroll.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c form_in.cpp -o .OBJ.1.libvscon.a/form_in.o
-.OBJ.1.libvscon.a/unicon.o:  unicon.cpp unicon.h
+.OBJ.1.libvscon.a/unicon.o:  unicon.cpp unicon.h target.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c unicon.cpp -o .OBJ.1.libvscon.a/unicon.o
 
 ### TARGET 2: test #########################################
 
 CC_2      = g++
 LD_2      = g++
-AR_2      = ar rvs
+AR_2      = ar rv
+RANLIB_2  = ranlib
 CFLAGS_2  = 
 CCFLAGS_2 = -g -I. $(CCDEF) -DTEST
 LDFLAGS_2 = -g -L. -lvslib -lvscon -lncurses $(LDDEF)

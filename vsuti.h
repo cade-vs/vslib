@@ -4,14 +4,12 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: vsuti.h,v 1.3 2002/08/17 11:48:37 cade Exp $
  *
  */
 
 #ifndef _VSUTI_H_
 #define _VSUTI_H_
-
-#include <target.h>
 
 #include <sys/stat.h>
 #include <string.h>
@@ -22,18 +20,20 @@
 #include <unistd.h>
 #include <dirent.h>
 
+#include "target.h"
+
 #ifdef _TARGET_UNIX_
 #include <pwd.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #endif
 
-#include "vstring.h"
-
 #include <assert.h>
 #ifndef ASSERT
 #define ASSERT assert
 #endif
+
+#include "vstring.h"
 
 /*###########################################################################*/
 /* MISC defines */

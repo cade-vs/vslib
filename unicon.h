@@ -4,14 +4,14 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: unicon.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ * $Id: unicon.h,v 1.3 2002/08/17 11:48:37 cade Exp $
  *
  */
 
 #ifndef _UNICON_H_
 #define _UNICON_H_
 
-#include <target.h>
+#include "target.h"
 
 #ifdef _TARGET_UNKNOWN_
   #error "I don't know what is the target platform"
