@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- * $Id: vstrlib.cpp,v 1.10 2002/11/06 19:57:09 cade Exp $
+ * $Id: vstrlib.cpp,v 1.11 2002/12/12 23:45:14 cade Exp $
  *
  */
 #ifdef WIN32
@@ -57,7 +57,7 @@
     ASSERT( new_size >= 0 );
     if ( new_size == 0 )
       {
-      delete _data;
+      delete [] _data;
       _data = NULL;
       _size = 0;
       _count = 0;
@@ -73,7 +73,7 @@
       {
       memcpy( new_data, _data,
               (_size < new_size ? _size : new_size) * sizeof(String*) );
-      delete _data;
+      delete [] _data;
       }
     _size = new_size;
     _data = new_data;

@@ -25,7 +25,7 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.9 2002/11/27 21:41:52 cade Exp $
+ * $Id: vstring.h,v 1.10 2002/12/12 23:45:14 cade Exp $
  *
  */
 
@@ -62,13 +62,13 @@
 
     int compact; // set this != 0 for compact (memory preserving) behaviour
 
-    String()                     { s = NULL; sl = size = compact = 0; resize(sl); };
-    String( const String& str )  { s = NULL; sl = size = compact = 0; set(str);   };
-    String( const char*   ps  )  { s = NULL; sl = size = compact = 0; set(ps);    };
-    String( const int     n   )  { s = NULL; sl = size = compact = 0; i(n);    };
-    String( const long    n   )  { s = NULL; sl = size = compact = 0; l(n);    };
-    String( const double  n   )  { s = NULL; sl = size = compact = 0; f(n);    };
-    ~String() { if ( s ) free( s );s = NULL; sl = size = compact = 0; };
+    String()                     {  s = NULL; sl = size = compact = 0; resize(sl); };
+    String( const String& str )  {  s = NULL; sl = size = compact = 0; set(str);   };
+    String( const char*   ps  )  {  s = NULL; sl = size = compact = 0; set(ps);    };
+    String( const int     n   )  {  s = NULL; sl = size = compact = 0; i(n);    };
+    String( const long    n   )  {  s = NULL; sl = size = compact = 0; l(n);    };
+    String( const double  n   )  {  s = NULL; sl = size = compact = 0; f(n);    };
+    ~String() { if ( s ) free( s ); s = NULL; sl = size = compact = 0; };
 
     const String& operator = ( const String& str ) { set(str.s); return *this; };
     const String& operator = ( const char*   ps  ) { set(ps); return *this; };

@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.10 2002/10/29 04:09:03 cade Exp $
+ * $Id: vstring.cpp,v 1.11 2002/12/12 23:45:14 cade Exp $
  *
  */
 
@@ -287,7 +287,7 @@
   {
     if ( pos < 0 )
       pos = target.sl + pos;
-    if ( pos < 0 && pos >= target.sl ) return;
+    if ( pos < 0 || pos >= target.sl ) return;
     target.s[pos] = ch;
   };
 
@@ -295,7 +295,7 @@
   {
     if ( pos < 0 )
       pos = target.sl + pos;
-    if ( pos < 0 && pos >= target.sl ) return 0;
+    if ( pos < 0 || pos >= target.sl ) return 0;
     return target.s[pos];
   };
 
@@ -331,7 +331,7 @@
     int res = vsprintf( tmp, format, vlist );
     va_end( vlist );
     target = tmp;
-    delete tmp;
+    delete [] tmp;
     return res;
   };
 
@@ -572,7 +572,7 @@
     int sl = str_len( target );
     if ( pos < 0 )
       pos = sl + pos;
-    if ( pos < 0 && pos >= sl ) return;
+    if ( pos < 0 || pos >= sl ) return;
     target[pos] = ch;
   };
 
@@ -581,7 +581,7 @@
     int sl = str_len( target );
     if ( pos < 0 )
       pos = sl + pos;
-    if ( pos < 0 && pos >= sl ) return 0;
+    if ( pos < 0 || pos >= sl ) return 0;
     return target[pos];
   };
 
@@ -677,7 +677,7 @@
       strcat( tmp, target );
       strcpy( target, tmp );
       }
-    delete tmp;
+    delete [] tmp;
     return target;
   }
 
@@ -921,7 +921,7 @@ char* str_file_name_ext( const char *ps, char *path )
   int len = strlen(ps);
   int z = len - 1;
 
-  while ( ps[z] != '/' && z >= 0) z--;
+  while ( z >= 0 && ps[z] != '/' ) z--;
   strcpy( path, ps + z + 1 );
 
   return path;
@@ -946,7 +946,7 @@ String& str_file_ext( const char *ps, String& ext )
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_ext( ps, t );
   ext = t;
-  delete t;
+  delete [] t;
   return ext;
 };
 
@@ -955,7 +955,7 @@ String& str_file_name( const char *ps, String& name )
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_name( ps, t );
   name = t;
-  delete t;
+  delete [] t;
   return name;
 };
 
@@ -964,7 +964,7 @@ String& str_file_name_ext( const char *ps, String& name )
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_name_ext( ps, t );
   name = t;
-  delete t;
+  delete [] t;
   return name;
 };
 
@@ -973,7 +973,7 @@ String& str_file_path( const char *ps, String& path )
   char *t = new char[ strlen( ps ) + 1 ];
   str_file_path( ps, t );
   path = t;
-  delete t;
+  delete [] t;
   return path;
 };
 

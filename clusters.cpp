@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: clusters.cpp,v 1.3 2002/04/14 10:14:44 cade Exp $
+ * $Id: clusters.cpp,v 1.4 2002/12/12 23:45:14 cade Exp $
  *
  */
 
@@ -326,7 +326,7 @@ void FLCluster::dump()
       
     BSet::~BSet() 
       { 
-      free( data ); 
+      if( data ) free( data );
       };
 
     void BSet::set1( int pn )
