@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sun Dec 15 22:20:19 2002 #########################
+### Created by makemake.pl on Sat Jan  4 20:32:20 2003 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -13,13 +13,13 @@ re: rebuild
 
 li: link
 
-all: libvslib.a libvscon.a test 
+all: modules libvslib.a libvscon.a test 
 
-clean: clean-libvslib.a clean-libvscon.a clean-test 
+clean: clean-modules clean-libvslib.a clean-libvscon.a clean-test 
 
-rebuild: rebuild-libvslib.a rebuild-libvscon.a rebuild-test 
+rebuild: rebuild-modules rebuild-libvslib.a rebuild-libvscon.a rebuild-test 
 
-link: link-libvslib.a link-libvscon.a link-test 
+link: link-modules link-libvslib.a link-libvscon.a link-test 
 
 ### GLOBAL (AND USER) DEFS #####################################################
 
@@ -28,6 +28,7 @@ AR = ar rv
 CC = g++
 LD = g++
 MKDIR = mkdir -p
+MODULES = pcre
 RANLIB = ranlib
 RMDIR = rm -rf
 RMFILE = rm -f
@@ -40,7 +41,7 @@ CC_1       = g++
 LD_1       = g++
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I. -O2 $(CCDEF) 
+CCFLAGS_1  = -I. -Ipcre -O2 $(CCDEF) 
 LDFLAGS_1  = $(LDDEF)
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -196,7 +197,7 @@ LD_3       = g++
 AR_3       = ar rv
 RANLIB_3   = ranlib
 CCFLAGS_3  = -g -I. $(CCDEF) -DTEST 
-LDFLAGS_3  = -g -L. -lvslib -lvscon -lncurses $(LDDEF)
+LDFLAGS_3  = -g -L. -Lpcre -lvslib -lvscon -lpcre -lncurses $(LDDEF)
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
 TARGET_3   = test
@@ -234,6 +235,21 @@ link-test: .OBJ.test $(OBJ_3)
 
 .OBJ.test/test.o: test.cpp  test.cpp vstring.h vstrlib.h regexp3.h
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp -o .OBJ.test/test.o
+
+
+### MODULES ####################################################################
+
+modules:
+	make -C pcre 
+
+clean-modules:
+	make -C pcre clean
+
+rebuild-modules:
+	make -C pcre rebuild
+
+link-modules:
+	make -C pcre link
 
 
 ### MAKEMAKE ENDS HERE #########################################################

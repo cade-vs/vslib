@@ -96,6 +96,12 @@ void test3()
   if( re.m( "tralala85." ) ) // match against regexp
     printf( "sub 1 = %s\n", re[1].data() ); // re[1] returns `85'
 
+  if( re.m( "tralala85.", "(la)+" ) ) // match against regexp
+    {
+    printf( "sub 0 = %s\n", re[0].data() ); // `lala'
+    printf( "sub 1 = %s\n", re[1].data() ); // `la'
+    }
+
   printf( "--------------------\n" );
   v1.undef(); // clear
   v1.split( " +", "tralala  opala and another   one" ); // splits on spaces
@@ -143,7 +149,7 @@ void test4()
   int ii;
   
   VArray va;
-  ii = 2000;
+  ii = 20;
   i = ii;
   while( i-- )
     {

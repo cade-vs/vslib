@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.9 2003/01/01 15:41:55 cade Exp $
+ *  $Id: vstrlib.h,v 1.10 2003/01/04 18:53:06 cade Exp $
  *
  */
 
@@ -24,6 +24,7 @@
 #endif
 
 #include <stdlib.h>
+#include <pcre.h>
 #include "regexp3.h"
 #include "vstring.h"
 
@@ -249,35 +250,51 @@ class VTrie
 ** VREGEXP
 **
 ****************************************************************************/
+/*
+** options are:
+**               i -- case insensitive
+**               m -- multiline matches
+**               s -- single line (`.' matches and NEWLINE's)
+**               x -- extended (ifnores whitespace and comments)
+**
+** for more docs see perlre(1) and pcre library docs
+*/
+
+/* number of subpatterns which can be catched by VRegexp::m() */
+#define VREGEXP_MAX_SUBS    32
 
 class VRegexp
 {
 
-  regexp* re;
+  pcre*       re;
+  pcre_extra *pe;
+  int         sp[VREGEXP_MAX_SUBS*3]; // sub pointers
+  int         rc;
+  const char *lp; // last line matched ptr
+  
   String substr;
+  String errstr;
 
+  int get_options( const char* opt );
+  
   public:
 
-  VRegexp() { re = NULL; };
-  VRegexp( const char* rs ) // compiles new regexp
-    { re = NULL; comp( rs ); };
-  ~VRegexp() 
-    { if ( re ) free( re ); };
+  VRegexp();
+  VRegexp( const char* pattern, const char *opt = NULL ); // compiles new regexp
+  ~VRegexp(); 
 
-  int comp( const char* rs ) // compile re, return 1 for success
-    { if ( re ) free(re); re = regcomp( rs ); return re != NULL; };
-  int ok() // return 1 if regexp is compiled ok, 0 if not
-    { return re != NULL; }
-  int exec( const char* line ) // execute re against line, return 1 for match
-    { ASSERT( re ); if (!re) return 0; return regexec( re, line ); };
-  int m( const char* line ) // same as exec
-    { return exec( line ); };
-  int m( const char* rs, const char* line ) // same as exec, but compiles first
-    { comp( rs ); return m( line ); };
+  int comp( const char* pattern, const char *opt = NULL ); // compile re, return 1 for success
+  int study(); // optimizing regexp for (big-size) multiple matches
+  int ok(); // return 1 if regexp is compiled ok, 0 if not
+  
+  int m( const char* line ); // execute re against line, return 1 for match
+  int m( const char* line, const char* pattern, const char *opt = NULL ); // same as exec, but compiles first
 
   const char* sub( int n ); // return n-th substring match
   String& operator []( int n ) // same as sub()
     { substr = ""; sub( n ); return substr; }
+    
+  const char* error_str() { return errstr.data(); };  
 };
 
 /***************************************************************************

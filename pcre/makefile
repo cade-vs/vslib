@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sat Jan  4 20:29:47 2003 #########################
+### Created by makemake.pl on Sat Jan  4 20:30:40 2003 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -53,7 +53,6 @@ SRC_1= \
      get.c \
      pcre.c \
      pcreposix.c \
-     pcretest.c \
      study.c \
 
 #### OBJECTS FOR TARGET 1: libpcre.a ###########################################
@@ -63,7 +62,6 @@ OBJ_1= \
      .OBJ.libpcre.a/get.o \
      .OBJ.libpcre.a/pcre.o \
      .OBJ.libpcre.a/pcreposix.o \
-     .OBJ.libpcre.a/pcretest.o \
      .OBJ.libpcre.a/study.o \
 
 ### TARGET DEFINITION FOR TARGET 1: libpcre.a ##################################
@@ -97,8 +95,6 @@ link-libpcre.a: .OBJ.libpcre.a $(OBJ_1)
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre.c -o .OBJ.libpcre.a/pcre.o
 .OBJ.libpcre.a/pcreposix.o: pcreposix.c  pcreposix.c internal.h config.h pcre.h pcreposix.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcreposix.c -o .OBJ.libpcre.a/pcreposix.o
-.OBJ.libpcre.a/pcretest.o: pcretest.c  pcretest.c internal.h config.h pcre.h pcreposix.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcretest.c -o .OBJ.libpcre.a/pcretest.o
 .OBJ.libpcre.a/study.o: study.c  study.c internal.h config.h pcre.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c study.c -o .OBJ.libpcre.a/study.o
 

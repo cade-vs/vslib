@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.14 2003/01/01 15:41:55 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.15 2003/01/04 18:53:06 cade Exp $
  *
  */
 
@@ -753,19 +753,118 @@
 **
 ****************************************************************************/
 
-  const char* VRegexp::sub( int n )
+  VRegexp::VRegexp()
+  { 
+    re = NULL;
+    pe = NULL;
+    rc = 0;
+    lp = NULL;
+  };
+  
+  VRegexp::VRegexp( const char* rs, const char* opt )
+  { 
+    re = NULL; 
+    pe = NULL;
+    rc = 0;
+    lp = NULL;
+    comp( rs, opt ); 
+  };
+  
+  VRegexp::~VRegexp() 
+  { 
+    if ( re ) pcre_free( re ); 
+  };
+
+  int VRegexp::get_options( const char* opt )
   {
-    if(re->startp[n] != NULL && re->endp[n] != NULL)
+    if ( ! opt    ) return 0;
+    if ( ! opt[0] ) return 0;
+    int options = 0;
+    int sl = strlen( opt );
+    int z;
+    for( z = 0; z < sl; z++ )
       {
-      int i = (int)(re->endp[n] - re->startp[n]);
-      substr.setn(re->startp[n],i);
-      return substr.data();
+      switch( opt[z] )
+        {
+        case 'i': options |= PCRE_CASELESS; break;
+        case 'm': options |= PCRE_MULTILINE; break;
+        case 's': options |= PCRE_DOTALL; break;
+        case 'x': options |= PCRE_EXTENDED; break;
+        default: errstr = "invalid option, allowed are: imsx"; return -1;
+        }
+      }
+    return options;  
+  };
+
+  int VRegexp::comp( const char* pattern, const char *opt )
+  { 
+    if ( re ) pcre_free( re ); 
+    
+    int options = get_options( opt );
+    if( options == -1 ) return 0;
+    
+    const char *error;
+    int erroffset;
+    re = pcre_compile( pattern, options, &error, &erroffset, NULL );
+    
+    if ( re )
+      {
+      errstr = "";
+      return 1;
       }
     else
       {
-      substr = "";
-      return NULL;
+      errstr = error;
+      return 0;
       }
+  };
+  
+  int VRegexp::study()
+  {
+    return 1;
+  };
+  
+  int VRegexp::ok()
+  { 
+    return re != NULL; 
+  }
+  
+  int VRegexp::m( const char* line )
+  { 
+    if ( ! re ) 
+      {
+      errstr = "no pattern compiled";
+      return 0;
+      }
+    if ( ! line )
+      {
+      return 0;
+      }
+    errstr = "";
+    lp = line;
+    rc = pcre_exec( re, pe, lp, strlen( lp ), 0, 0, sp, VREGEXP_MAX_SUBS*3 );
+    if ( rc > VREGEXP_MAX_SUBS ) rc = VREGEXP_MAX_SUBS;
+    return rc;
+  };
+  
+  int VRegexp::m(  const char* line, const char* pattern, const char *opt )
+  { 
+    comp( pattern, opt ); 
+    return m( line ); 
+  };
+
+  const char* VRegexp::sub( int n )
+  {
+    if ( ! re ) return NULL;
+    if ( ! lp ) return NULL;
+    if ( n < 0 || n >= rc ) return NULL;
+    substr = "";
+    
+    int s = sp[n*2];
+    int e = sp[n*2+1];
+    int l = e - s;
+    substr.setn( lp + s, l );
+    return substr.data();
   };
 
 /***************************************************************************
