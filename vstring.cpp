@@ -1,12 +1,12 @@
 /*
  *
  *  VSTRING Library
- *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
+ *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2002
  *  Distributed under the GPL license, see end of this file for full text!
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.6 2002/04/30 20:45:37 cade Exp $
+ * $Id: vstring.cpp,v 1.7 2002/05/17 08:14:50 cade Exp $
  *
  */
 

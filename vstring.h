@@ -1,7 +1,7 @@
 /*
  *
  *  VSTRING Library
- *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
+ *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2002
  *  Distributed under the GPL license, see end of this file for full text!
  *
  *  VSTRING library provides vast set of string manipulation features
@@ -25,7 +25,7 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- * $Id: vstring.h,v 1.5 2002/04/30 20:45:37 cade Exp $
+ * $Id: vstring.h,v 1.6 2002/05/17 08:14:50 cade Exp $
  *
  */
 
