@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- * $Id: vstring.cpp,v 1.8 2002/05/24 16:55:26 cade Exp $
+ * $Id: vstring.cpp,v 1.9 2002/08/20 21:52:54 cade Exp $
  *
  */
 
@@ -688,9 +688,10 @@
   {
     int dot = str_rfind( target, '.' );
     if (dot == -1) dot = strlen( target );
-    while( dot >= 4 )
+    dot -= 3;
+    while( dot > 0 )
       {
-      str_ins_ch( target, dot - 3 , delim );
+      str_ins_ch( target, dot , delim );
       dot -= 3;
       }
     return target;

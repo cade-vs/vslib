@@ -1,6 +1,6 @@
 ### MAKEMAKE STARTS HERE #########################################
 #
-# Created by makemake.pl on Thu Jun  6 01:22:47 2002
+# Created by makemake.pl on Sat Aug 17 15:26:08 2002
 #
 ##################################################################
 
@@ -9,6 +9,9 @@
 default: all
 
 re: rebuild
+
+
+li: link
 
 all: libvslib.a libvscon.a test 
 
