@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: target.h,v 1.5 2003/01/21 19:56:35 cade Exp $
+ * $Id: target.h,v 1.6 2004/12/29 02:44:21 cade Exp $
  *
  */
 
@@ -48,6 +48,15 @@
   #define _TARGET_WIN32_
   #define _TARGET_UNIX_
   #define _TARGET_DESCRIPTION_	"DOS/WIN32" // sorry :)
+  #undef  _TARGET_UNKNOWN_
+  #endif
+#endif
+
+#ifdef _TARGET_UNKNOWN_
+  #if defined(MACOSX) || defined(__APPLE__)
+  #define _TARGET_MACOSX_
+  #define _TARGET_UNIX_
+  #define _TARGET_DESCRIPTION_	"UNIX/MACOSX"
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif

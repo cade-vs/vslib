@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: test.cpp,v 1.16 2003/04/28 17:17:12 cade Exp $
+ * $Id: test.cpp,v 1.17 2004/12/29 02:44:21 cade Exp $
  *
  */
 
@@ -385,7 +385,7 @@ int main( int argc, char* argv[] )
   
   //printf( "expand=[%s]\n", (const char*)tilde_expand( "~root/" ) );
   
-  /*
+  /**/
   test1();
   test2();
   test3();
