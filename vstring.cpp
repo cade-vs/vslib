@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.23 2003/04/28 17:17:12 cade Exp $
+ *  $Id: vstring.cpp,v 1.24 2003/05/06 12:12:16 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -1268,7 +1268,7 @@
     if ( data ) delete data;
   }
 
-  void VTrieNode::del_node( const char *key, int branch = 0 )
+  void VTrieNode::del_node( const char *key, int branch )
   {
     if ( !key ) return;
     if ( !key[0] ) return;
