@@ -4,6 +4,8 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
+ * $Id: vstrlib.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
  */
 
 #include "vstrlib.h"

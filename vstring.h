@@ -25,6 +25,8 @@
  *  NOTE: vstring is loosely based on `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
+ * $Id: vstring.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
  */
 
 #ifndef _VSTRING_H_

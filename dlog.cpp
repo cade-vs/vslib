@@ -4,6 +4,8 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
+ * $Id: dlog.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
  */
 
 #include <time.h>

@@ -24,6 +24,13 @@
  *
  * *** NOTE: this code has been altered slightly for use in Tcl. ***
  * Slightly modified by David MacKenzie to undo most of the changes for TCL.
+ *
+ * *** NOTE: this code has been altered slightly for use in vslib
+ * by Vladi Belperchinov-Shabanski <cade@biscom.net>
+ * mostly few functions has been added.
+ *
+ * $Id: regexp2.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
  */
 
 #include <stdio.h>

@@ -3,6 +3,11 @@
  *
  * Caveat:  this is V8 regexp(3) [actually, a reimplementation thereof],
  * not the System V one.
+ *
+ * *** NOTE: see regexp2.cpp for further credits and notes!
+ *
+ * $Id: regexp2.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
  */
 
 #ifndef _REGEXP

@@ -1,5 +1,5 @@
 /*
- *  $Header: /cvs/vslib/getopt2.cpp,v 1.1 2001/10/28 13:41:14 cade Exp $
+ *  $Header: /cvs/vslib/getopt2.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
  *
  *  Copyright (C) 1994 Arno Schaefer
  *
@@ -14,6 +14,9 @@
  * when reach non option string return `+' w. optarg set to this string
  * instead of return `-1'
  * Changed code marked `+++ cade +++' and end w. `=== cade ==='
+ *
+ * $Id: getopt2.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
  */
 
 #include <stdio.h>

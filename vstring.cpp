@@ -6,6 +6,8 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
+ * $Id: vstring.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
  */
 
 #include <stdio.h>
@@ -71,7 +73,7 @@
   void String::setf( const double d )
   {
     char tmp[64];
-    sprintf( tmp, "%.10lf", d );
+    sprintf( tmp, "%.10f", d );
     int z = strlen( tmp );
     while( tmp[z-1] == '0' ) z--;
     if ( tmp[z-1] == '.' ) z--;
@@ -82,7 +84,7 @@
   void String::setfi( const double d ) // sets double as int (w/o frac)
   {
     char tmp[64];
-    sprintf( tmp, "%.0lf", d );
+    sprintf( tmp, "%.0f", d );
     int z = strlen( tmp );
     tmp[z] = 0;
     set( tmp );

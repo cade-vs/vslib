@@ -1,11 +1,12 @@
 /*
- *  $Header: /cvs/vslib/getopt2.h,v 1.1 2001/10/28 13:41:14 cade Exp $
+ *  $Header: /cvs/vslib/getopt2.h,v 1.2 2001/10/28 13:53:02 cade Exp $
  *
  *  Copyright (C) 1994 Arno Schaefer
  *
  *  AU: Prototypen und externe Variablen fuer getopt ()
  *
  *  PO: ANSI C
+ *
  */
 /* see getopt.h for changes */
 #ifndef GETOPT_H

@@ -1,3 +1,13 @@
+/*
+ *
+ * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-1999
+ *
+ * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
+ *
+ * $Id: conmenu.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *
+ */
+
 #include <ctype.h>
 
 #include <unicon.h>
