@@ -4,13 +4,12 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: test.cpp,v 1.13 2003/01/29 22:59:27 cade Exp $
+ * $Id: test.cpp,v 1.14 2003/02/08 02:48:50 cade Exp $
  *
  */
 
 #include <stdio.h>
-#include "vstring.h"
-#include "vstrlib.h"
+#include "vslib.h"
 
 void test1()
 {
@@ -375,7 +374,16 @@ void test8()
 
 int main( int argc, char* argv[] )
 {
-  test6();/**/
+  //#define PAT "9892009"
+  
+  
+  #define PAT "MARINOW Uliqn P. prof. dtn kw.Wladaq ul.Witoshki granit 11"
+  //#define PAT "marinow uliqn p. prof. dtn kw.wladaq ul.witoshki granit 11"
+  printf( "found at pos %d\n", file_pattern_search( PAT, strlen(PAT),
+                               "/tmp/ss.txt", "",
+                               mem_quick_search ) );
+  
+  //printf( "expand=[%s]\n", (const char*)tilde_expand( "~root/" ) );
   /*
   test1();
   test2();

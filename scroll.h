@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: scroll.h,v 1.4 2003/01/29 22:59:27 cade Exp $
+ * $Id: scroll.h,v 1.5 2003/02/08 02:48:50 cade Exp $
  *
  */
 
@@ -38,9 +38,9 @@ class ScrollPos
     void set_min_max( int a_min, int a_max ) 
       { _min = a_min; _max = a_max; _size = _max - _min + 1; }
     void set_pos( int a_pos ) 
-      { _pos = a_pos; ASSERT( check() ); }
+      { _pos = a_pos; }
     void set_page( int a_page ) 
-      { _page = a_page; ASSERT( check() ); }
+      { _page = a_page; }
     void set_pagesize( int a_pagesize ) 
       { _pagesize = a_pagesize; 
         if ( _pagesize < 0 ) _pagesize = 0; }

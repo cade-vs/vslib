@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.h,v 1.5 2003/01/21 19:56:35 cade Exp $
+ * $Id: vsuti.h,v 1.6 2003/02/08 02:48:50 cade Exp $
  *
  */
 
@@ -105,80 +105,115 @@ int file_exists( const char* fname );
 */
 int hex_string_to_pattern( const char *str, char* pattern );
 
-/*
- This function is used for searching for string patterns
- spos    -- defines what file start offset should be accepted					 
- pattern format is:
- ~pattern -- regular expression ( start with `~' => `~^[123]+\t')
- 			 this spawns file_grep() function
- $pattern -- hex pattern ( start with `$' => `$ FF 0A B4...' )
- 			 converts it into new binary pattern and call file_find_pattern
-  pattern -- normal exact string pattern ( use `\' to escape first char:
-             example => `\~tilde_expansion' or `\$440 is too much' )
-  			 just calculates string length and call file_find_pattern
- tip: if you want to search normal pattern which starts with `\' you
-      have to enter this: `\\start slash etc.' or
-	  use file_find_pattern() with strlen() etc.
- return:
- -1    -- pattern not found
- -2    -- pattern incorrect (for regexp's and hex patterns)
- else  -- found position
-*/
+/*****************************************************************************
+**
+** Next mem* search functions are used to find pattern into memory block
+** p is pattern, ps is pattern size, d is data searched and ds is its size
+** return found pttern position or -1 for not found
+**
+*****************************************************************************/
 
-long file_find_string( const char *pattern, const char* file_name, int nocase, int spos = -1 );
-long file_find_string( const char *pattern, FILE* f, int nocase, int spos = -1 );
+int mem_kmp_search( const char *p, int ps, const char *d, int ds ); 
+int mem_quick_search( const char *p, int ps, const char *d, int ds ); 
+int mem_sum_search( const char *p, int ps, const char *d, int ds );
 
-/*
- This function is used for searching for arbitrary (binary) patterns
- return:
- -1    -- pattern not found
- -2    -- pattern incorrect (for regexp's and hex patterns)
- else  -- found position
-*/
-long file_find_pattern( const char *pattern, int pattern_size, const char* file_name, int nocase, int spos = -1 );
-long file_find_pattern( const char *pattern, int pattern_size, FILE* f, int nocase, int spos = -1 );
+/* no-case versions */
 
-/*
- This function is kind of `low level' one and you should use
- file_find_*() functions
-*/
-long file_kmp_search( const char *pattern, int pattern_size, FILE* f, int nocase, int spos = -1 );
+int mem_quick_search_nc( const char *p, int ps, const char *d, int ds ); 
 
-/*
- This function reads lines from a text file and runs regexp on it.
- file_grep_max_line defines the max line length read (1024)
- file_grep_lines_read reports how many lines are read in during the
-                      last file_grep() call
- re_string is regexp string, not arbitrary (binary) pattern
- spos defines what file start offset should be accepted					 
-*/
+/*****************************************************************************
+**
+** Function which return position of pattern into a file
+** this uses mem* functions above or defaults to mem_quick_search
+**
+*****************************************************************************/
+
+long file_pattern_search( const char *p, int ps, FILE* f, const char* opt = "",
+                          int (*mem_search)( const char *p, int ps, 
+                                             const char *d, int ds ) = NULL );
+
+long file_pattern_search( const char *p, int ps, const char* fn, const char* opt = "",
+                          int (*mem_search)( const char *p, int ps, 
+                                             const char *d, int ds ) = NULL );
+
+/*****************************************************************************
+**
+** This function reads lines from a text file and runs regexp on it.
+** file_grep_max_line defines the max line length read (1024)
+** file_grep_lines_read reports how many lines are read in during the
+**                      last file_grep() call
+** re_string is regexp string, not arbitrary (binary) pattern
+** spos defines what file start offset should be accepted					 
+**
+*****************************************************************************/
+
 extern int file_grep_max_line;
 extern int file_grep_lines_read;
 long file_grep( const char *re_string, const char* file_name, int nocase, int spos = -1 );
 long file_grep( const char *re_string, FILE* f, int nocase, int spos = -1 );
 
-/*###########################################################################*/
-/* FILENAMES functions */
+/*****************************************************************************
+**
+** Search interface functions
+**
+** options are:
+**
+** i    -- ignore case
+** r    -- regular expression (grep)
+** h    -- hex pattern search
+**
+*****************************************************************************/
 
-char* tilde_expand( char* path ); // expands ~/path and ~name/path
-VString& tilde_expand( VString &str ); // expands ~/path and ~name/path
+long file_string_search( const char *p, const char* fn, const char* opt );
+long file_string_search( const char *p, FILE *f, const char* opt );
 
-/*###########################################################################*/
+/*****************************************************************************
+**
+** tilde_expand() expands ~/path and ~name/path to real pathname.
+** it uses $HOME environment variable for ~ substitution.
+**
+*****************************************************************************/
 
-/*
- Creates new directory path, i.e. can create /a/b/c/d/e/ without existing
- of `/a/' for example...
-*/
-int make_path( const char *s, long mode = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
+VString tilde_expand( const char* a_path );
 
-/*
- Expands given path to the real one, resolves symlinks and removes
- `/./' and `/../'s ( actually calls system function call )
- return pointer to dest or NULL if error
-*/
+/*****************************************************************************
+**
+** make_path() create new directory including non-existing path entries.
+** It can create /a/b/c/d/e/ without existing of `/a/' for example.
+** return 0 for success
+**
+*****************************************************************************/
+
+int make_path( const char *s, 
+        long mode = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
+
+/*****************************************************************************
+**
+** expand_path() resolves symlinks etc.
+**
+*****************************************************************************/
+
 char* expand_path( const char *src, char *dest );
+VString expand_path( const char* src );
 
-/*###########################################################################*/
+/*****************************************************************************
+**
+** dosstat() is fast stat() designed for DOS FAT filesystems under DJGPP.
+**
+*****************************************************************************/
+
+#ifdef _TARGET_GO32_
+#include <dirent.h>
+#include <dir.h>
+int dosstat( DIR *dir, struct stat *stbuf );
+#endif
+
+/*****************************************************************************
+**
+** ftwalk() traverses directory tree and calls func() for every entri it 
+** encounters. It supports DOS FAT filesystems under DJGPP.
+**
+*****************************************************************************/
 
 #define FTWALK_F        1 /* file (regular) */
 #define FTWALK_D        2 /* dir */
@@ -194,23 +229,21 @@ int ftwalk( const char *origin_dir,
                          int flag ), 
             int level = -1 );
 
-#ifdef _TARGET_GO32_
-#include <dirent.h>
-#include <dir.h>
-int dosstat( DIR *dir, struct stat *stbuf );
-#endif
+/*****************************************************************************
+**
+** get_rc_directory() return application rc directory (and possibly create it)
+** returned dir is $HOME/.dir_prefix or $HOME/$RC_PREFIX/dir_prefix depending
+** on $RC_PREFIX existence.
+**
+*****************************************************************************/
 
-/*###########################################################################*/
-/* 
- CONFIG functions
+VString get_rc_directory( const char* dir_prefix );
 
- this returns `$HOME/$RC_PREFIX/$dir_prefix/'
- where $HOME and $RC_PREFIX are env.vars and `$dir_prefix' is arg. here
- this also makes sure that directory exists (i.e. create it)
- if $HOME is not available `/tmp/' is returned
-*/ 
-const char* get_rc_directory( const char* dir_prefix, char *rc_dir );
-
+/*****************************************************************************
+**
+** EOF
+**
+*****************************************************************************/
 #endif /* _VUTILS_H_ */
 
-/* eof vutils.h */
+

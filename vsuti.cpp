@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.8 2003/01/21 19:56:35 cade Exp $
+ * $Id: vsuti.cpp,v 1.9 2003/02/08 02:48:50 cade Exp $
  *
  */
 
@@ -239,7 +239,7 @@ int file_exists( const char* fname )
 
 /*
   Thanks to Ivo Baylov <ivo@datamax.bg>
-  for the KMP search and hex pattern conversion!
+  for the KMP search hint and hex pattern conversion!
   see below...
 */
 
@@ -293,125 +293,223 @@ int file_exists( const char* fname )
      return pattern - pc;
   };
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Search interface functions
-//
+/*****************************************************************************
+**
+** Knuth-Morris-Pratt search
+**
+*****************************************************************************/
 
-long file_find_string( const char *pattern, const char* file_name, int nocase, int spos )
+void __kmp_preprocess( const char* p, int ps, int* next )
 {
-  FILE *f = fopen( file_name, "rb" );
-  if (!f) return -1;
-  long pos = file_find_string( pattern, f, nocase, spos );
-  fclose(f);
-  return pos;
-}
-
-long file_find_string( const char *pattern, FILE* f, int nocase, int spos )
-{
-  int pattern_size = strlen(pattern);
-  ASSERT( pattern_size < MAX_PATTERN );
-
-  if (pattern[0] == '~')
-    { // regular expression
-	return file_grep( pattern+1, f, nocase, spos );
-    } else
-  if (pattern[0] == '$')
-    { // hex pattern
-	char new_pattern[MAX_PATTERN+1];
-	int z = hex_string_to_pattern( pattern+1, new_pattern );
-	if (z > 0)
-	  return file_kmp_search( new_pattern, z, f, nocase, spos );
-	else
-	  return -2;
-    }
-  else
-    { // normal patters string
-	if (pattern[0] == '\\')
-	  return file_kmp_search( pattern+1, pattern_size-1, f, nocase, spos );
-	else
-	  return file_kmp_search( pattern, pattern_size, f, nocase, spos );
-    }
-};
-
-long file_find_pattern( const char *pattern, int pattern_size, const char* file_name, int nocase, int spos )
-{
-  FILE *f = fopen( file_name, "rb" );
-  if (!f) return -1;
-  long pos = file_find_pattern( pattern, pattern_size, f, nocase, spos );
-  fclose(f);
-  return pos;
-};
-
-long file_find_pattern( const char *pattern, int pattern_size, FILE* f, int nocase, int spos )
-{
-  return file_kmp_search( pattern, pattern_size, f, nocase, spos );    
-};
-
-
-////////////////////////////////////////////////////////////////////////////
-//
-// Knuth-Morris-Pratt search
-//
-
-void __kmp_preprocess_pattern( const char* pattern, int pattern_size, int* next )
-{
- int i=0;
- int j=next[0]=-1;
- while (i < pattern_size) 
+ int i = 0;
+ int j = next[0] = -1;
+ while (i < ps) 
    {
-   while ((j > -1) && (pattern[i] != pattern[j])) j=next[j];
+   while ((j > -1) && (p[i] != p[j])) j=next[j];
    i++;
    j++;
-   if (pattern[i] == pattern[j]) 
-     next[i]=next[j];
-   else 
-     next[i]=j;
+   next[i] = p[i] == p[j] ? next[j] : j;
    }
 }
 
-long file_kmp_search( const char *pattern, int pattern_size, FILE* f, int nocase, int spos )
-{
-  int  next[MAX_PATTERN+1];
-  char newpat[MAX_PATTERN+1];
-  int  j;
-  int  c;
- 
-  long opos = ftell( f );
- 
-  if (spos != -1) fseek( f, spos, SEEK_SET );
- 
-  if( pattern_size < 1 || pattern_size > MAX_PATTERN ) return -2;
-  
-  memcpy( newpat, pattern, pattern_size );
-  if (nocase)
-    for ( j = 0; j < pattern_size; j++)
-      if ( newpat[j] >= 'a' && newpat[j] <= 'z' )
-        newpat[j] = toupper(newpat[j]);
-		
-  memset( &next, 0, sizeof(next) );
-  __kmp_preprocess_pattern( newpat, pattern_size, next );
+#define MAX_KMP_PATTERN_SIZE 1024
 
-  j = 0;
-  while( (c = getc(f)) != EOF )
-    {
-    if (nocase) c = toupper( c );
-    while( j > -1 && newpat[j] != (char)c ) j = next[j];
-    j++;
-    if ( j >= pattern_size )
-      {
-      fflush( f );
-      int rpos = ftell( f );
-      fseek( f, opos, SEEK_SET );
-      ASSERT( rpos - pattern_size >= 0 );
-      return rpos - pattern_size;
-      // to continue:
-      // j = next[j];
-      }
-    }
-  fseek( f, opos, SEEK_SET );
-  return( -1 );
+int mem_kmp_search( const char *p, int ps, const char *d, int ds ) 
+{
+   int i;
+   int j;
+   int next[MAX_KMP_PATTERN_SIZE];
+   if ( ps > MAX_KMP_PATTERN_SIZE ) return -1;
+
+   __kmp_preprocess( p, ps, next );
+
+   i = j = 0;
+   while (j < ds) 
+     {
+     while (i > -1 && p[i] != d[j]) i = next[i];
+     i++;
+     j++;
+     if (i >= ps) return j - i;
+     }
+   return -1;
 }
+
+/*****************************************************************************
+**
+** Quick Search (simplified Boyer-Moore)
+**
+** Note: currently only 256-symbol alphabet supported (ASCII)
+**
+** The difference from Boyer-Moore is that good-suffix shift is not used.
+** Actually this is quick search with Horspool hint which is that rightmost
+** char is examined first.
+**
+*****************************************************************************/
+
+#define QS_ASIZE 256 
+
+void __qs_preprocess( const char* p, int ps, int* badc )
+{
+   int i;
+   for (i = 0; i < QS_ASIZE; i++) badc[i] = ps + 1;
+   for (i = 0; i < ps; i++) badc[(unsigned char)p[i]] = ps - i;
+}
+
+int mem_quick_search( const char *p, int ps, const char *d, int ds ) 
+{
+   int  badc[QS_ASIZE];
+   __qs_preprocess( p, ps, badc);
+
+   int j = 0;
+   while (j <= ds - ps) 
+   {
+      int i;
+      for ( i = ps - 1; i >= 0 && p[i] == d[i + j]; --i );
+      if ( i < 0 ) return j;
+      j += badc[(unsigned char)d[j + ps]];
+   }
+   return -1;
+}
+
+/* no-case version */
+
+void __qs_preprocess_nc( const char* p, int ps, int* badc )
+{
+   int i;
+   for (i = 0; i < QS_ASIZE; i++) badc[i] = ps + 1;
+   for (i = 0; i < ps; i++) badc[toupper((unsigned char)p[i])] = ps - i;
+}
+
+int mem_quick_search_nc( const char *p, int ps, const char *d, int ds ) 
+{
+   int  badc[QS_ASIZE];
+   __qs_preprocess_nc( p, ps, badc);
+
+   int j = 0;
+   while (j <= ds - ps) 
+   {
+      int i;
+      for ( i = ps - 1; i >= 0 && toupper(p[i]) == toupper(d[i + j]); --i );
+      if ( i < 0 ) return j;
+      j += badc[toupper((unsigned char)d[j + ps])];
+   }
+   return -1;
+}
+
+/*****************************************************************************
+**
+** Sum search
+**
+** This exact form is made myself. It is not anything new or exceptional :)
+** It is Karp-Rabin idea of searching `similar' pattern and if found check
+** the actual one. The hash function here is simple sum of bytes in the range
+** of pattern size.
+**
+** Mostly useless since Quick search performs better in almost all cases. 
+** I wrote it for benchmarking purpose.
+**
+*****************************************************************************/
+
+int mem_sum_search( const char *p, int ps, const char *d, int ds )
+{
+   char *buff;
+   
+   int psum = 0;
+   
+   int i;
+   for( i = 0; i < ps; i++ ) psum += p[i];
+
+   int j = 0;
+   int sum = 0;
+   while( j <= ds - ps )
+     {
+     if ( sum == psum && memcmp( p, d + j, ps ) == 0 ) return j;
+     sum -= d[j];
+     j++;
+     sum += d[j+ps];
+     }
+   return -1;  
+};
+
+/*****************************************************************************
+**
+** mem_*_search benchmarks:
+**
+** For simple benchmark I used ~700MB file and tried to find 10- and 70-chars
+** patterns. Results in seconds for both cases (similar to 1-2 seconds) were:
+**
+** Quick  26
+** KMP    42
+** Sum    39
+**
+** Even though KMP returns right result I prefer Quick search for default!
+** (last one was joke:))
+**
+** Case insensitive search is 2 times slower due to the simple implementation.
+**
+*****************************************************************************/
+
+/*****************************************************************************
+**
+** file search frontend
+**
+*****************************************************************************/
+
+long file_pattern_search( const char *p, int ps, FILE* f, const char* opt,
+                          int (*mem_search)( const char *p, int ps, 
+                                             const char *d, int ds ) )
+{
+   #define BUFSIZE  (1024*1024)
+   char* buff = new char[BUFSIZE];
+   
+   int nocase = str_find( opt, 'i' ) > -1;
+   char* np = new char[ps+1];
+   ASSERT(np);
+   memcpy( np, p, ps );
+   np[ps] = 0;
+   
+   if ( ! mem_search )
+     mem_search = mem_quick_search;
+   if ( nocase )
+     mem_search = mem_quick_search_nc;
+   
+   int pos = -1;
+   while(4)
+     {
+     int bs = fread( buff, 1, BUFSIZE, f );
+     int cpos = mem_search( np, ps, buff, bs );
+     if ( cpos > -1 )
+       {
+       pos = ftell(f) - bs + cpos;
+       break;
+       }
+     else
+       {
+       fseek( f, -ps, SEEK_CUR );
+       }
+     if ( bs < BUFSIZE ) break;
+     }
+   delete np;
+   delete buff;
+   return pos;
+};
+
+long file_pattern_search( const char *p, int ps, const char* fn, const char* opt, 
+                          int (*mem_search)( const char *p, int ps, 
+                                             const char *d, int ds ) )
+{
+  FILE *f = fopen( fn, "r" );
+  if ( ! f ) return -1;
+  int res = file_pattern_search( p, ps, f, opt, mem_search );
+  fclose( f );
+  return res;
+};
+
+/*****************************************************************************
+**
+** Grep -- regular expression search
+**
+*****************************************************************************/
 
 /* FGrep -- regular expression search (I know `G' here stands for <nothing>:)) */
 
@@ -468,55 +566,106 @@ long file_grep( const char *re_string, FILE* f, int nocase, int spos )
   return found ? cpos : -1;
 }
 
-/*###########################################################################*/
-/* FILENAMES functions */
+/*****************************************************************************
+**
+** Search interface functions
+**
+** options are:
+**
+** i    -- ignore case
+** r    -- regular expression (grep)
+** h    -- hex pattern search
+**
+*****************************************************************************/
 
-char* tilde_expand( char* path ) // expands ~/path and ~name/path
+long file_string_search( const char *p, const char* fn, const char* opt )
+{
+  FILE *f = fopen( fn, "rb" );
+  if (!f) return -1;
+  long pos = file_string_search( p, f, opt );
+  fclose(f);
+  return pos;
+}
+
+long file_string_search( const char *p, FILE *f, const char* opt )
+{
+  int ps = strlen(p);
+  ASSERT( ps < MAX_PATTERN );
+
+  int nocase = str_find( opt, 'i' ) > -1;
+  
+  long pos = -1;
+  
+  if( str_find( opt, 'r' ) > -1 )
+    {
+    pos = file_grep( p, f, 0, -1 );
+    } else
+  if( str_find( opt, 'h' ) > -1 )
+    {
+  	char new_p[MAX_PATTERN+1];
+  	int pl = hex_string_to_pattern( p, new_p );
+  	if (pl > 0)
+  	  pos = file_pattern_search( new_p, pl, f, nocase ? "i" : "" );
+    } 
+  else
+    {
+    pos = file_pattern_search( p, strlen(p), f, nocase ? "i" : "" );
+    }
+  
+  return pos;  
+};
+
+/*****************************************************************************
+**
+** tilde_expand() expands ~/path and ~name/path to real pathname.
+** it uses $HOME environment variable for ~ substitution.
+**
+*****************************************************************************/
+
+VString tilde_expand( const char* a_path )
 {
 #ifdef _TARGET_UNIX_
+  VString path;
   struct passwd* pwd;
-  char temp[MAX_PATH] = "";
-  if ( path[0] != '~' ) return path;
-
-  str_fix_path( path );
+  if ( !a_path || !a_path[0] || a_path[0] != '~' ) 
+    return VString( a_path );
 
   int z = 1; // first after ~
-  while( path[z] != '/' && path[z] != 0 )
-    temp[z-1] = path[z++];
-  temp[z-1] = 0;
-  z--; // length of `temp' username
-
-  if (z)
+  while( a_path[z] != '/' && a_path[z] != 0 )
+    str_add_ch( path, a_path[z++] );
+  
+  if ( path == "" )
+    path = getenv( "USER" );
+  if ( path != "" )
     {
-    pwd = getpwnam( temp );
-    if (!pwd) return path;
-    strcpy( temp, pwd->pw_dir );
+    pwd = getpwnam( path );
+    if (!pwd) return VString( a_path );
+    path = pwd->pw_dir;
     }
   else
     {
     char* pw_dir = getenv("HOME");
-    if (!pw_dir) return path;
-    strcpy( temp, pw_dir );
+    if (!pw_dir) return VString( a_path );
+    path = pw_dir;
     }
-  str_fix_path( temp ); // add slash to the end if not exist
-  strcat( temp, path + z + 2 );
-  strcpy( path, temp );
-#endif //_TARGET_UNIX_
+  // get rid of trailing `/' if exists
+  str_fix_path( path );
+  str_chop( path );
+  path += a_path + z;
   return path;
-};
-
-VString& tilde_expand( VString &str )
-{
-#ifdef _TARGET_UNIX_
-  char t[MAX_PATH];
-  strcpy( t, str );
-  tilde_expand( t );
-  str = t;
+#else //_TARGET_UNIX_
+  VString path = a_path;
+  return path;
 #endif //_TARGET_UNIX_
-  return str;
 };
 
-/*###########################################################################*/
+/*****************************************************************************
+**
+** make_path() create new directory including non-existing path entries.
+** It can create /a/b/c/d/e/ without existing of `/a/' for example.
+** return 0 for success
+**
+*****************************************************************************/
 
 int make_path( const char *s, long mode )
 {
@@ -550,7 +699,11 @@ int make_path( const char *s, long mode )
   return 0;
 }
 
-/*###########################################################################*/
+/*****************************************************************************
+**
+** expand_path() resolves symlinks etc.
+**
+*****************************************************************************/
 
 char* expand_path( const char *src, char *dest )
 {
@@ -565,7 +718,18 @@ char* expand_path( const char *src, char *dest )
   return dest;
 }
 
-/*###########################################################################*/
+VString expand_path( const char* src )
+{
+  char temp[MAX_PATH];
+  VString dest = expand_path( src, temp );
+  return dest;
+}
+
+/*****************************************************************************
+**
+** dosstat() is fast stat() designed for DOS FAT filesystems under DJGPP.
+**
+*****************************************************************************/
 
 #ifdef _TARGET_GO32_
 
@@ -646,7 +810,12 @@ int dosstat( DIR *dir, struct stat *statbuf )
 
 #endif /* _TARGET_GO32_ */
 
-/*###########################################################################*/
+/*****************************************************************************
+**
+** ftwalk() traverses directory tree and calls func() for every entri it 
+** encounters. It supports DOS FAT filesystems under DJGPP.
+**
+*****************************************************************************/
 
 int __ftwalk_process( const char *origin,
                       const char *path,
@@ -718,8 +887,6 @@ int __ftwalk_process( const char *origin,
   return 0;
 }
 
-/*---------------------------------------------------------------------------*/
-
 int ftwalk( const char *origin,
             int (*func)( const char* origin,    /* origin path */
                          const char* fname,     /* full file name */
@@ -740,37 +907,44 @@ int ftwalk( const char *origin,
   return r;
 }
 
-/*###########################################################################*/
+/*****************************************************************************
+**
+** get_rc_directory() return application rc directory (and possibly create it)
+** returned dir is $HOME/.dir_prefix or $HOME/$RC_PREFIX/dir_prefix depending
+** on $RC_PREFIX existence.
+**
+*****************************************************************************/
 
-const char* get_rc_directory( const char* dir_prefix, char *rc_dir )
+
+VString get_rc_directory( const char* dir_prefix )
 {
-  rc_dir[0] = 0;
-  if (getenv("HOME"))
-    strcpy( rc_dir, getenv("HOME"));
-  else
-    strcpy( rc_dir, "/tmp/" );
+  VString rc_dir;
+  
+  rc_dir = getenv("HOME");
+  if ( rc_dir == "" ) rc_dir = "/tmp/";
   #ifdef _TARGET_GO32_
   str_tr( rc_dir, "\\", "/" );
   #endif
   str_fix_path( rc_dir );
+  
   int rcprefix = 1;
   if (getenv("RC_PREFIX"))
-    strcat( rc_dir, getenv("RC_PREFIX"));
+    rc_dir += getenv("RC_PREFIX");
   else
     rcprefix = 0;
   str_fix_path( rc_dir );
-  if (dir_prefix)
+  if ( dir_prefix && dir_prefix[0] )
     {
     if ( rcprefix )
-      strcat( rc_dir, dir_prefix );
+      rc_dir += dir_prefix;
     else
       {
       #ifdef _TARGET_GO32_
-      strcat( rc_dir, "_" );
+      rc_dir += "_";
       #else
-      strcat( rc_dir, "." );
+      rc_dir += ".";
       #endif
-      strcat( rc_dir, dir_prefix );
+      rc_dir += dir_prefix;
       }
     str_fix_path( rc_dir );
     }
@@ -778,6 +952,10 @@ const char* get_rc_directory( const char* dir_prefix, char *rc_dir )
   return rc_dir;
 };
 
-/*###########################################################################*/
+/*****************************************************************************
+**
+** EOF
+**
+*****************************************************************************/
 
-// eof vutils.cpp
+
