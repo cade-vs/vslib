@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.18 2003/01/19 17:32:12 cade Exp $
+ *  $Id: vstring.cpp,v 1.19 2003/01/19 18:17:44 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -63,15 +63,17 @@
     if( s == NULL ) 
       { /* first time alloc */
       s = (char*)malloc( new_size );
-      ASSERT(s);
-      s[0] = 0;
+      ASSERT( s );
+      s[ 0 ] = 0;
       size = new_size;
+      sl = 0;
       } else
     if ( size != new_size ) 
       { /* expand/shrink */
       s = (char*)realloc( s, new_size );
-      s[new_size-1] = 0;
       size = new_size;
+      s[ size - 1 ] = 0;
+      if ( sl > size - 1 ) sl = size - 1;
       }
   };
 
@@ -1097,6 +1099,7 @@
 
   int VArray::fload( const char* fname )
   {
+    undef();
     FILE* f = fopen( fname, "rt" );
     if (!f) return 1;
     int r = fload( f );
@@ -1115,6 +1118,7 @@
 
   int VArray::fload( FILE* f )
   {
+    undef();
     char buf[1024];
     VString str;
     while( fgets( buf, sizeof(buf)-1, f ) )
