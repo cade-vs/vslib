@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.19 2003/01/19 18:17:44 cade Exp $
+ *  $Id: vstring.cpp,v 1.20 2003/01/19 18:40:31 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -130,6 +130,9 @@
     if (ps == NULL || ps[0] == 0)
       {
       resize( 0 );
+      ASSERT( box->s );
+      box->sl = 0;
+      box->s[ 0 ] = 0;
       }
     else
       {
@@ -157,6 +160,8 @@
     if ( !ps || len < 1 ) 
       {
       resize( 0 );
+      box->sl = 0;
+      box->s[ 0 ] = 0;
       return;
       }
     int z = strlen( ps );

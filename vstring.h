@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.18 2003/01/19 17:32:12 cade Exp $
+ *  $Id: vstring.h,v 1.19 2003/01/19 18:40:31 cade Exp $
  *
  */
 
@@ -103,7 +103,7 @@ public:
   VStringBox* clone();
   
   void resize_buf( int new_size );
-  void undef() { resize_buf( 0 ); };
+  void undef() { resize_buf( 0 ); sl = 0; };
 };
 
 

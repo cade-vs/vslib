@@ -296,6 +296,10 @@ void test6()
     printf( "reduced path is: %s\n", (const char*)str_reduce_path( ps ) );
     printf( "dot reduce sample is: %s\n", (const char*)str_dot_reduce( ps, 10 ) );
     }
+    
+  va.fsave( "/tmp/a.aaa" );  
+  va.fload( "/tmp/a.aaa" );  
+  va.print();
 }
 
 void test7()
@@ -361,7 +365,7 @@ void test8()
 
 int main( int argc, char* argv[] )
 {
-  test8();/**/
+  test6();/**/
   /*
   test1();
   test2();
