@@ -75,9 +75,10 @@ void test3()
 
   // take keys from `tr' as array and store them into va, returns count
   // i.e. i = tr.count();
-  int i = tr.keys( &va );
+  int i;
+  va = tr.keys();
 
-  printf( "keys count = %d\n", i );
+  printf( "keys count = %d\n", va.count() );
 
   // printing the array and trie data
   for( i = 0; i < va.count(); i++ )
@@ -138,6 +139,22 @@ void test3()
     printf("---\n");
     aa[i].print();
     }
+  
+  printf( "---box test-----------------------------\n" );
+  i = 20000;
+  while( i-- )
+  {
+  v1.push( "this" );
+  v1.push( "just" );
+  v1.push( "test" );
+  v1.push( "simple" );
+  }
+  
+  v1.print();
+  VArray vv = v1; // this makes vv data aliased to the data of v1
+  vv.print(); // actually print the v1's data which is shared right now
+  vv.set( 0, "---" ); // vv makes own copy of the array data
+  vv.print(); // vv's data is no more aliased to v1's
   printf( "************************ test 3 ends here\n" );
 }
 
@@ -287,11 +304,14 @@ void test6()
 
 int main( int argc, char* argv[] )
 {
+  test3();
+  /*
   test1();
   test2();
   test3();
   test4();
   test5();
   test6();
+  */
   return 0;
 }

@@ -4,7 +4,7 @@
  *  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2000
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.17 2003/01/06 00:37:49 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.18 2003/01/08 01:04:01 cade Exp $
  *
  */
 
@@ -82,50 +82,38 @@
 
 /***************************************************************************
 **
-** VARRAY
+** VARRAYBOX
 **
 ****************************************************************************/
 
-  VArray::VArray()
+  VArrayBox* VArrayBox::clone()
   {
-    _data = NULL;
-    _size = 0;
-    _count = 0;
-    compact = 1;
-    _ret_str = "";
-  }
-
-  VArray::VArray( const VArray& arr )
-  {
-    _data = NULL;
-    _size = 0;
-    _count = 0;
-    compact = 1;
-    _ret_str = "";
-    *this = arr;
-  }
-
-  VArray::VArray( const VTrie& tr )
-  {
-    _data = NULL;
-    _size = 0;
-    _count = 0;
-    compact = 1;
-    _ret_str = "";
-    *this = tr;
-  }
-
-  VArray::~VArray()
-  {
-    undef();
-  }
-
-  void VArray::resize( int new_size )
+    VArrayBox *new_box = new VArrayBox();
+    new_box->resize( _size );
+    new_box->_count = _count;
+    int i;
+    for( i = 0; i < _count; i++ )
+      {
+      new_box->_data[i] = new VString;
+      *new_box->_data[i] = *_data[i];
+      }
+    return new_box;         
+  };
+  
+  void VArrayBox::resize( int new_size )
   {
     ASSERT( new_size >= 0 );
+    if ( new_size < 0 ) new_size = 0;
+    while ( new_size < _count )
+      {
+      ASSERT( _data[ _count - 1 ] );
+      delete _data[ _count - 1 ];
+      _data[ _count - 1 ] = NULL;
+      _count--;
+      }
     if ( new_size == 0 )
       {
-      delete [] _data;
+      if ( _data ) delete [] _data;
       _data = NULL;
       _size = 0;
       _count = 0;
@@ -145,90 +133,130 @@
       }
     _size = new_size;
     _data = new_data;
+  };
+
+/***************************************************************************
+**
+** VARRAY
+**
+****************************************************************************/
+
+  VArray::VArray()
+  {
+    box = new VArrayBox();
+    compact = 1;
+  }
+
+  VArray::VArray( const VArray& arr )
+  {
+    box = arr.box;
+    box->ref();
+    compact = 1;
+  }
+
+  VArray::VArray( const VTrie& tr )
+  {
+    box = new VArrayBox();
+    compact = 1;
+    *this = tr;
+  }
+
+  VArray::~VArray()
+  {
+    if ( box->getref() == 1 ) 
+      delete box;
+    else  
+      box->unref();
+  }
+
+  void VArray::detach()
+  {
+    if ( box->getref() == 1 ) return;
+    VArrayBox *new_box = box->clone();
+    if ( box->getref() == 1 ) 
+      delete box;
+    else  
+      box->unref();
+    box = new_box;
   }
 
   void VArray::ins( int n, const char* s )
   {
-    ASSERT( n >= 0 && n <= _count );
-    if ( _count == _size ) resize( _size + 1 );
-    memmove( &_data[0] + n + 1,
-             &_data[0] + n,
-             ( _count - n ) * sizeof(String*) );
-    _count++;
+    detach();
+    ASSERT( n >= 0 && n <= box->_count );
+    if ( box->_count == box->_size ) box->resize( box->_size + 1 );
+    memmove( &box->_data[0] + n + 1,
+             &box->_data[0] + n,
+             ( box->_count - n ) * sizeof(String*) );
+    box->_count++;
 
-    _data[n] = new String;
-    _data[n]->compact = compact;
-    _data[n]->set( s );
+    box->_data[n] = new String;
+    box->_data[n]->compact = compact;
+    box->_data[n]->set( s );
   }
 
   void VArray::del( int n )
   {
-    if ( n < 0 || n >= _count ) return;
-    delete _data[n];
-    memmove( &_data[0] + n,
-             &_data[0] + n + 1,
-             ( _count - n ) * sizeof(String*) );
-    _count--;
-    if ( _size - _count > VARRAY_BLOCK_SIZE ) resize( _count );
+    detach();
+    if ( n < 0 || n >= box->_count ) return;
+    delete box->_data[n];
+    memmove( &box->_data[0] + n,
+             &box->_data[0] + n + 1,
+             ( box->_count - n ) * sizeof(String*) );
+    box->_count--;
+    if ( box->_size - box->_count > VARRAY_BLOCK_SIZE ) box->resize( box->_count );
   }
 
   void VArray::set( int n, const char* s )
   {
+    detach();
     ASSERT( n >= 0 );
-    if ( n >= _count )
+    if ( n >= box->_count )
       {
-      int i = n - _count + 1;
+      int i = n - box->_count + 1;
       while ( i-- ) push( "" );
       }
-    ASSERT( n < _count );
-    _data[n]->set( s );
+    ASSERT( n < box->_count );
+    box->_data[n]->set( s );
   }
 
   const char* VArray::get( int n )
   {
-    if ( n < 0 || n >= _count )
+    if ( n < 0 || n >= box->_count )
       return NULL;
     else
-      return _data[n]->data();
+      return box->_data[n]->data();
   }
 
   void VArray::undef()
   {
-    if ( _count )
-      for( int z = 0; z < _count; z++ )
-        if ( _data[z] )
-          delete _data[z];
-    resize( 0 );
-
-    _data = NULL;
-    _size = 0;
-    _count = 0;
+    box->undef();
     _ret_str = "";
   }
 
   int VArray::push( const char* s )
   {
-    ins( _count, s );
-    return _count;
+    ins( box->_count, s );
+    return box->_count;
   }
 
   const char* VArray::pop()
   {
-    if ( _count == 0 ) return NULL;
-    _ret_str = get( _count - 1 );
-    del( _count - 1 );
+    if ( box->_count == 0 ) return NULL;
+    _ret_str = get( box->_count - 1 );
+    del( box->_count - 1 );
     return _ret_str.data();
   }
 
   int VArray::unshift( const char* s )
   {
     ins( 0, s );
-    return _count;
+    return box->_count;
   }
 
   const char* VArray::shift()
   {
-    if ( _count == 0 ) return NULL;
+    if ( box->_count == 0 ) return NULL;
     _ret_str = get( 0 );
     del( 0 );
     return _ret_str.data();
@@ -237,14 +265,15 @@
   int VArray::merge( VTrie *tr )
   {
     VArray va;
-    int cnt = tr->keys( &va );
+    va = tr->keys();
+    int cnt = count();
     for( int z = 0; z < cnt; z++ )
       {
       const char* key = va[z];
       push( key );
       push( tr->get( key ) );
       }
-    return _count;
+    return box->_count;
   };
 
   int VArray::merge( VArray *arr )
@@ -252,7 +281,7 @@
     int cnt = arr->count();
     for( int z = 0; z < cnt; z++ )
       push( arr->get( z ) );
-    return _count;
+    return box->_count;
   };
 
   int VArray::fload( const char* fname )
@@ -290,7 +319,7 @@
 
   int VArray::fsave( FILE* f )
   {
-    for( int z = 0; z < _count; z++ )
+    for( int z = 0; z < box->_count; z++ )
       {
       size_t len = strlen( get(z) );
       if ( fwrite( get(z), 1, len, f ) != len ) return 2;
@@ -313,20 +342,20 @@
     const char* v;
 
     m = ( hi + lo ) / 2;
-    v = _data[m]->data();
+    v = box->_data[m]->data();
     l = lo;
     r = hi;
 
     do
       {
-      while( (l <= hi) && (strcmp(_data[l]->data(),v) < 0) ) l++;
-      while( (r >= lo) && (strcmp(v,_data[r]->data()) < 0) ) r--;
+      while( (l <= hi) && (strcmp(box->_data[l]->data(),v) < 0) ) l++;
+      while( (r >= lo) && (strcmp(v,box->_data[r]->data()) < 0) ) r--;
       if ( l <= r )
         {
         String *t;
-        t = _data[l];
-        _data[l] = _data[r];
-        _data[r] = t;
+        t = box->_data[l];
+        box->_data[l] = box->_data[r];
+        box->_data[r] = t;
         l++;
         r--;
         }
@@ -339,26 +368,26 @@
 
   void VArray::reverse()
   {
-    int m = _count / 2;
+    int m = box->_count / 2;
     for( int z = 0; z < m; z++ )
       {
       String *t;
-      t = _data[z];
-      _data[z] = _data[_count-1-z];
-      _data[_count-1-z] = t;
+      t = box->_data[z];
+      box->_data[z] = box->_data[box->_count-1-z];
+      box->_data[box->_count-1-z] = t;
       }
   };
 
   void VArray::shuffle() /* Fisher-Yates shuffle */
   {
-    int i = _count - 1;
+    int i = box->_count - 1;
     while( i >= 0 )
       {
       int j = rand() % ( i + 1 );
       String *t;
-      t = _data[i];
-      _data[i] = _data[j];
-      _data[j] = t;
+      t = box->_data[i];
+      box->_data[i] = box->_data[j];
+      box->_data[j] = t;
       i--;
       }
   };
@@ -419,12 +448,12 @@
     if( ! dest ) dest = &_ret_str;
     
     *dest = "";
-    for( int z = 0; z < _count-1; z++ )
+    for( int z = 0; z < box->_count-1; z++ )
       {
       *dest += get( z );
       *dest += glue;
       }
-    *dest += get( _count-1 );
+    *dest += get( box->_count-1 );
     return dest->data();
   };
 
@@ -700,12 +729,12 @@
     _nodes++;
   };
 
-  int VTrie::keys( VArray* arr )
+  VArray VTrie::keys()
   {
-    arr->undef();
+    VArray arr;
     temp_key = "";
-    key_node( root, arr );
-    return arr->count();
+    key_node( root, &arr );
+    return arr;
   };
 
   int VTrie::values( VArray* arr )
@@ -732,7 +761,8 @@
   int VTrie::merge( VTrie *tr )
   {
     VArray arr;
-    int cnt = tr->keys( &arr );
+    arr = tr->keys();
+    int cnt = count();
     for( int z = 0; z < cnt; z++ )
       set( arr[z], tr->get( arr[z] ) );
     return _count;
@@ -806,8 +836,7 @@
 
   void VTrie::print()
   {
-    VArray va;
-    keys( &va );
+    VArray va = keys();
     int z;
     for( z = 0; z < va.count(); z++ )
       printf( "%s=%s\n", va[z].data(), get( va[z] ) );

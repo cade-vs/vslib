@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.12 2003/01/06 00:37:49 cade Exp $
+ *  $Id: vstrlib.h,v 1.13 2003/01/08 01:04:01 cade Exp $
  *
  */
 
@@ -61,22 +61,64 @@ int str_rfind_regexp( const char* target, const char* pattern );
 
 /***************************************************************************
 **
+** VREF
+**
+****************************************************************************/
+
+class VRef
+{
+  
+  int _ref;
+  
+public:
+
+  VRef() { _ref = 1; }
+  ~VRef() { ASSERT( _ref == 1 ); }
+
+  int ref() { return ++_ref; }
+  int unref() { ASSERT( _ref > 0 ); return --_ref; }
+  
+  int getref() { return _ref; }
+};
+
+/***************************************************************************
+**
+** VARRAYBOX
+**
+****************************************************************************/
+
+class VArrayBox : public VRef
+{
+public:
+  
+  String**  _data;
+  int       _size;
+  int       _count;
+  
+  VArrayBox() { _data = NULL; _size = 0; _count = 0; };
+  ~VArrayBox() { undef(); };
+  
+  VArrayBox* clone();
+  
+  void resize( int new_size );
+  void undef() { resize( 0 ); };
+};
+
+/***************************************************************************
+**
 ** VARRAY
 **
 ****************************************************************************/
 
 class VArray
 {
-  String**  _data;
-  int       _size;
-  int       _count;
-
+  VArrayBox *box;
+  
   int       _fe; // foreach element index
 
   String    _ret_str; // return-container
 
-  void resize( int new_size );
-
+  void detach();
   void q_sort( int lo, int hi );
 
   public:
@@ -88,7 +130,7 @@ class VArray
   VArray( const VTrie& tr );
   ~VArray();
 
-  int count() { return _count; } // return element count
+  int count() { return box->_count; } // return element count
 
   void ins( int n, const char* s ); // insert at position `n'
   void del( int n ); // delete at position `n'
@@ -128,12 +170,21 @@ class VArray
   String& operator []( int n )
     {
       if ( n < 0 ) { _ret_str = ""; return _ret_str; }
-      if ( n >= _count ) set( n, "" );
-      return *_data[n];
+      if ( n >= box->_count ) set( n, "" );
+      return *box->_data[n];
     }
 
   const VArray& operator = ( const VArray& arr )
-    { undef(); merge( (VArray*)&arr ); return *this; };
+    {
+    if ( box->getref() == 1 ) 
+      delete box;
+    else  
+      box->unref();
+    box = arr.box;
+    box->ref();
+    return *this; 
+    };
+    
   const VArray& operator = ( const VTrie& tr )
     { undef(); merge( (VTrie*)&tr ); return *this; };
   const VArray& operator = ( const VString& str )
@@ -151,11 +202,11 @@ class VArray
   void reset() // reset position to beginning
     { _fe = -1; };
   const char* next() // get next item or NULL for the end
-    { _fe++; return _fe < _count ? _data[_fe]->data() : NULL; };
+    { _fe++; return _fe < box->_count ? box->_data[_fe]->data() : NULL; };
   const char* current() // get latest item got from next() -- current one
-    { return _fe < _count ? _data[_fe]->data() : NULL; };
+    { return _fe < box->_count ? box->_data[_fe]->data() : NULL; };
   int current_index() // current index
-    { return _fe < _count ? _fe : -1; };
+    { return _fe < box->_count ? _fe : -1; };
     
   int max_len(); // return the length of the longest string in the array
   int min_len(); // return the length of the shortest string in the array
@@ -217,7 +268,7 @@ class VTrie
 
   void undef(); // delete all key+data pairs
   
-  int keys( VArray* arr ); // store keys to `arr', return keys count
+  VArray keys(); // store keys to `arr', return keys count
   int values( VArray* arr ); // store values to `arr',  return values count
 
   void reverse(); // reverse keys <-> values

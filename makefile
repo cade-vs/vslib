@@ -41,7 +41,7 @@ CC_1       = g++
 LD_1       = g++
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I. -Ipcre -O2 $(CCDEF) 
+CCFLAGS_1  = -I. -Ipcre $(CCDEF) 
 LDFLAGS_1  = $(LDDEF)
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -130,7 +130,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF) 
+CCFLAGS_2  = -I. -I/usr/include/ncurses $(CCDEF) 
 LDFLAGS_2  = $(LDDEF)
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -213,7 +213,7 @@ OBJ_3= \
 .OBJ.test: 
 	$(MKDIR) .OBJ.test
 
-test: .OBJ.test $(OBJ_3)
+test: .OBJ.test $(OBJ_3) libvslib.a
 	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
 
 clean-test: 
