@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.cpp,v 1.8 2003/01/29 22:59:27 cade Exp $
+ * $Id: conmenu.cpp,v 1.9 2003/11/10 22:14:35 cade Exp $
  *
  */
 
@@ -168,7 +168,7 @@ int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConM
     {
     for(z = 0; z < va->count(); z++)
       if (strncmp("--", va->get(z), 2))
-        str_add_ch( hots,int((const char*)(va->get(z))[hotkeys]) );
+        str_add_ch( hots, int(((const char*)(va->get(z)))[hotkeys]) );
       else
         str_add_ch( hots,' ' );
     str_up(hots);
