@@ -4,7 +4,7 @@
  * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.27 2004/04/04 23:18:20 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.28 2005/04/27 23:08:52 cade Exp $
  *
  */
 
@@ -918,7 +918,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       int l = fs - ps;
       s.setn( ps, l );
       arr.push( s );
-      ps = s + rl;
+      ps = (const char *)(ps + l + rl);
       }
     if ( ps && ps[0] ) 
       arr.push( ps );
