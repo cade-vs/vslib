@@ -4,7 +4,7 @@
  * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.28 2005/04/27 23:08:52 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.29 2005/08/28 21:48:47 cade Exp $
  *
  */
 
@@ -531,7 +531,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
         case 'f': opt_mode = MODE_FIND; break;
         case 'h': opt_mode = MODE_HEX; break;
         case 'r': opt_mode = MODE_REGEXP; break;
-        default: errstr = "invalid option, allowed are: imsxfh"; return -1;
+        default: errstr = "invalid option, allowed are: imsxfhr"; return -1;
         }
       }
     return options;  

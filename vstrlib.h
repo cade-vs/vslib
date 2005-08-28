@@ -11,7 +11,7 @@
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.20 2004/04/04 23:18:20 cade Exp $
+ *  $Id: vstrlib.h,v 1.21 2005/08/28 21:48:47 cade Exp $
  *
  */
 
@@ -161,7 +161,9 @@ int mem_string_search( const char *p, const char* d, const char* opt );
 */
 
 /* number of subpatterns which can be catched by VRegexp::m() */
+#ifndef VREGEXP_MAX_SUBS
 #define VREGEXP_MAX_SUBS    32
+#endif
 
 class VRegexp
 {
@@ -197,6 +199,15 @@ class VRegexp
   ~VRegexp(); 
 
   int comp( const char* pattern, const char *opt = NULL ); // compile re, return > 0 for success
+    // options are:
+    //   i   -- ignore case
+    //   m   -- multiline match
+    //   s   -- match dot against all chars (\n)
+    //   x   -- extended, ignore whitespace
+    //   f   -- plain string search (no regexp used)
+    //   h   -- hex search, converts string ( `56 6C 61 64 69' ) to search pattern
+    //   r   -- regexp match (default, no need to specify)
+    // last options found are mandatory: "fhr" options sets regexp match
   int study(); // optimizing regexp for (big-size) multiple matches
   int ok(); // return 1 if regexp is compiled ok, 0 if not
   
