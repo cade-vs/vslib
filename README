@@ -1,14 +1,10 @@
 
   VSLIB
 
-  $Id: README,v 1.6 2002/11/27 21:41:52 cade Exp $
+  $Id: README,v 1.7 2005/08/28 16:26:29 cade Exp $
 
-  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2002
+  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2005
  
-  This library is collection of some structures/functions/etc.
-  that I need to write my programs a bit faster and to avoid
-  inventing the wheel every time again :)
-
   Some files are taken "as is" from other packages and/or software
   implementations. All the appropriate credits are intact. All files
   are under the GPL license. Some file names and/or function names
@@ -17,7 +13,8 @@
   LICENSE AGREEMENT: GPL, SEE `COPYING' FOR THE FULL TEXT.
 
                               Vladi Belperchinov-Shabanski "Cade"
-                              http://soul.datamax.bg/~cade
+                              http://cade.datamax.bg/
                               <cade@biscom.net>
                               <cade@datamax.bg>
+                              <cade@bis.bg>
 
