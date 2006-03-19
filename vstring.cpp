@@ -6,7 +6,7 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.24 2003/05/06 12:12:16 cade Exp $
+ *  $Id: vstring.cpp,v 1.25 2006/03/19 20:14:59 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -1479,6 +1479,15 @@
     detach();
     box->root->del_node( key );
   };
+
+  int VTrie::exists( const char* key ) // return != 0 if key exist (with data)
+  { 
+    VTrieNode *node = box->root->find_node( key );
+    if ( node && node->data )
+      return 1;
+    else
+      return 0;
+  }
 
   void VTrie::keys_and_values( VArray *keys, VArray *values )
   {

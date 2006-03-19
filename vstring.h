@@ -29,7 +29,7 @@
  *  This file (vstring.h and vstring.cpp) implements plain string-only 
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.22 2003/04/28 17:17:13 cade Exp $
+ *  $Id: vstring.h,v 1.23 2006/03/19 20:14:59 cade Exp $
  *
  */
 
@@ -598,8 +598,7 @@ class VTrie
   void del( const char* key ); // remove data associated with `key'
   const char* get( const char* key ); // get data by `key'
 
-  int exists( const char* key ) // return != 0 if key exist (with data)
-      { return box->root->find_node( key ) != NULL; }
+  int exists( const char* key ); // return != 0 if key exist (with data)
 
   void undef() // delete all key+data pairs
     { box->unref(); box = new VTrieBox(); }
