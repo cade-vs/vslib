@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: vsuti.cpp,v 1.12 2004/04/04 23:18:20 cade Exp $
+ * $Id: vsuti.cpp,v 1.13 2006/08/05 20:15:19 cade Exp $
  *
  */
 
@@ -126,7 +126,7 @@ off_t file_size( FILE *f )
   off_t opos = ftello( f );
   if (opos == -1) return -1;
   if (fseeko( f, 0, SEEK_END )) res++;
-  long size = ftello( f );
+  off_t size = ftello( f );
   res += (size == -1);
   if (fseeko( f, opos, SEEK_SET )) res++;
   if (res) return -1;
@@ -243,13 +243,13 @@ VString tilde_expand( const char* a_path )
 #ifdef _TARGET_UNIX_
   VString path;
   struct passwd* pwd;
-  if ( !a_path || !a_path[0] || a_path[0] != '~' ) 
+  if ( !a_path || !a_path[0] || a_path[0] != '~' )
     return VString( a_path );
 
   int z = 1; // first after ~
   while( a_path[z] != '/' && a_path[z] != 0 )
     str_add_ch( path, a_path[z++] );
-  
+
   if ( path == "" )
     path = getenv( "USER" );
   if ( path != "" )
@@ -330,7 +330,7 @@ char* expand_path( const char *src, char *dest )
   #ifdef _TARGET_GO32_
   _fixpath( src, dest );
   #endif
-  
+
   return dest;
 }
 
@@ -428,7 +428,7 @@ int dosstat( DIR *dir, struct stat *statbuf )
 
 /*****************************************************************************
 **
-** ftwalk() traverses directory tree and calls func() for every entri it 
+** ftwalk() traverses directory tree and calls func() for every entri it
 ** encounters. It supports DOS FAT filesystems under DJGPP.
 **
 *****************************************************************************/
@@ -439,26 +439,26 @@ int __ftwalk_process( const char *origin,
                                    const char* fname,     /* full file name */
                                    const struct stat* st, /* stat or NULL */
                                    int is_link,           /* 1 if link */
-                                   int flag ), 
+                                   int flag ),
                       int level = -1 )
 {
   DIR           *dir;
   struct dirent *de;
   struct stat   st;
   int           flag;
-  
+
   if ( level != -1 && level == 0) return 0; /* required level reqched */
-  
+
   VString this_path = path;
   int this_path_len = str_len( this_path );
-  
+
   dir = opendir( this_path );
   if (!dir) return 0; /* consider it ok */
 
   while( (de = readdir(dir)) )
     {
     if ( strcmp( de->d_name, "." ) == 0 || strcmp(de->d_name, "..") == 0 ) continue;
-    
+
     this_path += de->d_name;
     int is_link = file_is_link( this_path );
     #ifdef _TARGET_GO32_
@@ -471,7 +471,7 @@ int __ftwalk_process( const char *origin,
       flag = FTWALK_D;
     else
       flag = FTWALK_F;
-    
+
     int r = func( origin, this_path, &st, is_link, flag );
     if ( r )
       {
@@ -483,12 +483,12 @@ int __ftwalk_process( const char *origin,
       {
       this_path += "/";
       r = __ftwalk_process( origin, this_path, func, level - 1 );
-      if ( r )        
+      if ( r )
         {
         closedir(dir);
         return r;
         }
-      str_trim_right( this_path, 1 ); /* remove trailing `/' */  
+      str_trim_right( this_path, 1 ); /* remove trailing `/' */
       int r = func( origin, this_path, &st, is_link, FTWALK_DX );
       if ( r )
         {
@@ -496,7 +496,7 @@ int __ftwalk_process( const char *origin,
           return r;
         }
       }
-    str_sleft( this_path, this_path_len );  
+    str_sleft( this_path, this_path_len );
     } /* while readdir(dir) */
 
   closedir(dir);
@@ -508,11 +508,11 @@ int ftwalk( const char *origin,
                          const char* fname,     /* full file name */
                          const struct stat* st, /* stat struture or NULL */
                          int is_link,           /* 1 if link */
-                         int flag ), 
+                         int flag ),
             int level )
 {
   int r;
-  
+
   if ( !origin || !func || !origin[0] ) return 255;
 
   VString o = origin;
@@ -535,14 +535,14 @@ int ftwalk( const char *origin,
 VString get_rc_directory( const char* dir_prefix )
 {
   VString rc_dir;
-  
+
   rc_dir = getenv("HOME");
   if ( rc_dir == "" ) rc_dir = "/tmp/";
   #ifdef _TARGET_GO32_
   str_tr( rc_dir, "\\", "/" );
   #endif
   str_fix_path( rc_dir );
-  
+
   int rcprefix = 1;
   if (getenv("RC_PREFIX"))
     rc_dir += getenv("RC_PREFIX");
