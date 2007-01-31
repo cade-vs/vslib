@@ -4,7 +4,7 @@
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: form_in.cpp,v 1.8 2003/04/27 11:53:43 cade Exp $
+ * $Id: form_in.cpp,v 1.9 2007/01/31 22:34:50 cade Exp $
  *
  */
 
@@ -33,7 +33,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
   scroll.set_min_max( 0, str_len( str ) );
   scroll.set_pagesize( fieldlen );
   scroll.go( str_len(str) );
-  
+
   int show = 1;
   int firsthit = 1;
   int opage = -1;
@@ -74,8 +74,8 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
       show = 1;
       firsthit = 0;
       }
-        
-    
+
+
     if( ch == 27 )
       {
       res = 0;
@@ -86,6 +86,12 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
       *strres = str;
       res = 1;
       break;
+      } else
+    if( ch == KEY_CTRL_U )
+      {
+      scroll.go(0);
+      str = "";
+      show = 1;
       } else
     if( (ch == KEY_BACKSPACE || ch == 8 ) && (scroll.pos() > 0) )
       {
@@ -116,7 +122,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
       if (scroll.pos() != npos) scroll.go( npos );
       show = 1;
       }
-    
+
     scroll.set_min_max( 0, str_len( str ) );
     scroll.go( scroll.pos() );
     }
