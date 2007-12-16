@@ -1,5 +1,5 @@
 /*
- *  $Header: /cvs/vslib/getopt2.h,v 1.2 2001/10/28 13:53:02 cade Exp $
+ *  $Header: /cvs/vslib/getopt2.h,v 1.3 2007/12/16 13:53:36 cade Exp $
  *
  *  Copyright (C) 1994 Arno Schaefer
  *
@@ -16,11 +16,11 @@
 #define GETOPT(opts) while((optc = getopt2(argc, argv, opts)) != -1)
 
 
-extern char *optarg;
-extern int optind;
-extern int opterr;
-extern int optopt;
-extern int optc;
+extern "C" char *optarg;
+extern "C" int optind;
+extern "C" int opterr;
+extern "C" int optopt;
+extern "C" int optc;
 
 /*
  * set this to `0' to avoid warning message from getopt when
