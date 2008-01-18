@@ -22,14 +22,14 @@
  *  <cade@datamax.bg>
  *  http://soul.datamax.bg/~cade
  *
- *  NOTE: vstring was initially (and loosely) based on 
+ *  NOTE: vstring was initially (and loosely) based on
  *        `cxstring' lib (c) Ivo Baylov 1998.
  *  NOTE: vstring is distributed standalone as well as a part from vslib.
  *
- *  This file (vstring.h and vstring.cpp) implements plain string-only 
+ *  This file (vstring.h and vstring.cpp) implements plain string-only
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
- *  $Id: vstring.h,v 1.23 2006/03/19 20:14:59 cade Exp $
+ *  $Id: vstring.h,v 1.24 2008/01/18 18:40:46 cade Exp $
  *
  */
 
@@ -69,7 +69,7 @@ class VRegexp; /* forward */
 class VRef
 {
   int _ref;
-  
+
 public:
 
   VRef() { _ref = 1; }  // creator get first reference
@@ -77,7 +77,7 @@ public:
 
   void ref() { _ref++; }
   void unref() { ASSERT( _ref > 0 ); _ref--; if ( _ref == 0 ) delete this; }
-  
+
   int refs() { return _ref; }
 };
 
@@ -99,9 +99,9 @@ public:
 
   VStringBox() { s = NULL; sl = size = compact = 0; resize_buf( 0 ); };
   ~VStringBox() { undef(); if ( s ) free( s ); };
-  
+
   VStringBox* clone();
-  
+
   void resize_buf( int new_size );
   void undef() { resize_buf( 0 ); sl = 0; };
 };
@@ -129,7 +129,7 @@ public:
     box = str.box;
     box->ref();
     };
-  
+
   VString()                      {  box = new VStringBox(); };
   VString( const char*    ps  )  {  box = new VStringBox(); set( ps);  };
   VString( const int      n   )  {  box = new VStringBox(); i(n);     };
@@ -140,10 +140,10 @@ public:
   void compact( int a_compact ) // set this != 0 for compact (memory preserving) behaviour
        { box->compact = a_compact; }; //FIXME: detach() first?
 
-  void resize( int new_size ) 
+  void resize( int new_size )
        { detach(); box->resize_buf( new_size ); };
 
-  void undef() 
+  void undef()
        { box->unref(); box = new VStringBox(); };
 
   const VString& operator  = ( const VString& str )
@@ -151,26 +151,26 @@ public:
     box->unref();
     box = str.box;
     box->ref();
-    return *this; 
+    return *this;
     };
-  
+
   const VString& operator  = ( const char*   ps   ) { set(ps);return *this; };
   const VString& operator  = ( const int     n    ) { i(n);   return *this; };
   const VString& operator  = ( const long    n    ) { l(n);   return *this; };
   const VString& operator  = ( const double  n    ) { f(n);   return *this; };
 
-  const VString& operator += ( const VString& str ) 
+  const VString& operator += ( const VString& str )
         { cat( str.box->s ); return *this; };
-  const VString& operator += ( const char*  ps    ) 
+  const VString& operator += ( const char*  ps    )
         { cat( ps ); return *this; };
-  const VString& operator += ( const int    n     ) 
+  const VString& operator += ( const int    n     )
         { VString tmp = n; cat(tmp); return *this; };
-  const VString& operator += ( const long   n     ) 
+  const VString& operator += ( const long   n     )
         { VString tmp = n; cat(tmp); return *this; };
-  const VString& operator += ( const double n     ) 
+  const VString& operator += ( const double n     )
         { VString tmp = n; cat(tmp); return *this; };
 
-  const VString& operator *= ( const int    n     ) 
+  const VString& operator *= ( const int    n     )
         { return str_mul( *this, n ); };
 
   friend VString operator + ( const VString& str1, const VString& str2 )
@@ -219,25 +219,25 @@ public:
 
   operator const char* ( ) const { return (const char*)box->s; }
   const char* data() { return box->s; }
-  
+
   char& operator [] ( int n )
       {
       if ( n < 0 ) n = box->sl + n;
-      if ( n < 0 || n >= box->sl ) 
+      if ( n < 0 || n >= box->sl )
         {
         retch = 0;
         return retch;
         }
-      detach();  
-      return box->s[n]; 
+      detach();
+      return box->s[n];
       }
 
-  void fixlen() 
-       { box->sl = strlen(box->s); 
+  void fixlen()
+       { box->sl = strlen(box->s);
          ASSERT( box->sl < box->size ); }
-  void fix() 
-       { box->sl = strlen(box->s); 
-         box->resize_buf(box->sl); 
+  void fix()
+       { box->sl = strlen(box->s);
+         box->resize_buf(box->sl);
          ASSERT( box->sl < box->size ); }
 
   void   i( const int n );
@@ -296,7 +296,7 @@ public:
   friend char*  str_word( VString& target, const char* delimiters, char* result );
   friend char*  str_rword( VString& target, const char* delimiters, char* result );
   // check VArray::split() instead of word() funtions...
-  
+
   //FIXME: TODO: str_sprintf() should return VString!
   // this `sprintf'-like function works as follows:
   // 1. set `this.VString' length to `init_size'
@@ -311,7 +311,7 @@ public:
   friend VString& str_up ( VString& target );
   friend VString& str_low( VString& target );
   friend VString& str_flip_case( VString& target );
-  
+
   friend VString& str_reverse  ( VString& target ); // reverse the VString: `abcde' becomes `edcba'
   friend VString& str_squeeze( VString& target, const char* sq_chars ); // squeeze repeating chars to one only
 
@@ -386,6 +386,16 @@ public:
 
 /****************************************************************************
 **
+** VString Functions (for const char*)
+**
+****************************************************************************/
+
+  VString str_up ( const char* src );
+  VString str_low( const char* src );
+  VString str_flip_case( const char* src );
+
+/****************************************************************************
+**
 ** VString Functions -- common (VString class will pass transparently)
 **
 ****************************************************************************/
@@ -410,16 +420,16 @@ public:
 class VArrayBox : public VRef
 {
 public:
-  
+
   VString** _data;
   int       _size;
   int       _count;
-  
+
   VArrayBox() { _data = NULL; _size = 0; _count = 0; };
   ~VArrayBox() { undef(); };
-  
+
   VArrayBox* clone();
-  
+
   void resize( int new_size );
   void undef() { resize( 0 ); };
 };
@@ -433,7 +443,7 @@ public:
 class VArray
 {
   VArrayBox *box;
-  
+
   int       _fe; // foreach element index
 
   VString   _ret_str; // return-container
@@ -444,7 +454,7 @@ class VArray
   public:
 
   int compact;
-  
+
   VArray();
   VArray( const VArray& arr );
   VArray( const VTrie& tr );
@@ -459,7 +469,7 @@ class VArray
 
   void undef() // clear the array (frees all elements)
       { box->unref(); box = new VArrayBox(); _ret_str = ""; }
-      
+
   int push( const char* s ); // add to the end of the array
   const char* pop(); // get and remove the last element
 
@@ -483,10 +493,10 @@ class VArray
   VString& operator []( int n )
     {
       if ( n < 0 ) { _ret_str = ""; return _ret_str; }
-      if ( n >= box->_count ) 
+      if ( n >= box->_count )
         set( n, "" );
       else
-        detach(); // I don't know if user will change returned VString?!  
+        detach(); // I don't know if user will change returned VString?!
       return *box->_data[n];
     }
 
@@ -495,9 +505,9 @@ class VArray
     box->unref();
     box = arr.box;
     box->ref();
-    return *this; 
+    return *this;
     };
-    
+
   const VArray& operator = ( const VTrie& tr )
     { undef(); merge( (VTrie*)&tr ); return *this; };
   const VArray& operator = ( const VString& str )
@@ -508,9 +518,9 @@ class VArray
     { merge( (VTrie*)&tr ); return *this; };
   const VArray& operator += ( const VString& str )
     { push( str ); return *this; };
-  
+
   /* utilities */
-  
+
   /* implement `foreach'-like interface */
   void reset() // reset position to beginning
     { _fe = -1; };
@@ -520,7 +530,7 @@ class VArray
     { return _fe < box->_count ? box->_data[_fe]->data() : NULL; };
   int current_index() // current index
     { return _fe < box->_count ? _fe : -1; };
-    
+
   int max_len(); // return the length of the longest string in the array
   int min_len(); // return the length of the shortest string in the array
 };
@@ -546,7 +556,7 @@ public:
   void detach() { next = down = NULL; }
   void del_node( const char *key, int branch = 0 );
   VTrieNode* find_node( const char* key, int create = 0 );
-  
+
   VTrieNode *clone();
   void print();
 };
@@ -560,12 +570,12 @@ public:
 class VTrieBox : public VRef
 {
 public:
-  
+
   VTrieNode *root;
-  
+
   VTrieBox()  { root = new VTrieNode(); }
   ~VTrieBox() { ASSERT( root ); delete root; }
-  
+
   VTrieBox* clone();
   void undef() { ASSERT( root ); delete root; root = new VTrieNode(); };
 };
@@ -579,16 +589,16 @@ public:
 class VTrie
 {
   VTrieBox *box;
-  
+
   void detach();
   void trace_node( VTrieNode *node, VArray* keys, VArray *vals );
 
   VString temp_key;
-  
+
   public:
 
   int compact;
-  
+
   VTrie();
   VTrie( const VArray& arr );
   VTrie( const VTrie& tr );
@@ -602,9 +612,9 @@ class VTrie
 
   void undef() // delete all key+data pairs
     { box->unref(); box = new VTrieBox(); }
-  
+
   void keys_and_values( VArray *keys, VArray *values );
-  
+
   VArray keys(); // store keys to `arr', return keys count
   VArray values(); // store values to `arr',  return values count
 
@@ -630,15 +640,15 @@ class VTrie
       node->data = new VString();
     return *(node->data);
     }
-  
+
   const VTrie& operator = ( const VTrie& tr )
     {
     box->unref();
     box = tr.box;
     box->ref();
-    return *this; 
+    return *this;
     };
-  
+
   const VTrie& operator = ( const VArray& arr )
     { undef(); merge( (VArray*)&arr ); return *this; };
   const VTrie& operator += ( const VArray& arr )

@@ -4,7 +4,7 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.cpp,v 1.10 2005/06/06 06:20:20 cade Exp $
+ * $Id: conmenu.cpp,v 1.11 2008/01/18 18:40:46 cade Exp $
  *
  */
 
@@ -131,7 +131,7 @@ int con_toggle_box( int x, int y, const char *title, ToggleEntry* toggles, ConMe
     if ( ch < 0 || ch > 255 ) continue;
     if ( ch == 27 ) return 0;
     if ( ch == 13 /* && strncmp("--", toggles[scroll.pos].name, 2) */ ) return 1;
-    z = ( ch == ' ' ) ? scroll.pos() : z = str_find( hots, ch );
+    z = ( ch == ' ' ) ? scroll.pos() : str_find( hots, ch );
     if (z > -1 && strncmp("--", toggles[z].name, 2) )
       {
       int state = *(toggles[z].data) + 1;
@@ -205,9 +205,9 @@ int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConM
         if ( i != -1)
           str_sleft( str, i );
         }
- 
+
       str_pad( str,-w , (strncmp("--", str, 2) == 0)?'-':' ');
-      if (str_len(str) > w) 
+      if (str_len(str) > w)
         str = str_dot_reduce( str, w );
       if (menu_info->bo)
         str = "| " + str + " |";
@@ -310,11 +310,11 @@ int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu
       case KEY_PPAGE : scroll.ppage(); break;
       case KEY_HOME  : scroll.home(); break;
       case KEY_END   : scroll.end(); break;
-      default: 
-        if ( tolower(ch) == tolower(menu_info->ac) ) 
+      default:
+        if ( tolower(ch) == tolower(menu_info->ac) )
           {
-          menu_info->ec = menu_info->ac; 
-          return -2; 
+          menu_info->ec = menu_info->ac;
+          return -2;
           }
           break;
       }

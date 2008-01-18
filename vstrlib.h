@@ -5,13 +5,13 @@
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
  *  VSTRLIB library provides string data structures which mimic Perl's.
- *  There are several classes: 
- *    
+ *  There are several classes:
+ *
  *  VArray -- array of VString elements
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
- *  $Id: vstrlib.h,v 1.21 2005/08/28 21:48:47 cade Exp $
+ *  $Id: vstrlib.h,v 1.22 2008/01/18 18:40:46 cade Exp $
  *
  */
 
@@ -78,13 +78,13 @@ int hex_string_to_pattern( const char *str, char* pattern );
 **
 *****************************************************************************/
 
-int mem_kmp_search( const char *p, int ps, const char *d, int ds ); 
-int mem_quick_search( const char *p, int ps, const char *d, int ds ); 
+int mem_kmp_search( const char *p, int ps, const char *d, int ds );
+int mem_quick_search( const char *p, int ps, const char *d, int ds );
 int mem_sum_search( const char *p, int ps, const char *d, int ds );
 
 /* no-case versions */
 
-int mem_quick_search_nc( const char *p, int ps, const char *d, int ds ); 
+int mem_quick_search_nc( const char *p, int ps, const char *d, int ds );
 
 /*****************************************************************************
 **
@@ -94,11 +94,11 @@ int mem_quick_search_nc( const char *p, int ps, const char *d, int ds );
 *****************************************************************************/
 
 long file_pattern_search( const char *p, int ps, FILE* f, const char* opt = "",
-                          int (*mem_search)( const char *p, int ps, 
+                          int (*mem_search)( const char *p, int ps,
                                              const char *d, int ds ) = NULL );
 
 long file_pattern_search( const char *p, int ps, const char* fn, const char* opt = "",
-                          int (*mem_search)( const char *p, int ps, 
+                          int (*mem_search)( const char *p, int ps,
                                              const char *d, int ds ) = NULL );
 
 /*****************************************************************************
@@ -108,7 +108,7 @@ long file_pattern_search( const char *p, int ps, const char* fn, const char* opt
 ** file_grep_lines_read reports how many lines are read in during the
 **                      last file_grep() call
 ** re_string is regexp string, not arbitrary (binary) pattern
-** spos defines what file start offset should be accepted					 
+** spos defines what file start offset should be accepted
 **
 *****************************************************************************/
 
@@ -169,11 +169,11 @@ class VRegexp
 {
   /* search modes */
   enum SearchMode { MODE_REGEXP = 0, MODE_FIND, MODE_HEX };
-  
+
   /* common data */
   SearchMode opt_mode;
   int opt_nocase; // 1 if caseless search needed
-  
+
   /* regexp data */
   pcre*       re;
   pcre_extra *pe;
@@ -185,18 +185,18 @@ class VRegexp
   char*       pt; // pattern
   int         pl; // pattern length
   int         pos; // last match found pos
-  
+
   /* common data */
-  VString substr;
+  //VString substr;
   VString errstr;
 
   int get_options( const char* opt );
-  
+
   public:
 
   VRegexp();
   VRegexp( const char* pattern, const char *opt = NULL ); // compiles new regexp
-  ~VRegexp(); 
+  ~VRegexp();
 
   int comp( const char* pattern, const char *opt = NULL ); // compile re, return > 0 for success
     // options are:
@@ -210,18 +210,18 @@ class VRegexp
     // last options found are mandatory: "fhr" options sets regexp match
   int study(); // optimizing regexp for (big-size) multiple matches
   int ok(); // return 1 if regexp is compiled ok, 0 if not
-  
+
   int m( const char* line ); // execute re against line, return 1 for match
   int m( const char* line, const char* pattern, const char *opt = NULL ); // same as exec, but compiles first
 
-  const char* sub( int n ); // return n-th substring match
+  VString sub( int n ); // return n-th substring match
   int sub_sp( int n ); // return n-th substring start position
   int sub_ep( int n ); // return n-th substring end position
-  
-  VString& operator []( int n ) // same as sub()
-    { substr = ""; sub( n ); return substr; }
-    
-  const char* error_str() { return errstr.data(); };  
+
+  VString operator []( int n ) // same as sub()
+    { return sub( n ); }
+
+  const char* error_str() { return errstr.data(); };
 };
 
 /***************************************************************************
@@ -247,22 +247,22 @@ class VCharSet
     void undef();
 
     int  in( int n );
-/*    
-    
+/*
+
     push
-    
+
     int  get ( int pn );
 
     void set_range1( int start, int end );
     void set_range0( int start, int end );
-    
+
     void set_str1( const char* str );
     void set_str0( const char* str );
 
     int in( const char *str ); // return 1 if all str's chars are in the set
     int in( int pn )
         { if ( pn < 0 || pn >= size ) return 0; else return get( pn ); };
-    
+
     void reverse() { for(int z = 0; z < datasize; z++) data[z] = ~data[z]; };
     void set( int pn, int val ) { if ( val ) set1( pn ); else set0( pn ); };
     void set_all1() { if ( data ) memset( data, 0xff, datasize ); };
@@ -280,7 +280,7 @@ class VCharSet
 
     friend VCharSet operator & ( const VCharSet &b1, const VCharSet &b2 );
     friend VCharSet operator | ( const VCharSet &b1, const VCharSet &b2 );
-*/  
+*/
   };
 
 /***************************************************************************
@@ -304,8 +304,8 @@ class VCharSet
 **
 ****************************************************************************/
 
-		
-		
+
+
 #endif /* _VSTRLIB_H_ */
 
 /***************************************************************************

@@ -6,9 +6,9 @@
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
  *
- *  $Id: vstring.cpp,v 1.25 2006/03/19 20:14:59 cade Exp $
+ *  $Id: vstring.cpp,v 1.26 2008/01/18 18:40:46 cade Exp $
  *
- *  This file (vstring.h and vstring.cpp) implements plain string-only 
+ *  This file (vstring.h and vstring.cpp) implements plain string-only
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
  *
  */
@@ -41,7 +41,7 @@
     memcpy( box->s, s, size );
     return box;
   };
-  
+
   void VStringBox::resize_buf( int new_size )
   {
     /* FIXME: this breaks a lot of things: ==, strcmp, const char*, ...
@@ -53,14 +53,14 @@
       size = 0;
       return;
       }
-    */  
+    */
     new_size++; /* for the trailing 0 */
     if ( !compact )
       {
       new_size = new_size / STR_BLOCK_SIZE  + ( new_size % STR_BLOCK_SIZE != 0 );
       new_size *= STR_BLOCK_SIZE;
       }
-    if( s == NULL ) 
+    if( s == NULL )
       { /* first time alloc */
       s = (char*)malloc( new_size );
       ASSERT( s );
@@ -68,7 +68,7 @@
       size = new_size;
       sl = 0;
       } else
-    if ( size != new_size ) 
+    if ( size != new_size )
       { /* expand/shrink */
       s = (char*)realloc( s, new_size );
       size = new_size;
@@ -157,7 +157,7 @@
 
   void VString::setn( const char* ps, int len )
   {
-    if ( !ps || len < 1 ) 
+    if ( !ps || len < 1 )
       {
       resize( 0 );
       box->sl = 0;
@@ -242,7 +242,7 @@
   VString &str_copy( VString &target, const char* source, int pos, int len ) // returns `len' chars from `pos'
   {
     //FIXME: too many strlen()'s...
-    if ( pos < 0 ) 
+    if ( pos < 0 )
       {
       pos = str_len( source ) + pos;
       if ( pos < 0 ) pos = 0;
@@ -417,39 +417,39 @@
     return res;
   };
 
-  VString& str_tr ( VString& target, const char *from, const char *to ) 
-  { 
+  VString& str_tr ( VString& target, const char *from, const char *to )
+  {
     target.detach();
-    str_tr( target.box->s, from, to ); 
-    return target; 
+    str_tr( target.box->s, from, to );
+    return target;
   };
-  
-  VString& str_up ( VString& target ) 
-  { 
+
+  VString& str_up ( VString& target )
+  {
     target.detach();
-    str_up( target.box->s ); 
-    return target; 
+    str_up( target.box->s );
+    return target;
   };
-  
-  VString& str_low( VString& target ) 
-  { 
+
+  VString& str_low( VString& target )
+  {
     target.detach();
-    str_low( target.box->s ); 
-    return target; 
+    str_low( target.box->s );
+    return target;
   };
-  
-  VString& str_flip_case( VString& target ) 
-  { 
+
+  VString& str_flip_case( VString& target )
+  {
     target.detach();
-    str_flip_case( target.box->s ); 
-    return target; 
+    str_flip_case( target.box->s );
+    return target;
   };
-  
-  VString& str_reverse( VString& target ) 
-  { 
+
+  VString& str_reverse( VString& target )
+  {
     target.detach();
-    str_reverse( target.box->s ); 
-    return target; 
+    str_reverse( target.box->s );
+    return target;
   };
 
   VString &str_squeeze( VString &target, const char* sq_chars ) // squeeze repeating chars to one only
@@ -459,7 +459,7 @@
     target.fix();
     return target;
   }
-  
+
 /****************************************************************************
 **
 ** VString Functions (for char*)
@@ -588,7 +588,7 @@
   {
     target[0] = 0;
     int sl = str_len( source );
-    if ( pos < 0 ) 
+    if ( pos < 0 )
       {
       pos = sl + pos;
       if ( pos < 0 ) pos = 0;
@@ -633,20 +633,20 @@
   char* str_trim_left( char* target, int len ) // trims `len' chars from the beginning (left)
   {
     int s = strlen( target ) - len;
-    if ( s > 0 )  
+    if ( s > 0 )
       strcpy( target, target + len );
     else
-      target[0] = 0;  
+      target[0] = 0;
     return target;
   }
 
   char* str_trim_right( char* target, int len ) // trim `len' chars from the end (right)
   {
     int e = strlen(target) - len;
-    if ( e > 0 ) 
+    if ( e > 0 )
       target[e] = 0;
     else
-      target[0] = 0;  
+      target[0] = 0;
     return target;
   }
 
@@ -847,7 +847,7 @@
     if ( rc == -1 && strchr( sq_chars, target[pos] ) )
       {
       rc = target[pos];
-      pos++;  
+      pos++;
       }
     else if ( rc != -1 && target[pos] == rc )
       {
@@ -858,9 +858,33 @@
       rc = -1;
       }
     else
-      pos++;  
+      pos++;
     }
-  return target;  
+  return target;
+  }
+
+/****************************************************************************
+**
+** VString Functions (for const char*)
+**
+****************************************************************************/
+
+  VString str_up ( const char* src )
+  {
+    VString ret = src;
+    return str_up( ret );
+  }
+
+  VString str_low( const char* src )
+  {
+    VString ret = src;
+    return str_low( ret );
+  }
+
+  VString str_flip_case( const char* src )
+  {
+    VString ret = src;
+    return str_flip_case( ret );
   }
 
 /****************************************************************************
@@ -892,9 +916,9 @@
       pc += sl;
       cnt++;
       }
-    return cnt;  
+    return cnt;
   }
-  
+
   int str_is_int( const char* target ) // check if VString is correct int value
   {
     if (!target) return 0;
@@ -935,9 +959,9 @@
       new_box->_data[i] = new VString;
       *new_box->_data[i] = *_data[i];
       }
-    return new_box;         
+    return new_box;
   };
-  
+
   void VArrayBox::resize( int new_size )
   {
     ASSERT( new_size >= 0 );
@@ -1230,9 +1254,9 @@
       if ( sl > l )
         l = sl;
       }
-    return l;  
+    return l;
   };
-  
+
   int VArray::min_len()
   {
     if ( count() == 0 ) return 0;
@@ -1244,7 +1268,7 @@
       if ( sl < l )
         l = sl;
       }
-    return l;  
+    return l;
   };
 
 /***************************************************************************
@@ -1252,15 +1276,15 @@
 ** VTRIENODE
 **
 ****************************************************************************/
- 
+
   VTrieNode::VTrieNode()
-  { 
+  {
     next = NULL;
-    down = NULL; 
-    c = 0; 
+    down = NULL;
+    c = 0;
     data = NULL;
   }
- 
+
   VTrieNode::~VTrieNode()
   {
     if ( next ) delete next;
@@ -1272,9 +1296,9 @@
   {
     if ( !key ) return;
     if ( !key[0] ) return;
-    
+
     if ( key[1] == 0 )
-      { // last char reached 
+      { // last char reached
       if ( key[0] != c ) return;  // not found
       // key found
       if ( data ) delete data; // release key's value
@@ -1282,7 +1306,7 @@
       if ( down )
         { // there are more keys below
         if ( branch )
-          { 
+          {
           delete down; // delete all keys below
           c = 0; // mark current as `not used'
           }
@@ -1311,7 +1335,7 @@
           return; // not found
         }
       else
-        { 
+        {
         if ( next ) // char is not in the key, try next
           {
           next->del_node( key, branch );
@@ -1324,7 +1348,7 @@
             }
           }
         else
-          return; // not found  
+          return; // not found
         }
       }
   };
@@ -1360,7 +1384,7 @@
         }
       if ( next )
         return next->find_node( key, create ); // search next
-      else  
+      else
         return NULL; // not found
       }
   };
@@ -1372,7 +1396,7 @@
     if ( next ) tmp->next = next->clone();
     if ( down ) tmp->down = down->clone();
     if ( data ) tmp->data = new VString( *data );
-    return tmp;  
+    return tmp;
   };
 
   void VTrieNode::print()
@@ -1386,7 +1410,7 @@
     if (next) next->print();
     if (down) down->print();
   };
-  
+
 /***************************************************************************
 **
 ** VTRIEBOX
@@ -1442,7 +1466,7 @@
   {
     int kl = str_len( temp_key );
     if ( node->c ) str_add_ch( temp_key, node->c );
-    if ( node->data ) 
+    if ( node->data )
       {
       if ( keys ) keys->push( temp_key );
       if ( vals ) vals->push( node->data->data() );
@@ -1458,11 +1482,11 @@
     detach();
     VTrieNode *node = box->root->find_node( key, 1 );
     ASSERT( node );
-    if ( ! node->data ) 
+    if ( ! node->data )
       node->data = new VString();
     node->data->set( value );
   }
-  
+
   const char* VTrie::get( const char* key )
   {
     if ( !key || !key[0] ) return NULL;
@@ -1481,7 +1505,7 @@
   };
 
   int VTrie::exists( const char* key ) // return != 0 if key exist (with data)
-  { 
+  {
     VTrieNode *node = box->root->find_node( key );
     if ( node && node->data )
       return 1;
@@ -1576,7 +1600,7 @@
     arr.merge( this );
     return arr.fsave( f );
   };
-  
+
   void VTrie::print()
   {
     VArray ka = keys();
@@ -1647,7 +1671,7 @@ VString str_file_ext( const char *ps )
 VString str_file_name( const char *ps )
 {
   VString name;
-  
+
   int len = strlen( ps );
   int z = len - 1;
 
@@ -1664,7 +1688,7 @@ VString str_file_name( const char *ps )
 VString str_file_name_ext( const char *ps )
 {
   VString name;
-  
+
   int len = strlen( ps );
   int z = len - 1;
 
@@ -1676,7 +1700,7 @@ VString str_file_name_ext( const char *ps )
 VString str_file_path( const char *ps )
 {
   VString name;
-  
+
   int len = strlen( ps );
   int z = len;
 
@@ -1703,7 +1727,7 @@ VString str_reduce_path( const char* path ) // removes ".."s
 	  if ( dest[0] == '/' )
 	    str_del( dest, 0, 3 );
 	  }
-	else  
+	else
 	  str_del( dest, j+1, i+3-j );
     }
   return dest;

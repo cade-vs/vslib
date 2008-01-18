@@ -4,7 +4,7 @@
  * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
  *  Distributed under the GPL license, see end of this file for full text!
  *
- *  $Id: vstrlib.cpp,v 1.29 2005/08/28 21:48:47 cade Exp $
+ *  $Id: vstrlib.cpp,v 1.30 2008/01/18 18:40:46 cade Exp $
  *
  */
 
@@ -67,7 +67,7 @@
     else
       return -1;
   };
-  
+
   int str_rfind_regexp( const char* target, const char* pattern )
   {
     VRegexp re;
@@ -80,7 +80,7 @@
         return z + re.sub_sp( 0 );
       if ( z == 0 ) break;
       }
-    return -1;  
+    return -1;
   };
 
 /*****************************************************************************
@@ -100,7 +100,7 @@
     if( ch >= 'A' && ch <= 'F' ) return ch - 'A' + 10;
     return -1;
   }
-  
+
   int hex_string_to_pattern( const char *str, char* pattern )
   {
      const char *pc = pattern;
@@ -129,7 +129,7 @@ void __kmp_preprocess( const char* p, int ps, int* next )
 {
  int i = 0;
  int j = next[0] = -1;
- while (i < ps) 
+ while (i < ps)
    {
    while ((j > -1) && (p[i] != p[j])) j=next[j];
    i++;
@@ -140,7 +140,7 @@ void __kmp_preprocess( const char* p, int ps, int* next )
 
 #define MAX_KMP_PATTERN_SIZE 1024
 
-int mem_kmp_search( const char *p, int ps, const char *d, int ds ) 
+int mem_kmp_search( const char *p, int ps, const char *d, int ds )
 {
    int i;
    int j;
@@ -150,7 +150,7 @@ int mem_kmp_search( const char *p, int ps, const char *d, int ds )
    __kmp_preprocess( p, ps, next );
 
    i = j = 0;
-   while (j < ds) 
+   while (j < ds)
      {
      while (i > -1 && p[i] != d[j]) i = next[i];
      i++;
@@ -172,7 +172,7 @@ int mem_kmp_search( const char *p, int ps, const char *d, int ds )
 **
 *****************************************************************************/
 
-#define QS_ASIZE 256 
+#define QS_ASIZE 256
 
 void __qs_preprocess( const char* p, int ps, int* badc )
 {
@@ -181,13 +181,13 @@ void __qs_preprocess( const char* p, int ps, int* badc )
    for (i = 0; i < ps; i++) badc[(unsigned char)p[i]] = ps - i;
 }
 
-int mem_quick_search( const char *p, int ps, const char *d, int ds ) 
+int mem_quick_search( const char *p, int ps, const char *d, int ds )
 {
    int  badc[QS_ASIZE];
    __qs_preprocess( p, ps, badc);
 
    int j = 0;
-   while (j <= ds - ps) 
+   while (j <= ds - ps)
    {
       int i;
       for ( i = ps - 1; i >= 0 && p[i] == d[i + j]; --i );
@@ -206,13 +206,13 @@ void __qs_preprocess_nc( const char* p, int ps, int* badc )
    for (i = 0; i < ps; i++) badc[toupper((unsigned char)p[i])] = ps - i;
 }
 
-int mem_quick_search_nc( const char *p, int ps, const char *d, int ds ) 
+int mem_quick_search_nc( const char *p, int ps, const char *d, int ds )
 {
    int  badc[QS_ASIZE];
    __qs_preprocess_nc( p, ps, badc);
 
    int j = 0;
-   while (j <= ds - ps) 
+   while (j <= ds - ps)
    {
       int i;
       for ( i = ps - 1; i >= 0 && toupper(p[i]) == toupper(d[i + j]); --i );
@@ -231,7 +231,7 @@ int mem_quick_search_nc( const char *p, int ps, const char *d, int ds )
 ** the actual one. The hash function here is simple sum of bytes in the range
 ** of pattern size.
 **
-** Mostly useless since Quick search performs better in almost all cases. 
+** Mostly useless since Quick search performs better in almost all cases.
 ** I wrote it for benchmarking purpose.
 **
 *****************************************************************************/
@@ -239,7 +239,7 @@ int mem_quick_search_nc( const char *p, int ps, const char *d, int ds )
 int mem_sum_search( const char *p, int ps, const char *d, int ds )
 {
    int psum = 0;
-   
+
    int i;
    for( i = 0; i < ps; i++ ) psum += p[i];
 
@@ -252,7 +252,7 @@ int mem_sum_search( const char *p, int ps, const char *d, int ds )
      j++;
      sum += d[j+ps];
      }
-   return -1;  
+   return -1;
 };
 
 /*****************************************************************************
@@ -280,23 +280,23 @@ int mem_sum_search( const char *p, int ps, const char *d, int ds )
 *****************************************************************************/
 
 long file_pattern_search( const char *p, int ps, FILE* f, const char* opt,
-                          int (*mem_search)( const char *p, int ps, 
+                          int (*mem_search)( const char *p, int ps,
                                              const char *d, int ds ) )
 {
    #define BUFSIZE  (1024*1024)
    char* buff = new char[BUFSIZE];
-   
+
    int nocase = str_find( opt, 'i' ) > -1;
    char* np = new char[ps+1];
    ASSERT(np);
    memcpy( np, p, ps );
    np[ps] = 0;
-   
+
    if ( ! mem_search )
      mem_search = mem_quick_search;
    if ( nocase )
      mem_search = mem_quick_search_nc;
-   
+
    off_t pos = -1;
    while(4)
      {
@@ -318,8 +318,8 @@ long file_pattern_search( const char *p, int ps, FILE* f, const char* opt,
    return pos;
 };
 
-long file_pattern_search( const char *p, int ps, const char* fn, const char* opt, 
-                          int (*mem_search)( const char *p, int ps, 
+long file_pattern_search( const char *p, int ps, const char* fn, const char* opt,
+                          int (*mem_search)( const char *p, int ps,
                                              const char *d, int ds ) )
 {
   FILE *f = fopen( fn, "r" );
@@ -338,13 +338,13 @@ long file_pattern_search( const char *p, int ps, const char* fn, const char* opt
 /* FGrep -- regular expression search (I know `G' here stands for <nothing>:)) */
 
 long file_grep( const char *re_string, const char* file_name, int nocase, off_t spos )
-{    
+{
   FILE *f = fopen( file_name, "rb" );
   if (!f) return -1;
   long pos = file_grep( re_string, f, nocase, spos );
   fclose(f);
   return pos;
-}	
+}
 
 int file_grep_max_line = MAX_GREP_LINE;
 int file_grep_lines_read = 0;
@@ -355,7 +355,7 @@ long file_grep( const char *re_string, FILE* f, int nocase, off_t spos )
   char newpat[MAX_PATTERN+1];
   strcpy( newpat, re_string );
   if ( nocase ) str_up( newpat );
-  
+
   VRegexp re;
   if ( ! re.comp( newpat ) ) return -2;
   char *line = (char*)malloc( file_grep_max_line+1 );
@@ -416,9 +416,9 @@ long file_string_search( const char *p, FILE *f, const char* opt )
   ASSERT( ps < MAX_PATTERN );
 
   int nocase = str_find( opt, 'i' ) > -1;
-  
+
   long pos = -1;
-  
+
   if( str_find( opt, 'r' ) > -1 )
     {
     pos = file_grep( p, f, 0, -1 );
@@ -429,13 +429,13 @@ long file_string_search( const char *p, FILE *f, const char* opt )
   	int pl = hex_string_to_pattern( p, new_p );
   	if (pl > 0)
   	  pos = file_pattern_search( new_p, pl, f, nocase ? "i" : "" );
-    } 
+    }
   else
     {
     pos = file_pattern_search( p, strlen(p), f, nocase ? "i" : "" );
     }
-  
-  return pos;  
+
+  return pos;
 };
 
 int mem_string_search( const char *p, const char* d, const char* opt )
@@ -444,9 +444,9 @@ int mem_string_search( const char *p, const char* d, const char* opt )
   ASSERT( ps < MAX_PATTERN );
 
   int nocase = str_find( opt, 'i' ) > -1;
-  
+
   long pos = -1;
-  
+
   if( str_find( opt, 'r' ) > -1 )
     {
     VRegexp re;
@@ -461,18 +461,18 @@ int mem_string_search( const char *p, const char* d, const char* opt )
   	if (pl > 0)
   	  if ( nocase )
         pos = mem_quick_search_nc( new_p, pl, d, strlen(d) );
-      else  
+      else
         pos = mem_quick_search( new_p, pl, d, strlen(d) );
-    } 
+    }
   else
     {
     if ( nocase )
       pos = mem_quick_search_nc( p, ps, d, strlen(d) );
-    else  
+    else
       pos = mem_quick_search( p, ps, d, strlen(d) );
     }
-  
-  return pos;  
+
+  return pos;
 };
 
 /***************************************************************************
@@ -482,31 +482,31 @@ int mem_string_search( const char *p, const char* d, const char* opt )
 ****************************************************************************/
 
   VRegexp::VRegexp()
-  { 
+  {
     re = NULL;
     pe = NULL;
     rc = 0;
     lp = NULL;
-    
+
     pt = NULL;
     pl = 0;
   };
-  
+
   VRegexp::VRegexp( const char* rs, const char* opt )
-  { 
-    re = NULL; 
+  {
+    re = NULL;
     pe = NULL;
     rc = 0;
     lp = NULL;
-    
+
     pt = NULL;
     pl = 0;
-    
-    comp( rs, opt ); 
+
+    comp( rs, opt );
   };
-  
-  VRegexp::~VRegexp() 
-  { 
+
+  VRegexp::~VRegexp()
+  {
     if ( re ) pcre_free( re );
     if ( pt ) delete pt;
   };
@@ -534,26 +534,26 @@ int mem_string_search( const char *p, const char* d, const char* opt )
         default: errstr = "invalid option, allowed are: imsxfhr"; return -1;
         }
       }
-    return options;  
+    return options;
   };
 
   int VRegexp::comp( const char* pattern, const char *opt )
-  { 
+  {
     if ( re ) pcre_free( re );
     if ( pt ) delete pt;
     re = NULL;
     pt = NULL;
     pl = 0;
-    
+
     int options = get_options( opt );
     if( options == -1 ) return 0;
-    
+
     if ( opt_mode == MODE_REGEXP )
       {
       const char *error;
       int erroffset;
       re = pcre_compile( pattern, options, &error, &erroffset, NULL );
-    
+
       if ( re )
         {
         errstr = "";
@@ -564,42 +564,42 @@ int mem_string_search( const char *p, const char* d, const char* opt )
         errstr = error;
         return 0;
         }
-      } 
+      }
     else
       {
       pl = strlen( pattern );
       pt = new char[pl+1];
       if ( opt_mode == MODE_HEX )
         pl = hex_string_to_pattern( pattern, pt );
-      else  
+      else
         strcpy( pt, pattern );
       pt[pl] = 0;
       return pl;
       }
   };
-  
+
   int VRegexp::study()
   {
     return 1;
   };
-  
+
   int VRegexp::ok()
-  { 
-    if ( opt_mode == MODE_REGEXP ) 
-      return re != NULL; 
-    else  
+  {
+    if ( opt_mode == MODE_REGEXP )
+      return re != NULL;
+    else
       return pt != NULL && pl > 0;
   }
-  
+
   int VRegexp::m( const char* line )
-  { 
+  {
     if ( ! ok() )
-      { 
+      {
       errstr = "no pattern compiled";
       return 0;
       }
     if ( ! line )
-      { 
+      {
       errstr = "no data to search into";
       return 0;
       }
@@ -617,27 +617,28 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       {
       if ( opt_nocase )
         pos = mem_quick_search_nc( pt, pl, line, strlen(lp) );
-      else  
+      else
         pos = mem_quick_search( pt, pl, line, strlen(lp) );
-      return pos >= 0;  
+      return pos >= 0;
       }
   };
-  
+
   int VRegexp::m(  const char* line, const char* pattern, const char *opt )
-  { 
-    comp( pattern, opt ); 
-    return m( line ); 
+  {
+    comp( pattern, opt );
+    return m( line );
   };
 
-  const char* VRegexp::sub( int n )
+  VString VRegexp::sub( int n )
   {
-    if ( ! ok() ) return NULL;
-    if ( ! lp ) return NULL;
+    VString substr;
+    if ( ! ok() ) return substr;
+    if ( ! lp ) return substr;
     if ( opt_mode == MODE_REGEXP )
       {
-      if ( n < 0 || n >= rc ) return NULL;
-      substr = "";
-      
+      if ( n < 0 || n >= rc ) return substr;
+      //substr = "";
+
       int s = sp[n*2];
       int e = sp[n*2+1];
       int l = e - s;
@@ -645,10 +646,10 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       }
     else
       {
-      if ( n != 0 ) return NULL;
+      if ( n != 0 ) return substr;
       substr.setn( lp + pos, pl );
       }
-    return substr.data();
+    return substr;
   };
 
   int VRegexp::sub_sp( int n )
@@ -664,7 +665,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       return pos;
       }
   };
-  
+
   int VRegexp::sub_ep( int n )
   {
     if ( opt_mode == MODE_REGEXP )
@@ -685,14 +686,14 @@ int mem_string_search( const char *p, const char* d, const char* opt )
 **
 ****************************************************************************/
 
-  VCharSet::VCharSet() 
+  VCharSet::VCharSet()
     {
     _data = NULL;
     _size = 0;
     };
 
-  VCharSet::~VCharSet() 
-    { 
+  VCharSet::~VCharSet()
+    {
     _data = NULL;
     _size = 0;
     };
@@ -751,7 +752,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
   };
 
 
-/*  
+/*
   int VCharSet::get( int pn )
     {
       if ( pn < 0 || pn >= size ) return 0;
@@ -791,7 +792,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     int sl = strlen( str );
     for( int z = 0; z < sl; z++ )
       if ( !in( str[z] ) ) return 0;
-    return 1;  
+    return 1;
   };
 
   int VCharSet::resize( int p_size )
@@ -893,20 +894,20 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       arr.push( s );
       ps += re.sub_ep( 0 );
       }
-    if ( ps && ps[0] ) 
+    if ( ps && ps[0] )
       arr.push( ps );
-    return arr;  
+    return arr;
   };
-  
+
   // split `source' with exact string `delimiter_str'
   VArray str_split_simple( const char* delimiter_str, const char* source, int maxcount )
   {
     VArray arr;
     const char* ps = source;
     const char* fs;
-    
+
     int rl = strlen( delimiter_str );
-    
+
     VString s;
     while( (fs = strstr( ps, delimiter_str )) )
       {
@@ -920,9 +921,9 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       arr.push( s );
       ps = (const char *)(ps + l + rl);
       }
-    if ( ps && ps[0] ) 
+    if ( ps && ps[0] )
       arr.push( ps );
-    return arr;  
+    return arr;
   };
 
   // join array data to single string with `glue' string
