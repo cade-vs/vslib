@@ -18,20 +18,20 @@ struct  ToggleEntry
   int  key;
   char name[64];
   int  *data;
-  char **states;
+  const char **states;
 };
 
 struct ConMenuInfo
 {
   ConMenuInfo() { defaults(); }
   void defaults() { cn = 112; ch = 47; ti = 95; bo = ec = ac = 0; }
- 
+
   int cn; // normal color
   int ch; // highlight color
   int ti; // title color
- 
+
   int bo; // should view borders?
- 
+
   int ec; // exit char (used by con_menu_box)
   int ac; // alternative confirm (used by menu box)
 
