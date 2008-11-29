@@ -129,13 +129,13 @@
 
 /****************************************************************************
 ** This part is loosely based on `linconio':
-** --------------------------------------------------------------------- 
-** File: conio.h     Date: 03/09/1997       Version: 1.02                
-** CONIO.H an implementation of the conio.h for Linux based on ncurses.  
-** This is copyright (c) 1996,97 by Fractor / Mental EXPlosion.          
-** If you want to copy it you must do this following the terms of the    
-** GNU Library Public License                                            
-** Please read the file "README" before using this library.              
+** ---------------------------------------------------------------------
+** File: conio.h     Date: 03/09/1997       Version: 1.02
+** CONIO.H an implementation of the conio.h for Linux based on ncurses.
+** This is copyright (c) 1996,97 by Fractor / Mental EXPlosion.
+** If you want to copy it you must do this following the terms of the
+** GNU Library Public License
+** Please read the file "README" before using this library.
 ****************************************************************************/
 
   int __fg;
@@ -174,7 +174,7 @@
          will cause misinterpretation of some keys (arrows) after
          resuming (SUSP -- ctrl+z)...
          So, unless UNICON_NO_RAW exported and set to any value raw()
-         is called as usual. 
+         is called as usual.
       */
       raw();
       }
@@ -185,7 +185,7 @@
     conio_scr=newwin(0,0,0,0);
     keypad(conio_scr,TRUE); // allow function keys (keypad)
     meta(conio_scr,TRUE); // switch to 8 bit terminal return values
-    // intrflush(conio_scr,FALSE); // 
+    // intrflush(conio_scr,FALSE); //
     idlok(conio_scr,TRUE);      // hardware line ins/del (required?)
     idcok(conio_scr,TRUE);      // hardware char ins/del (required?)
     scrollok(conio_scr,TRUE);   // scroll screen if required (cursor at bottom)
@@ -306,7 +306,7 @@
   void con_bg( int color )
   {
     __bg=color;
-    con_ta( CONCOLOR( __fg, __bg ) );  
+    con_ta( CONCOLOR( __fg, __bg ) );
   };
 
 

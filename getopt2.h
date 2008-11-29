@@ -16,17 +16,22 @@
 #define GETOPT(opts) while((optc = getopt2(argc, argv, opts)) != -1)
 
 
-extern "C" char *optarg;
-extern "C" int optind;
-extern "C" int opterr;
-extern "C" int optopt;
-extern "C" int optc;
+/* avoid C/C++ linkage declarations conflict with <getopt.h> */
+extern "C" {
+
+extern char *optarg;
+extern int optind;
+extern int opterr;
+extern int optopt;
+extern int optc;
 
 /*
  * set this to `0' to avoid warning message from getopt when
  * reach unknown option
  */
 extern int opterr_report;
+
+} /* extern "C" */
 
 /* name changed to getopt2 to avoid library function mismatch */
 
