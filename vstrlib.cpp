@@ -459,10 +459,12 @@ int mem_string_search( const char *p, const char* d, const char* opt )
   	char new_p[MAX_PATTERN+1];
   	int pl = hex_string_to_pattern( p, new_p );
   	if (pl > 0)
+      {
   	  if ( nocase )
         pos = mem_quick_search_nc( new_p, pl, d, strlen(d) );
       else
         pos = mem_quick_search( new_p, pl, d, strlen(d) );
+      }
     }
   else
     {
