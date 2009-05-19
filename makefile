@@ -28,7 +28,6 @@ AR = ar rv
 CC = g++
 LD = g++
 MKDIR = mkdir -p
-MODULES = pcre
 RANLIB = ranlib
 RMDIR = rm -rf
 RMFILE = rm -f
@@ -41,7 +40,7 @@ CC_1       = g++
 LD_1       = g++
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I. -Ipcre -O2 $(CCDEF) 
+CCFLAGS_1  = -I. -O2 $(CCDEF) 
 LDFLAGS_1  = $(LDDEF)
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -130,7 +129,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -Ipcre -I/usr/include/ncurses -O2 $(CCDEF) 
+CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF) 
 LDFLAGS_2  = $(LDDEF)
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -192,8 +191,8 @@ CC_3       = g++
 LD_3       = g++
 AR_3       = ar rv
 RANLIB_3   = ranlib
-CCFLAGS_3  = -g -I. -Ipcre $(CCDEF) -DTEST 
-LDFLAGS_3  = -g -L. -Lpcre -lvslib -lvscon -lpcre -lncurses $(LDDEF)
+CCFLAGS_3  = -g -I. $(CCDEF) -DTEST 
+LDFLAGS_3  = -g -L. -lvslib -lvscon -lpcre -lncurses $(LDDEF)
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
 TARGET_3   = test
@@ -236,16 +235,16 @@ link-test: .OBJ.test $(OBJ_3)
 ### MODULES ####################################################################
 
 modules:
-	make -C pcre 
+	true
 
 clean-modules:
-	make -C pcre clean
+	true
 
 rebuild-modules:
-	make -C pcre rebuild
+	true
 
 link-modules:
-	make -C pcre link
+	true
 
 
 ### MAKEMAKE ENDS HERE #########################################################
