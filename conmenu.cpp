@@ -266,7 +266,7 @@ int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConM
     }
   menu_info->ac = -1;
   return -1;
-};
+}
 
 int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu_info )
 {

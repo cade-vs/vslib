@@ -36,16 +36,16 @@
     gettextinfo( &ti );
     original_ta = ti.attribute;
     return 0;
-  };
+  }
 
   void con_done()
   {
     textattr( original_ta );
     return;
-  };
+  }
 
-  void con_suspend() { return; };
-  void con_restore() { return; };
+  void con_suspend() { return; }
+  void con_restore() { return; }
 
   void con_ce( int attr )
   {
@@ -58,7 +58,7 @@
       }
     else
       clreol();
-  };
+  }
 
   void con_cs( int attr )
   {
@@ -75,7 +75,7 @@
       clrscr();
       gotoxy(1,1);
       }
-  };
+  }
 
   void con_puts( const char *s )
   {
@@ -86,21 +86,21 @@
     #else
     cputs( s );
     #endif
-  };
+  }
 
-  int con_max_x() { return ti.screenwidth; };
-  int con_max_y() { return ti.screenheight; };
-  int con_x() { return wherex(); };
-  int con_y() { return wherey(); };
-  void con_fg( int color ) { __fg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); };
-  void con_bg( int color ) { __bg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); };
-  void con_ta( int attr ) { __ta = attr; __bg = COLORBG(attr); __fg = COLORFG(attr); textattr( attr ); };
-  void con_xy( int x, int y ) { gotoxy( x, y ); };
+  int con_max_x() { return ti.screenwidth; }
+  int con_max_y() { return ti.screenheight; }
+  int con_x() { return wherex(); }
+  int con_y() { return wherey(); }
+  void con_fg( int color ) { __fg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); }
+  void con_bg( int color ) { __bg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); }
+  void con_ta( int attr ) { __ta = attr; __bg = COLORBG(attr); __fg = COLORFG(attr); textattr( attr ); }
+  void con_xy( int x, int y ) { gotoxy( x, y ); }
 
-  void con_chide() { _setcursortype( _NOCURSOR ); };
-  void con_cshow() { _setcursortype( _NORMALCURSOR ); };
+  void con_chide() { _setcursortype( _NOCURSOR ); }
+  void con_cshow() { _setcursortype( _NORMALCURSOR ); }
 
-  int con_kbhit() { return kbhit(); };
+  int con_kbhit() { return kbhit(); }
   int con_getch()
   {
     char ch = getch();
@@ -108,14 +108,14 @@
       return KEY_PREFIX + getch();
     else
       return ch;
-  };
+  }
 
   void con_beep()
   {
     sound(800);
     delay(1); // 1/10 second
     sound(0);
-  };
+  }
 
 #endif /* _TARGET_GO32_ */
 
@@ -195,23 +195,23 @@
           init_pair( CON_PAIR(__fg,__bg), colortab(__fg), colortab(__bg));
     con_ta(7);
     return 0;
-  };
+  }
 
   void con_done()
   {
     delwin(conio_scr);
     endwin();
-  };
+  }
 
   void con_suspend()
   {
     con_done();
-  };
+  }
 
   void con_restore()
   {
     con_init();
-  };
+  }
 
   void con_ta( int attr )
   {
@@ -221,7 +221,7 @@
     __bg = COLORBG(attr);
     wattrset(conio_scr,COLOR_PAIR(CON_PAIR( __fg%8, __bg%8 )) | ( __bg > 7 )*(A_BLINK) | ( __fg > 7 )*(A_BOLD) );
     wbkgdset( conio_scr, COLOR_PAIR(CON_PAIR( __fg%8, __bg%8 )) );
-  };
+  }
 
   void con_ce( int attr )
   {
@@ -238,7 +238,7 @@
       wclrtoeol(conio_scr);
       wrefresh(conio_scr);
       }
-  };
+  }
 
   void con_cs( int attr )
   {
@@ -257,13 +257,13 @@
       wmove(conio_scr,0,0);
       wrefresh(conio_scr);
       }
-  };
+  }
 
   void con_puts( const char *s )
   {
     waddstr(conio_scr,s);
     wrefresh(conio_scr);
-  };
+  }
 
   int con_max_x()
   {
@@ -271,7 +271,7 @@
     int y;
     getmaxyx(conio_scr,y,x);
     return(x);
-  };
+  }
 
   int con_max_y()
   {
@@ -279,7 +279,7 @@
     int y;
     getmaxyx(conio_scr,y,x);
     return(y);
-  };
+  }
 
   int con_x()
   {
@@ -287,7 +287,7 @@
     int x;
     getyx(conio_scr,y,x);
     return(x+1);
-  };
+  }
 
   int con_y()
   {
@@ -295,39 +295,39 @@
     int x;
     getyx(conio_scr,y,x);
     return(y+1);
-  };
+  }
 
   void con_fg( int color )
   {
     __fg=color;
     con_ta( CONCOLOR( __fg, __bg ) );
-  };
+  }
 
   void con_bg( int color )
   {
     __bg=color;
     con_ta( CONCOLOR( __fg, __bg ) );
-  };
+  }
 
 
   void con_xy( int x, int y )
   {
     wmove(conio_scr,y-1,x-1);
     wrefresh(conio_scr);
-  };
+  }
 
   void con_chide()
   {
     con_xy( 1, 1 );
     leaveok(conio_scr,TRUE);
     curs_set( 0 );
-  };
+  }
 
   void con_cshow()
   {
     leaveok(conio_scr,FALSE);
     curs_set( 1 );
-  };
+  }
 
   int con_kbhit()
   {
@@ -340,7 +340,7 @@
     else
       ungetch(i);
     return(i);
-  };
+  }
 
   int con_getch()
   {
@@ -354,13 +354,13 @@
     if (i == KEY_PREFIX + 27) i = 27;
     #endif
     return(i);
-  };
+  }
 
   void con_beep()
   {
     printf( "\007" );
     fflush( stdout );
-  };
+  }
 
 #endif /* _TARGET_UNIX_ */
 
@@ -373,7 +373,7 @@
   void con_out( int x, int y, const char *s )
   {
     con_out( x, y, s, __ta );
-  };
+  }
 
   void con_out( int x, int y, const char *s, int attr )
   {
@@ -382,7 +382,7 @@
     con_xy( x, y );
     con_puts( s );
     con_ta( ta );
-  };
+  }
 
   void con_puts( const char *s, int attr )
   {

@@ -62,13 +62,13 @@
     AnsiTA( cNORMAL );
 
     return 0;
-  };
+  }
 
   void AnsiDone()
   {
     if (!ANSI) return;
     AnsiTA( cNORMAL );
-  };
+  }
 
 
   void AnsiSuspend() // suspends console (before system() for example)
@@ -98,7 +98,7 @@
       {
       printf( "\033[K" );
       }
-  };
+  }
 
   void AnsiCS( int attr ) // clear screen
   {
@@ -114,25 +114,25 @@
       {
       printf( "\033[2J" );
       }
-  };
+  }
 
 
   void AnsiOut( int x, int y, const char *s )
   {
     AnsiXY( x, y );
     AnsiPuts( s );
-  };
+  }
 
   void AnsiOut( int x, int y, const char *s, int attr )
   {
     AnsiXY( x, y );
     AnsiPuts( s, attr );
-  };
+  }
 
   void AnsiPuts( const char *s )
   {
     printf( s );
-  };
+  }
 
   void AnsiPuts( const char *s, int attr )
   {
@@ -140,7 +140,7 @@
     AnsiTA( attr );
     printf( s );
     AnsiTA( _ta  );
-  };
+  }
 
   void AnsiCHide() { return; } // cursor hide
   void AnsiCShow() { return; } // cursor show
