@@ -22,30 +22,30 @@
     _pos  = _min;
     _page = _min;
     fix();
-  };
+  }
 
   void ScrollPos::end()
   {
     if ( ! _size ) return;
     _pos = _max;
     fix();
-  };
+  }
 
   void ScrollPos::up()
   {
     if ( ! _size ) return;
     ASSERT( check() );
     _pos--;
-    if ( _pos < _min ) 
+    if ( _pos < _min )
       {
       if ( wrap )
         _pos = _max;
       else
-        _pos = _min;  
+        _pos = _min;
       }
     if ( _pos < _page ) _page--;
     fix();
-  };
+  }
 
   void ScrollPos::down()
   {
@@ -57,11 +57,11 @@
       if ( wrap )
         _pos = _min;
       else
-        _pos = _max;  
+        _pos = _max;
       }
     if ( _pos > _page + _pagesize - 1 ) _page++;
     fix();
-  };
+  }
 
   void ScrollPos::pageup()
   {
@@ -71,8 +71,8 @@
       _pos  = _page;
     else
       _pos -= _pagesize;
-    fix();  
-  };
+    fix();
+  }
 
   void ScrollPos::pagedown()
   {
@@ -85,8 +85,8 @@
       _pos += _pagesize;
       if ( _page + _pagesize <= _max ) _page += _pagesize;
       }
-    fix();  
-  };
+    fix();
+  }
 
   void ScrollPos::go( int new_pos )
   {
@@ -105,8 +105,8 @@
       if ( _pagesize )
         _page = ( _pos / _pagesize ) * _pagesize;
       else
-        _page = 0;  
-      }  
+        _page = 0;
+      }
     ASSERT( check() );
   }
 

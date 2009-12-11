@@ -26,7 +26,7 @@
   {
     time_t t = tim;
     return ctime( &t );
-  };
+  }
 
   time_t str2time( const char* timstr )
   {
@@ -49,7 +49,7 @@
     m.tm_isdst = -1;
     time_t tim = mktime( &m );
     return tim;
-  };
+  }
 
   int str_find_regexp( const char* target, const char* pattern, int startpos )
   {
@@ -66,7 +66,7 @@
       return z + re.sub_sp( 0 );
     else
       return -1;
-  };
+  }
 
   int str_rfind_regexp( const char* target, const char* pattern )
   {
@@ -81,7 +81,7 @@
       if ( z == 0 ) break;
       }
     return -1;
-  };
+  }
 
 /*****************************************************************************
 **
@@ -117,7 +117,7 @@
        pattern ++;
      }
      return pattern - pc;
-  };
+  }
 
 /*****************************************************************************
 **
@@ -253,7 +253,7 @@ int mem_sum_search( const char *p, int ps, const char *d, int ds )
      sum += d[j+ps];
      }
    return -1;
-};
+}
 
 /*****************************************************************************
 **
@@ -316,7 +316,7 @@ long file_pattern_search( const char *p, int ps, FILE* f, const char* opt,
    delete np;
    delete buff;
    return pos;
-};
+}
 
 long file_pattern_search( const char *p, int ps, const char* fn, const char* opt,
                           int (*mem_search)( const char *p, int ps,
@@ -327,7 +327,7 @@ long file_pattern_search( const char *p, int ps, const char* fn, const char* opt
   int res = file_pattern_search( p, ps, f, opt, mem_search );
   fclose( f );
   return res;
-};
+}
 
 /*****************************************************************************
 **
@@ -436,7 +436,7 @@ long file_string_search( const char *p, FILE *f, const char* opt )
     }
 
   return pos;
-};
+}
 
 int mem_string_search( const char *p, const char* d, const char* opt )
 {
@@ -475,7 +475,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     }
 
   return pos;
-};
+}
 
 /***************************************************************************
 **
@@ -492,7 +492,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
 
     pt = NULL;
     pl = 0;
-  };
+  }
 
   VRegexp::VRegexp( const char* rs, const char* opt )
   {
@@ -505,13 +505,13 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     pl = 0;
 
     comp( rs, opt );
-  };
+  }
 
   VRegexp::~VRegexp()
   {
     if ( re ) pcre_free( re );
     if ( pt ) delete pt;
-  };
+  }
 
   int VRegexp::get_options( const char* opt )
   {
@@ -537,7 +537,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
         }
       }
     return options;
-  };
+  }
 
   int VRegexp::comp( const char* pattern, const char *opt )
   {
@@ -578,12 +578,12 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       pt[pl] = 0;
       return pl;
       }
-  };
+  }
 
   int VRegexp::study()
   {
     return 1;
-  };
+  }
 
   int VRegexp::ok()
   {
@@ -623,13 +623,13 @@ int mem_string_search( const char *p, const char* d, const char* opt )
         pos = mem_quick_search( pt, pl, line, strlen(lp) );
       return pos >= 0;
       }
-  };
+  }
 
   int VRegexp::m(  const char* line, const char* pattern, const char *opt )
   {
     comp( pattern, opt );
     return m( line );
-  };
+  }
 
   VString VRegexp::sub( int n )
   {
@@ -652,7 +652,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       substr.setn( lp + pos, pl );
       }
     return substr;
-  };
+  }
 
   int VRegexp::sub_sp( int n )
   {
@@ -666,7 +666,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       if ( n != 0 ) return -1;
       return pos;
       }
-  };
+  }
 
   int VRegexp::sub_ep( int n )
   {
@@ -680,7 +680,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       if ( n != 0 ) return -1;
       return pos+pl;
       }
-  };
+  }
 
 /***************************************************************************
 **
@@ -692,13 +692,13 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     {
     _data = NULL;
     _size = 0;
-    };
+    }
 
   VCharSet::~VCharSet()
     {
     _data = NULL;
     _size = 0;
-    };
+    }
 
   void VCharSet::resize( int new_size )
   {
@@ -724,7 +724,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       }
     _data = new_data;
     _size = new_size;
-  };
+  }
 
 
   void VCharSet::push( int n, int val )
@@ -735,12 +735,12 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       _data[ n / sizeof(unsigned char) ] |= 1 << (n % sizeof(unsigned char));
     else
       _data[ n / sizeof(unsigned char) ] &= ~(1 << (n % sizeof(unsigned char)));
-  };
+  }
 
   void VCharSet::undef( int n )
   {
     push( n, 0 );
-  };
+  }
 
   void VCharSet::undef()
   {
@@ -751,7 +751,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
   {
     if ( n < 0 || n >= _size * (int)sizeof(unsigned char) ) return 0;
     return ( _data[ n / sizeof(unsigned char) ] & ( 1 << ( n % sizeof(unsigned char) ) ) ) != 0;
-  };
+  }
 
 
 /*
@@ -759,35 +759,35 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     {
       if ( pn < 0 || pn >= size ) return 0;
       return (data[pn / 8] & (1 << (pn % 8))) != 0;
-    };
+    }
 
   void VCharSet::set_range1( int start, int end ) // set range
   {
     char s = ( start < end ) ? start : end;
     char e = ( start > end ) ? start : end;
     for( int z = s; z <= e; z++) set1( z );
-  };
+  }
 
   void VCharSet::set_range0( int start, int end ) // set range
   {
     char s = ( start < end ) ? start : end;
     char e = ( start > end ) ? start : end;
     for( int z = s; z <= e; z++) set0( z );
-  };
+  }
 
   void VCharSet::set_str1( const char* str )
   {
     int sl = strlen( str );
     for( int z = 0; z < sl; z++ )
       set1( str[z] );
-  };
+  }
 
   void VCharSet::set_str0( const char* str )
   {
     int sl = strlen( str );
     for( int z = 0; z < sl; z++ )
       set0( str[z] );
-  };
+  }
 
   int VCharSet::in( const char *str )
   {
@@ -795,7 +795,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     for( int z = 0; z < sl; z++ )
       if ( !in( str[z] ) ) return 0;
     return 1;
-  };
+  }
 
   int VCharSet::resize( int p_size )
     {
@@ -822,7 +822,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     resize( b1.size );
     memcpy( data, b1.data, datasize );
     return *this;
-  };
+  }
 
   VCharSet& VCharSet::operator &= ( const VCharSet &b1 )
   {
@@ -830,7 +830,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     for(z = 0; z < (datasize < b1.datasize ? datasize : b1.datasize ); z++)
       data[z] &= b1.data[z];
     return *this;
-  };
+  }
 
   VCharSet& VCharSet::operator |= ( const VCharSet &b1 )
   {
@@ -838,7 +838,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     for(z = 0; z < (datasize < b1.datasize ? datasize : b1.datasize ); z++)
       data[z] |= b1.data[z];
     return *this;
-  };
+  }
 
   VCharSet VCharSet::operator ~ ()
   {
@@ -848,7 +848,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     for(z = 0; z < b.datasize; z++)
       b.data[z] = ~b.data[z];
     return b;
-  };
+  }
 
   VCharSet operator & ( const VCharSet &b1, const VCharSet &b2 )
   {
@@ -856,7 +856,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     b = b1;
     b &= b2;
     return b;
-  };
+  }
 
   VCharSet operator | ( const VCharSet &b1, const VCharSet &b2 )
   {
@@ -864,7 +864,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     b = b1;
     b |= b2;
     return b;
-  };
+  }
 */
 
 /***************************************************************************
@@ -899,7 +899,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     if ( ps && ps[0] )
       arr.push( ps );
     return arr;
-  };
+  }
 
   // split `source' with exact string `delimiter_str'
   VArray str_split_simple( const char* delimiter_str, const char* source, int maxcount )
@@ -926,7 +926,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     if ( ps && ps[0] )
       arr.push( ps );
     return arr;
-  };
+  }
 
   // join array data to single string with `glue' string
   // returns the result string or store to optional `dest'
@@ -940,7 +940,7 @@ int mem_string_search( const char *p, const char* d, const char* opt )
       }
     str += array.get( array.count()-1 );
     return str;
-  };
+  }
 
 /***************************************************************************
 **

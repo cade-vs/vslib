@@ -40,7 +40,7 @@
     box->compact = compact;
     memcpy( box->s, s, size );
     return box;
-  };
+  }
 
   void VStringBox::resize_buf( int new_size )
   {
@@ -75,7 +75,7 @@
       s[ size - 1 ] = 0;
       if ( sl > size - 1 ) sl = size - 1;
       }
-  };
+  }
 
 /****************************************************************************
 **
@@ -142,7 +142,7 @@
       box->sl = sl;
       box->s[sl] = 0;
       }
-  };
+  }
 
   void VString::cat( const char* ps )
   {
@@ -153,7 +153,7 @@
     memcpy( box->s + box->sl, ps, psl );
     box->s[ box->sl + psl ] = 0;
     box->sl += psl;
-  };
+  }
 
   void VString::setn( const char* ps, int len )
   {
@@ -170,7 +170,7 @@
     box->sl = z;
     memcpy( box->s, ps, z );
     box->s[z] = 0;
-  };
+  }
 
   void VString::catn( const char* ps, int len )
   {
@@ -181,7 +181,7 @@
     memcpy( box->s + box->sl, ps, z );
     box->sl += z;
     box->s[ box->sl ] = 0;
-  };
+  }
 
 /****************************************************************************
 **
@@ -204,7 +204,7 @@
     str_del( target.box->s, pos, len );
     target.fix();
     return target;
-  };
+  }
 
   VString &str_ins( VString &target, int pos, const char* s ) // inserts `s' in position `pos'
   {
@@ -213,7 +213,7 @@
     str_ins( target.box->s, pos, s );
     target.fixlen();
     return target;
-  };
+  }
 
   VString &str_ins_ch( VString &target, int pos, char ch ) // inserts `ch' in position `pos'
   {
@@ -222,7 +222,7 @@
     str_ins_ch( target.box->s, pos, ch );
     target.fixlen();
     return target;
-  };
+  }
 
   VString &str_replace( VString &target, const char* out, const char* in ) // replace `out' w. `in'
   {
@@ -237,7 +237,7 @@
       }
     ASSERT(target.check());
     return target;
-  };
+  }
 
   VString &str_copy( VString &target, const char* source, int pos, int len ) // returns `len' chars from `pos'
   {
@@ -246,7 +246,7 @@
       {
       pos = str_len( source ) + pos;
       if ( pos < 0 ) pos = 0;
-      };
+      }
     if ( len == -1 ) len = str_len( source ) - pos;
     if ( len < 1 )
       {
@@ -258,17 +258,17 @@
     target.fix();
     ASSERT( target.check() );
     return target;
-  };
+  }
 
   VString &str_left( VString &target, const char* source, int len ) // returns `len' chars from the left
   {
     return str_copy( target, source, 0, len );
-  };
+  }
 
   VString &str_right( VString &target, const char* source, int len ) // returns `len' chars from the right
   {
     return str_copy( target, source, strlen( source ) - len, len );
-  };
+  }
 
   VString &str_sleft( VString &target, int len ) // SelfLeft -- just as 'Left' but works on `this'
   {
@@ -279,7 +279,7 @@
       target.fix();
       }
     return target;
-  };
+  }
 
   VString &str_sright( VString &target, int len ) // SelfRight -- just as 'Right' but works on `this'
   {
@@ -287,7 +287,7 @@
     str_sright( target.box->s, len );
     target.fix();
     return target;
-  };
+  }
 
 
   VString &str_trim_left( VString &target, int len ) // trims `len' chars from the beginning (left)
@@ -296,7 +296,7 @@
     str_trim_left( target.box->s, len );
     target.fix();
     return target;
-  };
+  }
 
   VString &str_trim_right( VString &target, int len ) // trim `len' chars from the end (right)
   {
@@ -304,7 +304,7 @@
     str_trim_right( target.box->s, len );
     target.fix();
     return target;
-  };
+  }
 
   VString &str_cut_left( VString &target, const char* charlist ) // remove all chars `charlist' from the beginning (i.e. from the left)
   {
@@ -312,7 +312,7 @@
     str_cut_left( target.box->s, charlist );
     target.fix();
     return target;
-  };
+  }
 
   VString &str_cut_right( VString &target, const char* charlist ) // remove all chars `charlist' from the end (i.e. from the right)
   {
@@ -320,7 +320,7 @@
     str_cut_right( target.box->s, charlist );
     target.fix();
     return target;
-  };
+  }
 
   VString &str_cut( VString &target, const char* charlist ) // does `CutR(charlist);CutL(charlist);'
   {
@@ -329,12 +329,12 @@
     str_cut_right( target.box->s, charlist );
     target.fix();
     return target;
-  };
+  }
 
   VString &str_cut_spc( VString &target ) // does `Cut(" ");'
   {
     return str_cut( target, " " );
-  };
+  }
 
   VString &str_pad( VString &target, int len, char ch )
   {
@@ -342,7 +342,7 @@
     str_pad( target.box->s, len, ch );
     target.fixlen();
     return target;
-  };
+  }
 
   VString &str_comma( VString &target, char delim )
   {
@@ -351,7 +351,7 @@
     str_comma( target.box->s, delim );
     target.fix();
     return target;
-  };
+  }
 
   void str_set_ch( VString &target, int pos, const char ch ) // sets `ch' char at position `pos'
   {
@@ -359,14 +359,14 @@
     if ( pos < 0 || pos >= target.box->sl ) return;
     if (target.box->s[pos] != ch) target.detach();
     target.box->s[pos] = ch;
-  };
+  }
 
   char str_get_ch( VString &target, int pos ) // return char at position `pos'
   {
     if ( pos < 0 ) pos = target.box->sl + pos;
     if ( pos < 0 || pos >= target.box->sl ) return 0;
     return target.box->s[pos];
-  };
+  }
 
   void str_add_ch( VString &target, const char ch ) // adds `ch' at the end
   {
@@ -375,7 +375,7 @@
     target.box->s[sl] = ch;
     target.box->s[sl+1] = 0;
     target.fix();
-  };
+  }
 
   char* str_word( VString &target, const char* delimiters, char* result )
   {
@@ -383,7 +383,7 @@
     str_word( target.box->s, delimiters, result );
     target.fix();
     return result[0] ? result : NULL;
-  };
+  }
 
   char* str_rword( VString &target, const char* delimiters, char* result )
   {
@@ -391,7 +391,7 @@
     str_rword( target.box->s, delimiters, result );
     target.fix();
     return result;
-  };
+  }
 
   int sprintf( int init_size, VString &target, const char *format, ... )
   {
@@ -403,7 +403,7 @@
     target = tmp;
     delete [] tmp;
     return res;
-  };
+  }
 
   int sprintf( VString &target, const char *format, ... )
   {
@@ -415,42 +415,42 @@
     va_end( vlist );
     target = tmp;
     return res;
-  };
+  }
 
   VString& str_tr ( VString& target, const char *from, const char *to )
   {
     target.detach();
     str_tr( target.box->s, from, to );
     return target;
-  };
+  }
 
   VString& str_up ( VString& target )
   {
     target.detach();
     str_up( target.box->s );
     return target;
-  };
+  }
 
   VString& str_low( VString& target )
   {
     target.detach();
     str_low( target.box->s );
     return target;
-  };
+  }
 
   VString& str_flip_case( VString& target )
   {
     target.detach();
     str_flip_case( target.box->s );
     return target;
-  };
+  }
 
   VString& str_reverse( VString& target )
   {
     target.detach();
     str_reverse( target.box->s );
     return target;
-  };
+  }
 
   VString &str_squeeze( VString &target, const char* sq_chars ) // squeeze repeating chars to one only
   {
@@ -524,7 +524,7 @@
       {
       if ( strncmp( target + z, s, sls ) == 0 ) return z;
       z--;
-      };
+      }
     return -1;
   }
 
@@ -592,7 +592,7 @@
       {
       pos = sl + pos;
       if ( pos < 0 ) pos = 0;
-      };
+      }
     if ( pos < 0 || pos >= sl ) return target;
     if ( len == -1 ) len = sl - pos;
     if ( len < 1 ) return target;
@@ -617,7 +617,7 @@
   {
     if ( (size_t)len < strlen(target) ) target[len] = 0;
     return target;
-  };
+  }
 
   char* str_sright( char* target, int len ) // SelfRight -- just as 'Right' but works on `this'
   {
@@ -628,7 +628,7 @@
       target[len] = 0;
       }
     return target;
-  };
+  }
 
   char* str_trim_left( char* target, int len ) // trims `len' chars from the beginning (left)
   {
@@ -657,7 +657,7 @@
       pos = sl + pos;
     if ( pos < 0 || pos >= sl ) return;
     target[pos] = ch;
-  };
+  }
 
   char str_get_ch( char* target, int pos ) // return char at position `pos'
   {
@@ -666,14 +666,14 @@
       pos = sl + pos;
     if ( pos < 0 || pos >= sl ) return 0;
     return target[pos];
-  };
+  }
 
   void str_add_ch( char* target, const char ch ) // adds `ch' at the end
   {
     int sl = strlen( target );
     target[sl] = ch;
     target[sl+1] = 0;
-  };
+  }
 
 
 
@@ -713,7 +713,7 @@
     if (z == 0) return target;
     strcpy( target, target + z );
     return target;
-  };
+  }
 
   char* str_cut_right( char* target, const char* charlist ) // remove all chars `charlist' from the end (i.e. from the right)
   {
@@ -722,21 +722,21 @@
     while ((strchr(charlist, target[z]) != NULL) && (z > 0)) z--;
     target[z+1] = 0;
     return target;
-  };
+  }
 
   char* str_cut( char* target, const char* charlist ) // does `CutR(charlist);CutL(charlist);'
   {
     str_cut_left( target, charlist );
     str_cut_right( target, charlist );
     return target;
-  };
+  }
 
   char* str_cut_spc( char* target ) // does `Cut(" ");'
   {
     str_cut_left( target, " " );
     str_cut_right( target, " " );
     return target;
-  };
+  }
 
   // expand align in a field, filled w. `ch', if len > 0 then right, else left
   char* str_pad( char* target, int len, char ch )
@@ -928,7 +928,7 @@
     int sl = strlen( tmp );
     free( tmp );
     return ( dc == sl );
-  };
+  }
 
   int str_is_double( const char* target ) // check if VString is correct double (w/o `e' format :( )
   {
@@ -960,7 +960,7 @@
       *new_box->_data[i] = *_data[i];
       }
     return new_box;
-  };
+  }
 
   void VArrayBox::resize( int new_size )
   {
@@ -995,7 +995,7 @@
       }
     _size = new_size;
     _data = new_data;
-  };
+  }
 
 /***************************************************************************
 **
@@ -1116,7 +1116,7 @@
   {
     tr->keys_and_values( this, this );
     return box->_count;
-  };
+  }
 
   int VArray::merge( VArray *arr )
   {
@@ -1124,7 +1124,7 @@
     for( int z = 0; z < cnt; z++ )
       push( arr->get( z ) );
     return box->_count;
-  };
+  }
 
   int VArray::fload( const char* fname )
   {
@@ -1134,7 +1134,7 @@
     int r = fload( f );
     fclose(f);
     return r;
-  };
+  }
 
   int VArray::fsave( const char* fname )
   {
@@ -1143,7 +1143,7 @@
     int r = fsave( f );
     fclose(f);
     return r;
-  };
+  }
 
   int VArray::fload( FILE* f )
   {
@@ -1159,7 +1159,7 @@
       str = "";
       }
     return 0;
-  };
+  }
 
   int VArray::fsave( FILE* f )
   {
@@ -1170,7 +1170,7 @@
       if ( fwrite( "\n", 1, 1, f ) != 1 ) return 2;
       }
     return 0;
-  };
+  }
 
   void VArray::sort( int rev, int (*q_strcmp)(const char *, const char *) )
   {
@@ -1178,7 +1178,7 @@
       q_sort( 0, count() - 1, q_strcmp ? q_strcmp : strcmp );
     if ( rev ) // FIXME: not optimal...
       reverse();
-  };
+  }
 
   void VArray::q_sort( int lo, int hi, int (*q_strcmp)(const char *, const char *) )
   {
@@ -1208,7 +1208,7 @@
 
     if ( lo < r ) q_sort( lo, r, q_strcmp );
     if ( l < hi ) q_sort( l, hi, q_strcmp );
-  };
+  }
 
   void VArray::reverse()
   {
@@ -1220,7 +1220,7 @@
       box->_data[z] = box->_data[box->_count-1-z];
       box->_data[box->_count-1-z] = t;
       }
-  };
+  }
 
   void VArray::shuffle() /* Fisher-Yates shuffle */
   {
@@ -1234,7 +1234,7 @@
       box->_data[j] = t;
       i--;
       }
-  };
+  }
 
   void VArray::print()
   {
@@ -1255,7 +1255,7 @@
         l = sl;
       }
     return l;
-  };
+  }
 
   int VArray::min_len()
   {
@@ -1269,7 +1269,7 @@
         l = sl;
       }
     return l;
-  };
+  }
 
 /***************************************************************************
 **
@@ -1351,7 +1351,7 @@
           return; // not found
         }
       }
-  };
+  }
 
   VTrieNode* VTrieNode::find_node( const char* key, int create )
   {
@@ -1387,7 +1387,7 @@
       else
         return NULL; // not found
       }
-  };
+  }
 
   VTrieNode *VTrieNode::clone()
   {
@@ -1397,7 +1397,7 @@
     if ( down ) tmp->down = down->clone();
     if ( data ) tmp->data = new VString( *data );
     return tmp;
-  };
+  }
 
   void VTrieNode::print()
   {
@@ -1409,7 +1409,7 @@
     printf( "data = %s\n", data ? data->data() : "(null)" );
     if (next) next->print();
     if (down) down->print();
-  };
+  }
 
 /***************************************************************************
 **
@@ -1423,7 +1423,7 @@
     delete new_box->root;
     new_box->root = root->clone();
     return new_box;
-  };
+  }
 
 /***************************************************************************
 **
@@ -1440,13 +1440,13 @@
   {
     box = new VTrieBox();
     merge( (VArray*)&arr );
-  };
+  }
 
   VTrie::VTrie( const VTrie& tr )
   {
     box = tr.box;
     box->ref();
-  };
+  }
 
 
   VTrie::~VTrie()
@@ -1474,7 +1474,7 @@
     if ( node->down ) trace_node( node->down, keys, vals );
     str_sleft( temp_key, kl );
     if ( node->next ) trace_node( node->next, keys, vals );
-  };
+  }
 
   void VTrie::set( const char* key, const char* value )
   {
@@ -1495,14 +1495,14 @@
       return node->data->data();
     else
       return NULL;
-  };
+  }
 
   void VTrie::del( const char* key )
   {
     if ( !key || !key[0] ) return;
     detach();
     box->root->del_node( key );
-  };
+  }
 
   int VTrie::exists( const char* key ) // return != 0 if key exist (with data)
   {
@@ -1516,21 +1516,21 @@
   void VTrie::keys_and_values( VArray *keys, VArray *values )
   {
     trace_node( box->root, keys, values );
-  };
+  }
 
   VArray VTrie::keys()
   {
     VArray arr;
     keys_and_values( &arr, NULL );
     return arr;
-  };
+  }
 
   VArray VTrie::values()
   {
     VArray arr;
     keys_and_values( NULL, &arr );
     return arr;
-  };
+  }
 
   void VTrie::reverse()
   {
@@ -1555,7 +1555,7 @@
       {
       set( ka.get( z ), va.get( z ) );
       }
-  };
+  }
 
   void VTrie::merge( VArray *arr )
   {
@@ -1565,7 +1565,7 @@
       set( arr->get( z ), arr->get( z + 1 ) );
       z += 2;
       }
-  };
+  }
 
   int VTrie::fload( const char* fname )
   {
@@ -1574,7 +1574,7 @@
     int r = fload( f );
     fclose(f);
     return r;
-  };
+  }
 
   int VTrie::fsave( const char* fname )
   {
@@ -1583,7 +1583,7 @@
     int r = fsave( f );
     fclose(f);
     return r;
-  };
+  }
 
   int VTrie::fload( FILE* f )
   {
@@ -1592,14 +1592,14 @@
     if ( r == 0 )
       merge( &arr );
     return r;
-  };
+  }
 
   int VTrie::fsave( FILE* f )
   {
     VArray arr;
     arr.merge( this );
     return arr.fsave( f );
-  };
+  }
 
   void VTrie::print()
   {
@@ -1628,7 +1628,7 @@
     str_del( dest, pos, sl - width + 3 );
     str_ins( dest, pos, "..." );
     return dest;
-  };
+  }
 
 /****************************************************************************
 **
@@ -1666,7 +1666,7 @@ VString str_file_ext( const char *ps )
     if ( !(z == 0 || (z > 0 && ps[z-1] == '/')) ) // `.name' has no extension!
       ext = ps + z + 1;
   return ext;
-};
+}
 
 VString str_file_name( const char *ps )
 {
@@ -1683,7 +1683,7 @@ VString str_file_name( const char *ps )
   if ( z > 0 && name[z] == '.') // `.name' has no extension!
     str_sleft( name, z );
   return name;
-};
+}
 
 VString str_file_name_ext( const char *ps )
 {
@@ -1695,7 +1695,7 @@ VString str_file_name_ext( const char *ps )
   while ( z >= 0 && ps[z] != '/' ) z--;
   name = ps + z + 1;
   return name;
-};
+}
 
 VString str_file_path( const char *ps )
 {
@@ -1708,7 +1708,7 @@ VString str_file_path( const char *ps )
   name = ps;
   str_sleft( name, z+1 );
   return name;
-};
+}
 
 
 VString str_reduce_path( const char* path ) // removes ".."s

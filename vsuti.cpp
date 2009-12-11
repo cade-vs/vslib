@@ -16,7 +16,7 @@
 
 /* adler32.c -- compute the Adler-32 checksum of a data stream
  * Copyright (C) 1995-1996 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #define BASE 65521L /* largest prime smaller than 65536 */
@@ -62,14 +62,14 @@ unsigned long adler32(unsigned long adler, const char *buf, unsigned int len)
 adler32_t mem_adler32( const void* buff, int size )
 {
   return adler32( adler32( 0, NULL, 0 ), (const char *)buff, size );
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
 adler32_t str_adler32( const char *s )
 {
   return mem_adler32( s, strlen(s) );
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
@@ -95,7 +95,7 @@ adler32_t file_adler32( FILE *f, long buffsize  )
   free( buff );
 
   return adler;
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
@@ -106,7 +106,7 @@ adler32_t file_adler32( const char *fname, long buffsize  )
   adler32_t adler = file_adler32( f, buffsize );
   fclose(f);
   return adler;
-};
+}
 
 /*###########################################################################*/
 /* FILE functions */
@@ -116,7 +116,7 @@ off_t file_size( const char *fname )
   struct stat st;
   if (stat( fname, &st )) return -1;
   return st.st_size;
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
@@ -131,21 +131,21 @@ off_t file_size( FILE *f )
   if (fseeko( f, opos, SEEK_SET )) res++;
   if (res) return -1;
   return size;
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
 int file_load( FILE *f, void *buff, int size )
 {
   return ( fread( buff, 1, size, f ) != (size_t)size);
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
 int file_save( FILE *f, void *buff, int size )
 {
   return (fwrite( buff, 1, size, f ) != (size_t)size);
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
@@ -156,7 +156,7 @@ int file_load( const char* fname, void *buff, int size )
   int res = file_load( f, buff, size );
   fclose( f );
   return res;
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
@@ -167,7 +167,7 @@ int file_save( const char* fname, void *buff, int size )
   int res = file_save( f, buff, size );
   fclose( f );
   return res;
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
@@ -182,7 +182,7 @@ int file_load_crc32( const char* fname, void *buff, int size )
   fclose(f);
   res += ( crc != mem_crc32( buff, size ) );
   return res;
-};
+}
 
 /*---------------------------------------------------------------------------*/
 
@@ -196,7 +196,7 @@ int file_save_crc32( const char* fname, void *buff, int size )
   res += ( fwrite( &crc, 1, sizeof(crc), f ) != sizeof(crc) );
   fclose(f);
   return res;
-};
+}
 
 
 int file_is_link( const char* fname )
@@ -273,7 +273,7 @@ VString tilde_expand( const char* a_path )
   VString path = a_path;
   return path;
 #endif //_TARGET_UNIX_
-};
+}
 
 /*****************************************************************************
 **
@@ -361,7 +361,7 @@ struct ___DIR {
   struct ffblk ff;
   struct dirent de;
   int need_fake_dot_dotdot; /* 0=no, 1=.., 2=. */
-};
+}
 
 /* Convert file date and time to time_t value suitable for
    struct stat fields.  */
@@ -566,7 +566,7 @@ VString get_rc_directory( const char* dir_prefix )
     }
   make_path( rc_dir );
   return rc_dir;
-};
+}
 
 /*****************************************************************************
 **

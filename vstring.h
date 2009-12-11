@@ -329,8 +329,8 @@ public:
 **
 ****************************************************************************/
 
-  inline int str_len( const char* ps ) { return strlen( ps ); };
-  inline char* str_set( char* target, const char* ps ) { target[0] = 0; if (ps) strcpy( target, ps ); strcpy( target, ps ); return target; };
+  inline int str_len( const char* ps ) { return strlen( ps ); }
+  inline char* str_set( char* target, const char* ps ) { target[0] = 0; if (ps) strcpy( target, ps ); strcpy( target, ps ); return target; }
 
   char* str_mul( char* target, int n ); // multiplies the VString n times, i.e. `1'*5 = `11111'
 
@@ -664,8 +664,8 @@ class VTrie
 ****************************************************************************/
 
 /* str_chop() removes last char from a VString (perl-like) */
-inline char* str_chop( char* target ) { return str_trim_right( target, 1 ); };
-inline VString& str_chop( VString& target ) { return str_trim_right( target, 1 ); };
+inline char* str_chop( char* target ) { return str_trim_right( target, 1 ); }
+inline VString& str_chop( VString& target ) { return str_trim_right( target, 1 ); }
 
 /* reduces VString to the given width using dots:
    `this is long line' -> `this...ine'

@@ -52,7 +52,7 @@ const unsigned long crc_32_tab[256] = {
 crc32_t update_crc32( const unsigned char octet, const crc32_t crc )
 {
   return (crc_32_tab[(unsigned char)((unsigned char)crc ^ octet)] ^ ((crc >> 8) & 0x00FFFFFFl));
-};
+}
 
 crc32_t mem_crc32( const void* buff, int size )
 {
@@ -60,12 +60,12 @@ crc32_t mem_crc32( const void* buff, int size )
   int z;
   for ( z = 0; z < size; z++ ) crc = update_crc32( ((unsigned char*)buff)[z], crc );
   return ~crc;
-};
+}
 
 crc32_t str_crc32( const char *s )
 {
   return mem_crc32( s, strlen(s) );
-};
+}
 
 crc32_t file_crc32( FILE *f, long buffsize ) /* return CRC32NULL for error */
 {
@@ -90,7 +90,7 @@ crc32_t file_crc32( FILE *f, long buffsize ) /* return CRC32NULL for error */
   free( buff );
 
   return ~crc;
-};
+}
 
 crc32_t file_crc32( const char *fname, long buffsize  ) // return `0xffffffff' for error
 {
@@ -99,7 +99,7 @@ crc32_t file_crc32( const char *fname, long buffsize  ) // return `0xffffffff' f
   crc32_t crc = file_crc32( f, buffsize );
   fclose(f);
   return crc;
-};
+}
 
 /*###########################################################################*/
 

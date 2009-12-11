@@ -175,7 +175,7 @@ void FLCluster::dump()
     size = 0;
     bsize = p_bsize;
     RETURN(Realloc( p_size ));
-  };
+  }
 
   void BaseCluster::done()
   {
@@ -185,7 +185,7 @@ void FLCluster::dump()
     bsize = 0;
     if (data) ::free(data);
     data = NULL;
-  };
+  }
 
   void BaseCluster::del( int pn )
   {
@@ -193,21 +193,21 @@ void FLCluster::dump()
     if (pn < cnt - 1)
       memmove( data + ( pn )*es, data + ( pn + 1 )*es, ( cnt - pn )*es );
     cnt--;
-  };
+  }
 
   void BaseCluster::delall()
   {
     int z = cnt;
     while(z)
       del((z--) - 1);
-  };
+  }
 
   void BaseCluster::free( int pn )
   {
     ASSERT( pn >= 0 && pn < cnt );
     destroy_element( (void*)(data + (pn)*es) );
     del( pn );
-  };
+  }
 
   void BaseCluster::freeall()
   {
@@ -236,11 +236,11 @@ void FLCluster::dump()
 ** DATA cluster
 **
 ****************************************************************************/
-    
+
   int DCluster::add( void* pe )
   {
     RETURN(ins( cnt, pe ));
-  };
+  }
 
   int DCluster::ins( int pn, void* pe )
   {
@@ -252,19 +252,19 @@ void FLCluster::dump()
     memcpy( data + (pn*es), pe, es );
     cnt++;
     RETURN(CE_OK);
-  };
+  }
 
   void DCluster::put( int pn, void* pe )
   {
     ASSERT( pn >= 0 && pn < cnt );
     memcpy( data + pn*es, pe, es );
-  };
+  }
 
   void DCluster::get( int pn, void* pe )
   {
     ASSERT( pn >= 0 && pn < cnt );
     memcpy( pe, data + pn*es, es );
-  };
+  }
 
 /****************************************************************************
 **
@@ -275,7 +275,7 @@ void FLCluster::dump()
     int PCluster::add( void* pe )
     {
       RETURN(ins( cnt, pe ));
-    };
+    }
 
     int PCluster::ins( int pn, void* pe )
     {
@@ -287,103 +287,103 @@ void FLCluster::dump()
      ((void**)data)[pn] = pe;
       cnt++;
       RETURN(CE_OK);
-    };
+    }
 
     void PCluster::put( int pn, void* pe )
     {
       ASSERT( pn >= 0 && pn < cnt );
      ((void**)data)[pn] = pe;
-    };
+    }
 
     void* PCluster::get( int pn )
     {
       ASSERT( pn >= 0 && pn < cnt );
       return ((void**)data)[pn];
-    };
+    }
 
 /****************************************************************************
 **
 ** BIT-SET cluster
 **
 ****************************************************************************/
-    
-    BSet::BSet() 
-      { 
-      data = NULL; 
-      size = 0; 
-      datasize = 0; 
-      resize( 256 );
-      };
 
-    BSet::BSet( const char* str ) 
-      { 
-      data = NULL; 
-      size = 0; 
-      datasize = 0; 
+    BSet::BSet()
+      {
+      data = NULL;
+      size = 0;
+      datasize = 0;
+      resize( 256 );
+      }
+
+    BSet::BSet( const char* str )
+      {
+      data = NULL;
+      size = 0;
+      datasize = 0;
       resize( 256 );
       set_str1( str );
-      };
-      
-    BSet::~BSet() 
-      { 
+      }
+
+    BSet::~BSet()
+      {
       if( data ) free( data );
-      };
+      }
 
     void BSet::set1( int pn )
       {
         if ( pn < 0 ) return;
         if ( pn >= size ) resize( pn + 1 );
         data[pn / 8] |= 1 << (pn % 8);
-      };
+      }
 
     void BSet::set0( int pn )
       {
         if ( pn < 0 ) return;
         if ( pn >= size ) resize( pn + 1 );
         data[pn / 8] &= ~(1 << (pn % 8));
-      };
+      }
 
     int BSet::get( int pn )
       {
         if ( pn < 0 || pn >= size ) return 0;
         return (data[pn / 8] & (1 << (pn % 8))) != 0;
-      };
+      }
 
     void BSet::set_range1( int start, int end ) // set range
-    {
+      {
       char s = ( start < end ) ? start : end;
       char e = ( start > end ) ? start : end;
       for( int z = s; z <= e; z++) set1( z );
-    };
+      }
 
     void BSet::set_range0( int start, int end ) // set range
-    {
+      {
       char s = ( start < end ) ? start : end;
       char e = ( start > end ) ? start : end;
       for( int z = s; z <= e; z++) set0( z );
-    };
+      }
 
     void BSet::set_str1( const char* str )
-    {
+      {
       int sl = strlen( str );
       for( int z = 0; z < sl; z++ )
         set1( str[z] );
-    };
+      }
 
     void BSet::set_str0( const char* str )
-    {
+      {
       int sl = strlen( str );
       for( int z = 0; z < sl; z++ )
         set0( str[z] );
-    };
+      }
 
     int BSet::in( const char *str )
-    {
+      {
       int sl = strlen( str );
       for( int z = 0; z < sl; z++ )
         if ( !in( str[z] ) ) return 0;
-      return 1;  
-    };
+      return 1;
+      }
 
     int BSet::resize( int p_size )
       {
@@ -410,7 +410,7 @@ void FLCluster::dump()
       resize( b1.size );
       memcpy( data, b1.data, datasize );
       return *this;
-    };
+    }
 
     BSet& BSet::operator &= ( const BSet &b1 )
     {
@@ -418,7 +418,7 @@ void FLCluster::dump()
       for(z = 0; z < (datasize < b1.datasize ? datasize : b1.datasize ); z++)
         data[z] &= b1.data[z];
       return *this;
-    };
+    }
 
     BSet& BSet::operator |= ( const BSet &b1 )
     {
@@ -426,7 +426,7 @@ void FLCluster::dump()
       for(z = 0; z < (datasize < b1.datasize ? datasize : b1.datasize ); z++)
         data[z] |= b1.data[z];
       return *this;
-    };
+    }
 
     BSet BSet::operator ~ ()
     {
@@ -436,7 +436,7 @@ void FLCluster::dump()
       for(z = 0; z < b.datasize; z++)
         b.data[z] = ~b.data[z];
       return b;
-    };
+    }
 
     BSet operator & ( const BSet &b1, const BSet &b2 )
     {
@@ -444,7 +444,7 @@ void FLCluster::dump()
       b = b1;
       b &= b2;
       return b;
-    };
+    }
 
     BSet operator | ( const BSet &b1, const BSet &b2 )
     {
@@ -452,6 +452,6 @@ void FLCluster::dump()
       b = b1;
       b |= b2;
       return b;
-    };
-    
+    }
+
 // eof
