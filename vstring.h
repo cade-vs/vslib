@@ -400,8 +400,8 @@ public:
 **
 ****************************************************************************/
 
-  int str_find ( const char* target, const char  c, int startpos = 0 ); // returns first zero-based position of char, or -1 if not found
-  int str_rfind( const char* target, const char  c ); // returns last zero-based position of char, or -1 if not found
+  int str_find ( const char* target, int c, int startpos = 0 ); // returns first zero-based position of char, or -1 if not found
+  int str_rfind( const char* target, int c ); // returns last zero-based position of char, or -1 if not found
   int str_find ( const char* target, const char* s, int startpos = 0 ); // returns first zero-based position of VString, or -1 if not found
   int str_rfind( const char* target, const char* s ); // returns last zero-based position of VString, or -1 if not found
 

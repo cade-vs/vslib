@@ -485,20 +485,20 @@
     return target;
   }
 
-  int str_find( const char* target, const char  s, int startpos ) // returns first zero-based position of char, or -1 if not found
+  int str_find( const char* target, int c, int startpos ) // returns first zero-based position of char, or -1 if not found
   {
     if (startpos < 0) return -1;
     int sl = strlen( target );
     if (startpos >= sl) return -1;
-    char* pc = strchr( target + startpos, s );
+    const char* pc = strchr( target + startpos, c );
     if( ! pc )
       return -1;
     return  pc - target;
   }
 
-  int str_rfind( const char* target, const char c ) // returns last zero-based position of char, or -1 if not found
+  int str_rfind( const char* target, int c ) // returns last zero-based position of char, or -1 if not found
   {
-    char* pc = strrchr( target, c );
+    const char* pc = strrchr( target, c );
     if( ! pc )
       return -1;
     return  pc - target;
@@ -509,7 +509,7 @@
     if (startpos < 0) return -1;
     int sl = strlen( target );
     if (startpos >= sl) return -1;
-    char* pc = strstr( target + startpos, s );
+    const char* pc = strstr( target + startpos, s );
     if( ! pc )
       return -1;
     return  pc - target;
@@ -791,7 +791,7 @@
     int sl = strlen( target );
     for( z = 0; z < sl; z++ )
       {
-      char *pc = strchr( from, target[z] );
+      const char *pc = strchr( from, target[z] );
       if (pc) target[z] = to[ pc - from ];
       }
     return target;
