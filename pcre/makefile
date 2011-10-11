@@ -2,24 +2,24 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Wed Dec 29 04:47:29 2004 #########################
+### Created by makemake.pl on Tue Oct 11 20:00:28 2011 #########################
 
 
 ### GLOBAL TARGETS #############################################################
 
-default: all
+default: mm_update all
 
-re: rebuild
+re: mm_update rebuild
 
-li: link
+li: mm_update link
 
-all: libpcre.a 
+all: mm_update libpcre.a 
 
-clean: clean-libpcre.a 
+clean: mm_update clean-libpcre.a 
 
-rebuild: rebuild-libpcre.a 
+rebuild: mm_update rebuild-libpcre.a 
 
-link: link-libpcre.a 
+link: mm_update link-libpcre.a 
 
 ### GLOBAL (AND USER) DEFS #####################################################
 
@@ -49,20 +49,26 @@ TARGET_1   = libpcre.a
 ### SOURCES FOR TARGET 1: libpcre.a ############################################
 
 SRC_1= \
-     chartables.c \
-     get.c \
-     pcre.c \
-     pcreposix.c \
-     study.c \
+     pcre_chartables.c \
+     pcre_compile.c \
+     pcre_config.c \
+     pcre_exec.c \
+     pcre_globals.c \
+     pcre_newline.c \
+     pcre_tables.c \
+     pcre_try_flipped.c \
 
 #### OBJECTS FOR TARGET 1: libpcre.a ###########################################
 
 OBJ_1= \
-     .OBJ.libpcre.a/chartables.o \
-     .OBJ.libpcre.a/get.o \
-     .OBJ.libpcre.a/pcre.o \
-     .OBJ.libpcre.a/pcreposix.o \
-     .OBJ.libpcre.a/study.o \
+     .OBJ.libpcre.a/pcre_chartables.o \
+     .OBJ.libpcre.a/pcre_compile.o \
+     .OBJ.libpcre.a/pcre_config.o \
+     .OBJ.libpcre.a/pcre_exec.o \
+     .OBJ.libpcre.a/pcre_globals.o \
+     .OBJ.libpcre.a/pcre_newline.o \
+     .OBJ.libpcre.a/pcre_tables.o \
+     .OBJ.libpcre.a/pcre_try_flipped.o \
 
 ### TARGET DEFINITION FOR TARGET 1: libpcre.a ##################################
 
@@ -87,16 +93,26 @@ link-libpcre.a: .OBJ.libpcre.a $(OBJ_1)
 
 ### TARGET OBJECTS FOR TARGET 1: libpcre.a #####################################
 
-.OBJ.libpcre.a/chartables.o: chartables.c  chartables.c
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c chartables.c         -o .OBJ.libpcre.a/chartables.o
-.OBJ.libpcre.a/get.o: get.c  get.c internal.h config.h pcre.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c get.c                -o .OBJ.libpcre.a/get.o
-.OBJ.libpcre.a/pcre.o: pcre.c  pcre.c internal.h config.h pcre.h chartables.c
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre.c               -o .OBJ.libpcre.a/pcre.o
-.OBJ.libpcre.a/pcreposix.o: pcreposix.c  pcreposix.c internal.h config.h pcre.h pcreposix.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcreposix.c          -o .OBJ.libpcre.a/pcreposix.o
-.OBJ.libpcre.a/study.o: study.c  study.c internal.h config.h pcre.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c study.c              -o .OBJ.libpcre.a/study.o
+.OBJ.libpcre.a/pcre_chartables.o: pcre_chartables.c  pcre_chartables.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_chartables.c    -o .OBJ.libpcre.a/pcre_chartables.o
+.OBJ.libpcre.a/pcre_compile.o: pcre_compile.c  pcre_compile.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_compile.c       -o .OBJ.libpcre.a/pcre_compile.o
+.OBJ.libpcre.a/pcre_config.o: pcre_config.c  pcre_config.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_config.c        -o .OBJ.libpcre.a/pcre_config.o
+.OBJ.libpcre.a/pcre_exec.o: pcre_exec.c  pcre_exec.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_exec.c          -o .OBJ.libpcre.a/pcre_exec.o
+.OBJ.libpcre.a/pcre_globals.o: pcre_globals.c  pcre_globals.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_globals.c       -o .OBJ.libpcre.a/pcre_globals.o
+.OBJ.libpcre.a/pcre_newline.o: pcre_newline.c  pcre_newline.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_newline.c       -o .OBJ.libpcre.a/pcre_newline.o
+.OBJ.libpcre.a/pcre_tables.o: pcre_tables.c  pcre_tables.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_tables.c        -o .OBJ.libpcre.a/pcre_tables.o
+.OBJ.libpcre.a/pcre_try_flipped.o: pcre_try_flipped.c  pcre_try_flipped.c pcre_internal.h pcre.h ucp.h
+	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c pcre_try_flipped.c   -o .OBJ.libpcre.a/pcre_try_flipped.o
+
+
+mm_update:
+	
 
 
 ### MAKEMAKE ENDS HERE #########################################################

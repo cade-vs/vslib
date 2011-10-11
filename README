@@ -1,15 +1,43 @@
 
   VSLIB
 
-  $Id: README,v 1.7 2005/08/28 16:26:29 cade Exp $
+  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2011
 
-  (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2005
- 
   Some files are taken "as is" from other packages and/or software
   implementations. All the appropriate credits are intact. All files
   are under the GPL license. Some file names and/or function names
   are changed just to keep this library namespace clean where needed.
- 
+
+  To build VSLIB you need just:
+
+    make
+
+  To clean after build (including output library):
+
+    make clean
+
+  To clean and rebuild you need just:
+
+    make re
+
+  VSLIB uses PCRE regexp library:
+
+    http://www.pcre.org/
+
+  With permission VSLIB has own version of PCRE but it is not used by default.
+
+  Try to build with usual:
+
+    make
+
+  if system pcre installation doas not work or is missing you can use VSLIB's
+  version of PCRE:
+
+    make -C pcre re
+    make re CCDEF=-Ipcre LDDEF=-Lpcre
+
+  this will rebuild VSLIB using the included version of PCRE
+
   LICENSE AGREEMENT: GPL, SEE `COPYING' FOR THE FULL TEXT.
 
                               Vladi Belperchinov-Shabanski "Cade"
