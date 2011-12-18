@@ -528,7 +528,6 @@
     return -1;
   }
 
-
   char* str_del( char* target, int pos, int len ) // deletes `len' chars starting from `pos'
   {
     int sl = strlen( target );
@@ -583,9 +582,20 @@
     return target;
   }
 
+  int   str_overlap( const char* target, const char* source, int len ) // check if source and target overlap, returns 1 if they do
+  {
+    int sl = len;
+    if( sl == -1 )
+      sl = strlen( source );
+
+    if ( target      >= source && target      <= source + sl ) return 1;
+    if ( target + sl >= source && target + sl <= source + sl ) return 1;
+    return 0;
+  }
 
   char* str_copy( char* target, const char* source, int pos, int len ) // returns `len' chars from `pos'
   {
+    ASSERT( len >= -1 );
     target[0] = 0;
     int sl = str_len( source );
     if ( pos < 0 )
@@ -594,11 +604,14 @@
       if ( pos < 0 ) pos = 0;
       }
     if ( pos < 0 || pos >= sl ) return target;
-    if ( len == -1 ) len = sl - pos;
+    if ( len == -1 ) len = sl - pos; // untill the end of the string (default arg)
     if ( len < 1 ) return target;
     if ( pos + len >= sl ) len = sl - pos;
 
-    strncpy( target, source + pos, len );
+    if( str_overlap( target, source + pos, len ) )
+      memmove( target, source + pos, len );
+    else
+      memcpy( target, source + pos, len );
     target[ len ] = 0;
     return target;
   }
@@ -610,21 +623,21 @@
 
   char* str_right( char* target, const char* source, int len ) // returns `len' chars from the right
   {
-    return str_copy( target, source, strlen(source) - len, len );
+    return str_copy( target, source, strlen( source ) - len, len );
   }
 
   char* str_sleft( char* target, int len ) // SelfLeft -- just as 'Left' but works on `this'
   {
-    if ( (size_t)len < strlen(target) ) target[len] = 0;
+    if ( (size_t)len < strlen(target) && (size_t)len >= 0 ) target[len] = 0;
     return target;
   }
 
   char* str_sright( char* target, int len ) // SelfRight -- just as 'Right' but works on `this'
   {
     int sl = strlen( target );
-    if ( len < sl )
+    if( len < sl )
       {
-      strcpy( target, target + ( sl - len ));
+      memmove( target, target + ( sl - len ), len + 1 );
       target[len] = 0;
       }
     return target;
@@ -632,9 +645,15 @@
 
   char* str_trim_left( char* target, int len ) // trims `len' chars from the beginning (left)
   {
-    int s = strlen( target ) - len;
-    if ( s > 0 )
-      strcpy( target, target + len );
+    int sl = strlen( target );
+    int sr = sl - len; // result string length (without trailing 0)
+    if( sr >= sl )
+      return target;
+    if( sr > 0 )
+      {
+      memmove( target, target + len, sr + 1 );
+      target[sr] = 0;
+      }
     else
       target[0] = 0;
     return target;
@@ -642,9 +661,12 @@
 
   char* str_trim_right( char* target, int len ) // trim `len' chars from the end (right)
   {
-    int e = strlen(target) - len;
-    if ( e > 0 )
-      target[e] = 0;
+    int sl = strlen( target );
+    int sr = sl - len; // result string length (without trailing 0)
+    if( sr >= sl )
+      return target;
+    if( sr > 0 )
+      target[sr] = 0;
     else
       target[0] = 0;
     return target;

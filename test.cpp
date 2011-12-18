@@ -400,6 +400,13 @@ int main( int argc, char* argv[] )
 
   //printf( "expand=[%s]\n", (const char*)tilde_expand( "~root/" ) );
 
+  char t[256] = "123456----------------------------------------9999999999999";
+  str_trim_left( t, 3 );
+  printf( "%s\n", t );
+
+  str_copy( t+10, t,    0, 15 ); // check for overlapping borders, begin of str
+  str_copy( t+10, t+20, 0, 15 ); // check for overlapping borders, end   of str
+
   /**/
   test1();
   test2();
