@@ -416,12 +416,13 @@ int main( int argc, char* argv[] )
   str_cut_left( t, " " );
   ASSERT( strcmp( t, "opa" ) == 0 );
 
-  for( long z; z < 200000000; z++ )
-  {
-  strcpy( t, "this is good XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" );
+  strcpy( t, "this is good" );
   str_ins( t, 8, "not " );
-  }
-  ASSERT( strcmp( t, "this is not good XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" ) == 0 );
+  ASSERT( strcmp( t, "this is not good" ) == 0 );
+
+  str_del( t, 8, 4 );
+  ASSERT( strcmp( t, "this is good" ) == 0 );
+
 
   str_copy( t+10, t,    0, 15 ); // check for overlapping borders, begin of str
   str_copy( t+10, t+20, 0, 15 ); // check for overlapping borders, end   of str
