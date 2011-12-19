@@ -700,7 +700,7 @@
 
 
   // return first `word', i.e. from pos 0 to first found delimiter char
-  // after that deletes this `word' from the VString
+  // after that deletes this `word' from the target
   char* str_word( char* target, const char* delimiters, char* result )
   {
     int z = 0;
@@ -709,7 +709,7 @@
     strncpy(result, target, z);
     result[z] = 0;
     if ( z > 0 )
-      strncpy( target, target + z + 1, sl - z + 1 );
+      memmove( target, target + z + 1, sl - z ); // including trailing zero
     return result[0] ? result : NULL;
   }
 

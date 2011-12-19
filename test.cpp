@@ -389,20 +389,26 @@ void test8()
 
 int main( int argc, char* argv[] )
 {
-  //#define PAT "9892009"
 
-
-  #define PAT "MARINOW Uliqn P. prof. dtn kw.Wladaq ul.Witoshki granit 11"
-  //#define PAT "marinow uliqn p. prof. dtn kw.wladaq ul.witoshki granit 11"
-  printf( "found at pos %ld\n", file_pattern_search( PAT, strlen(PAT),
-                               "/tmp/ss.txt", "",
-                               mem_quick_search ) );
-
-  //printf( "expand=[%s]\n", (const char*)tilde_expand( "~root/" ) );
-
+  /*
   char t[256] = "123456----------------------------------------9999999999999";
+  char T[256] = "123456----------------------------------------9999999999999";
   str_trim_left( t, 3 );
   printf( "%s\n", t );
+
+  for( long z; z < 300000000; z++ )
+  {
+  //str_copy( t+10, t,    0, 15 ); // check for overlapping borders, begin of str
+  //str_copy( t+10, t+20, 0, 15 ); // check for overlapping borders, end   of str
+  //memmove( T, t, 222 );
+  //memcpy( T, t, 222 );
+  //str_copy( T, t, 0, 222 ); // check for overlapping borders, begin of str
+  }
+  /**/
+
+  char t[64] = "this is simple test\0002222";
+  char r[64] = "1111111111111111111";
+  str_word( t, " ", r );
 
   str_copy( t+10, t,    0, 15 ); // check for overlapping borders, begin of str
   str_copy( t+10, t+20, 0, 15 ); // check for overlapping borders, end   of str
