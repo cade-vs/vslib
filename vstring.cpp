@@ -547,15 +547,9 @@
     int sls = strlen( s );
     if ( sls < 1 ) return target;
 
-    int z = sl - pos;
-    target[pos + z + sls] = 0;
-    while(z)
-      {
-      target[pos + z + sls - 1] = target[pos + z - 1];
-      z--;
-      }
+    memmove( target + pos + sls, target + pos, sl - pos + 1 );
+    memmove( target + pos, s, sls );
 
-    for(z = 0; z < sls; z++) target[pos+z] = s[z];
     return target;
   }
 
@@ -729,11 +723,12 @@
 
   char* str_cut_left( char* target, const char* charlist ) // remove all chars `charlist' from the beginning (i.e. from the left)
   {
-    if (strlen(target) == 0) return target;
+    int sl = strlen(target);
+    if (sl == 0) return target;
     int z = 0;
     while ((strchr(charlist, target[z]) != NULL) && (target[z] != 0)) z++;
     if (z == 0) return target;
-    strcpy( target, target + z );
+    memmove( target, target + z, sl - z + 1 );
     return target;
   }
 
@@ -760,7 +755,8 @@
     return target;
   }
 
-  // expand align in a field, filled w. `ch', if len > 0 then right, else left
+  // expand string to width 'len' filling with char 'ch'
+  // if len > 0 target will be padded right, else left
   char* str_pad( char* target, int len, char ch )
   {
     int sl = strlen( target );

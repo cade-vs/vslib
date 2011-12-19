@@ -406,13 +406,27 @@ int main( int argc, char* argv[] )
   }
   /**/
 
-  char t[64] = "this is simple test\0002222";
-  char r[64] = "1111111111111111111";
+  char t[92] = "this is simple test";
+  char r[92] = "1111111111111111111";
   str_word( t, " ", r );
+  ASSERT( strcmp( t, "is simple test" ) == 0 );
+  ASSERT( strcmp( r, "this" ) == 0 );
+
+  strcpy( t, "   opa" );
+  str_cut_left( t, " " );
+  ASSERT( strcmp( t, "opa" ) == 0 );
+
+  for( long z; z < 200000000; z++ )
+  {
+  strcpy( t, "this is good XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" );
+  str_ins( t, 8, "not " );
+  }
+  ASSERT( strcmp( t, "this is not good XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" ) == 0 );
 
   str_copy( t+10, t,    0, 15 ); // check for overlapping borders, begin of str
   str_copy( t+10, t+20, 0, 15 ); // check for overlapping borders, end   of str
 
+  return 0;
   /**/
   test1();
   test2();
