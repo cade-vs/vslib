@@ -466,7 +466,7 @@
 **
 ****************************************************************************/
 
-  char* str_mul( char* target, int n ) // multiplies the VString n times, i.e. `1'*5 = `11111'
+  char* str_mul( char* target, int n ) // multiplies the string n times, i.e. `1'*5 = `11111'
   {
     if ( n < 0 ) return target;
     if ( n == 0 )
@@ -532,9 +532,9 @@
   {
     int sl = strlen( target );
     if ( pos > sl || pos < 0 ) return target;
-    int z = sl-pos-len;
+    int z = sl - pos - len;
     if ( pos + len < sl )
-      strncpy(target+pos, target+pos+len, z+1);
+      memmove( target + pos, target + pos + len, z + 1 );
     else
       target[pos] = 0;
     return target;
@@ -715,7 +715,7 @@
     int z = sl - 1;
     while ( strchr( delimiters, target[z] ) == NULL && z > 0 ) z--;
     if (z < 0) return NULL;
-    strcpy( result, target + z + 1);
+    memmove( result, target + z + 1, sl - z );
     target[z] = 0;
     return result;
   }
@@ -856,8 +856,8 @@
 
   char* str_squeeze( char* target, const char* sq_chars ) // squeeze repeating chars to one only
   {
-  if (!target) return NULL;
-  if (!sq_chars) return NULL;
+  if ( ! target   ) return NULL;
+  if ( ! sq_chars ) return NULL;
   int rc = -1;
   int pos = 0;
   while( target[pos] )
@@ -1761,8 +1761,12 @@ VString str_reduce_path( const char* path ) // removes ".."s
   {
     long P = 1;
     long C = 0;
+
     char tmp[255];
-    strcpy( tmp, s ); str_up( tmp ); str_cut_spc( tmp );
+    strcpy( tmp, s );
+    str_up( tmp );
+    str_cut_spc( tmp );
+
     int sl = strlen(tmp);
     for( int z=sl-1; z >= 0; z-- )
       {

@@ -239,6 +239,9 @@ public:
        { box->sl = strlen(box->s);
          box->resize_buf(box->sl);
          ASSERT( box->sl < box->size ); }
+  void fixbuf()
+       { box->resize_buf(box->sl);
+         ASSERT( box->sl < box->size ); }
 
   void   i( const int n );
   void   l( const long n );
