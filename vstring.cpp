@@ -120,8 +120,6 @@
   {
     char tmp[64];
     sprintf( tmp, "%.0f", d );
-    int z = strlen( tmp );
-    tmp[z] = 0;
     set( tmp );
   }
 
