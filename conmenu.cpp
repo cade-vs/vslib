@@ -4,8 +4,6 @@
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: conmenu.cpp,v 1.11 2008/01/18 18:40:46 cade Exp $
- *
  */
 
 #include <ctype.h>
@@ -128,8 +126,8 @@ int con_toggle_box( int x, int y, const char *title, ToggleEntry* toggles, ConMe
     if ( ch == KEY_HOME  ) scroll.home();
     if ( ch == KEY_END   ) scroll.end();
 
-    if ( ch < 0 || ch > 255 ) continue;
-    if ( ch == 27 ) return 0;
+    if ( ch == 27 || ch == 8 ||  ch == KEY_BACKSPACE ) return 0; // exit on ESC or BS
+    if ( ch < 0 || ch > 255 ) continue; //FIXME: unicode?
     if ( ch == 13 /* && strncmp("--", toggles[scroll.pos].name, 2) */ ) return 1;
     z = ( ch == ' ' ) ? scroll.pos() : str_find( hots, ch );
     if (z > -1 && strncmp("--", toggles[z].name, 2) )
@@ -232,12 +230,13 @@ int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConM
     if ( ch == KEY_HOME  ) scroll.home();
     if ( ch == KEY_END   ) scroll.end();
 
-    if ( ch < 0 || ch > 255 ) continue;
-    if ( ch == 27 )
+    if ( ch == 27 || ch == 8 ||  ch == KEY_BACKSPACE )
       {
+      // exit on ESC or BS
       menu_info->ac = 0;
       return -1;
       }
+    if ( ch < 0 || ch > 255 ) continue; //FIXME: unicode?
     if ( ch == 13 )
       {
       if (strncmp("--", va->get(scroll.pos()), 2) != 0) // ako e "--" e separator
@@ -303,6 +302,8 @@ int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu
     switch( (ch = con_getch()) )
       {
       case 27 : menu_info->ec = 27; return -1; break;
+      case  8 : menu_info->ec =  8; return -1; break;
+      case KEY_BACKSPACE : menu_info->ec =  KEY_BACKSPACE; return -1; break;
       case 13 : menu_info->ec = 13; return scroll.pos(); break;
       case KEY_UP    : scroll.up(); break;
       case KEY_DOWN  : scroll.down(); break;
