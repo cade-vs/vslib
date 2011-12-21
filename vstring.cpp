@@ -698,10 +698,13 @@
     int z = 0;
     int sl = strlen( target );
     while ((strchr(delimiters, target[z]) == NULL) && (target[z] != 0)) z++;
-    strncpy(result, target, z);
+    memmove(result, target, z);
     result[z] = 0;
     if ( z > 0 )
-      memmove( target, target + z + 1, sl - z ); // including trailing zero
+      if( z < sl )
+        memmove( target, target + z + 1, sl - z ); // including trailing zero
+      else
+        target[0] = 0;
     return result[0] ? result : NULL;
   }
 

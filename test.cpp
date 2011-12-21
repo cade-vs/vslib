@@ -434,6 +434,12 @@ int main( int argc, char* argv[] )
   str_copy( t+10, t,    0, 15 ); // check for overlapping borders, begin of str
   str_copy( t+10, t+20, 0, 15 ); // check for overlapping borders, end   of str
 
+  strcpy( t, "despicable me" );
+  str_word( t, " ", r );
+  ASSERT( strcmp( r, "despicable" ) == 0 );
+  str_word( t, " ", r );
+  ASSERT( strcmp( r, "me" ) == 0 );
+  ASSERT( t[0] == 0 );
 
 
   return 0;
