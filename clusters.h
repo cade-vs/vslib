@@ -1,10 +1,9 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
- *
- * $Id: clusters.h,v 1.5 2003/01/21 19:56:35 cade Exp $
  *
  */
 /*
@@ -43,7 +42,7 @@
 ** FREE-LIST cluster
 **
 ****************************************************************************/
-  
+
   class FLCluster
   {
     int32 es;      // element size
@@ -199,7 +198,7 @@ class TPCluster : public PCluster
     T* operator [] ( int pn ) { ASSERT( pn >= 0 && pn < cnt  ); return ((T**)data)[pn]; };
 
     protected:
-    virtual void destroy_element( void* pe ) 
+    virtual void destroy_element( void* pe )
       { delete ((T**)pe)[0]; };
   };
 
@@ -284,14 +283,14 @@ class BSet
 
     void set_range1( int start, int end );
     void set_range0( int start, int end );
-    
+
     void set_str1( const char* str );
     void set_str0( const char* str );
 
     int in( const char *str ); // return 1 if all str's chars are in the set
     int in( int pn )
         { if ( pn < 0 || pn >= size ) return 0; else return get( pn ); };
-    
+
     void reverse() { for(int z = 0; z < datasize; z++) data[z] = ~data[z]; };
     void set( int pn, int val ) { if ( val ) set1( pn ); else set0( pn ); };
     void set_all1() { if ( data ) memset( data, 0xff, datasize ); };

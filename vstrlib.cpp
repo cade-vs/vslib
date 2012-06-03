@@ -1,10 +1,9 @@
 /*
  *
  *  VSTRING Library supporting structures and functions
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *  Distributed under the GPL license, see end of this file for full text!
- *
- *  $Id: vstrlib.cpp,v 1.30 2008/01/18 18:40:46 cade Exp $
  *
  */
 
@@ -425,10 +424,10 @@ long file_string_search( const char *p, FILE *f, const char* opt )
     } else
   if( str_find( opt, 'h' ) > -1 )
     {
-  	char new_p[MAX_PATTERN+1];
-  	int pl = hex_string_to_pattern( p, new_p );
-  	if (pl > 0)
-  	  pos = file_pattern_search( new_p, pl, f, nocase ? "i" : "" );
+    char new_p[MAX_PATTERN+1];
+    int pl = hex_string_to_pattern( p, new_p );
+    if (pl > 0)
+      pos = file_pattern_search( new_p, pl, f, nocase ? "i" : "" );
     }
   else
     {
@@ -456,11 +455,11 @@ int mem_string_search( const char *p, const char* d, const char* opt )
     } else
   if( str_find( opt, 'h' ) > -1 )
     {
-  	char new_p[MAX_PATTERN+1];
-  	int pl = hex_string_to_pattern( p, new_p );
-  	if (pl > 0)
+    char new_p[MAX_PATTERN+1];
+    int pl = hex_string_to_pattern( p, new_p );
+    if (pl > 0)
       {
-  	  if ( nocase )
+      if ( nocase )
         pos = mem_quick_search_nc( new_p, pl, d, strlen(d) );
       else
         pos = mem_quick_search( new_p, pl, d, strlen(d) );

@@ -1,10 +1,9 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
- *
- * $Id: unicon.h,v 1.4 2003/01/21 19:56:35 cade Exp $
  *
  */
 
@@ -55,9 +54,9 @@
   #define cBROWN     6
   #define cYELLOW    6
   #define cLGRAY     7
-  
+
   /***** hi-colors/bright *******/
-  
+
   #define chBLACK    7
   #define cWHITE     7
   #define cDGRAY     8
@@ -107,7 +106,7 @@
 #ifdef KEY_ENTER
 #undef KEY_ENTER
 #endif
-#define KEY_ENTER	13
+#define KEY_ENTER 13
 
 /******* DJGPP/DOS *********************************************************/
 
@@ -321,9 +320,9 @@
 ** Functions
 **
 ****************************************************************************/
-  
+
   int con_init();  // should be called before any other con_xxx()
-  void con_done(); // should be called at the end of the console io actions 
+  void con_done(); // should be called at the end of the console io actions
 
   void con_suspend(); // suspends console (before system() for example)
   void con_restore(); // restores console after suspend
@@ -352,7 +351,7 @@
 
   void con_xy( int x, int y ); // move cursor to position x,y
 
-  int con_kbhit(); // return != 0 if key is waiting in "keyboard" buffer 
+  int con_kbhit(); // return != 0 if key is waiting in "keyboard" buffer
   int con_getch(); // get single char from the "keyboard"
   void con_beep(); // make a "beep" sound
 

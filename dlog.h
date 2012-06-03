@@ -1,13 +1,12 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
- * $Id: dlog.h,v 1.3 2003/01/21 19:56:35 cade Exp $
- *
  */
-      
+
 #ifndef _DLOG_H_
 #define _DLOG_H_
 

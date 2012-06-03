@@ -1,10 +1,9 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
- *
- * $Id: target.h,v 1.6 2004/12/29 02:44:21 cade Exp $
  *
  */
 
@@ -20,7 +19,7 @@
   #define _TARGET_GO32_
   #define _TARGET_DJGPP_
   #define _TARGET_DOS_
-  #define _TARGET_DESCRIPTION_	"DOS/DJGPP"
+  #define _TARGET_DESCRIPTION_  "DOS/DJGPP"
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif
@@ -29,7 +28,7 @@
   #if defined(__linux__) || defined(__Linux__) || defined(_TARGET_LINUX_)
   #define _TARGET_LINUX_
   #define _TARGET_UNIX_
-  #define _TARGET_DESCRIPTION_	"UNIX/LINUX"
+  #define _TARGET_DESCRIPTION_  "UNIX/LINUX"
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif
@@ -38,7 +37,7 @@
   #if defined(__NetBSD__) || defined(_TARGET_NETBSD_)
   #define _TARGET_NETBSD_
   #define _TARGET_UNIX_
-  #define _TARGET_DESCRIPTION_	"UNIX/NETBSD"
+  #define _TARGET_DESCRIPTION_  "UNIX/NETBSD"
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif
@@ -47,7 +46,7 @@
   #if defined(WIN32) || defined(_TARGET_WIN32_)
   #define _TARGET_WIN32_
   #define _TARGET_UNIX_
-  #define _TARGET_DESCRIPTION_	"DOS/WIN32" // sorry :)
+  #define _TARGET_DESCRIPTION_  "DOS/WIN32" // sorry :)
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif
@@ -56,7 +55,7 @@
   #if defined(MACOSX) || defined(__APPLE__)
   #define _TARGET_MACOSX_
   #define _TARGET_UNIX_
-  #define _TARGET_DESCRIPTION_	"UNIX/MACOSX"
+  #define _TARGET_DESCRIPTION_  "UNIX/MACOSX"
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif
@@ -65,7 +64,7 @@
   #if defined(__GNU__) || defined(_TARGET_GNU_)
   #define _TARGET_GNU_
   #define _TARGET_UNIX_
-  #define _TARGET_DESCRIPTION_	"GNU"
+  #define _TARGET_DESCRIPTION_  "GNU"
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif
@@ -73,13 +72,13 @@
 #ifdef _TARGET_UNKNOWN_
   #if ((defined(__unix__) || defined(unix)) && !defined(USG)) || defined(_TARGET_UNIX_)
   #define _TARGET_UNIX_
-  #define _TARGET_DESCRIPTION_	"UNIX"
+  #define _TARGET_DESCRIPTION_  "UNIX"
   #undef  _TARGET_UNKNOWN_
   #endif
 #endif
 
 #ifndef _TARGET_DESCRIPTION_
-  #define _TARGET_DESCRIPTION_	"UNKNOWN/UNKNOWN"
+  #define _TARGET_DESCRIPTION_  "UNKNOWN/UNKNOWN"
 #endif
 
 /****************************************** go error unless known :/ *******/

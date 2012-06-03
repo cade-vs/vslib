@@ -1,7 +1,8 @@
 /*
  *
  *  VSTRING Library supporting structures and functions
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
  *  VSTRLIB library provides string data structures which mimic Perl's.
@@ -10,8 +11,6 @@
  *  VArray -- array of VString elements
  *  VTrie -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
- *
- *  $Id: vstrlib.h,v 1.22 2008/01/18 18:40:46 cade Exp $
  *
  */
 
@@ -38,10 +37,10 @@
 #define VCHARSET_BLOCK_SIZE 32
 
 /* max pattern length for file_find_*() and ... */
-#define MAX_PATTERN		2048
+#define MAX_PATTERN   2048
 
 /* max file_grep() text line input length... :| */
-#define MAX_GREP_LINE		4096
+#define MAX_GREP_LINE   4096
 
 
 /****************************************************************************

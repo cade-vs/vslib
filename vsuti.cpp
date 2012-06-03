@@ -1,10 +1,9 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',LICENSE' OR COPYING' FILE FOR LICENSE AND OTHER DETAILS!
- *
- * $Id: vsuti.cpp,v 1.13 2006/08/05 20:15:19 cade Exp $
  *
  */
 
@@ -44,12 +43,12 @@ unsigned long adler32(unsigned long adler, const char *buf, unsigned int len)
         len -= k;
         while (k >= 16) {
             DO16(buf);
-	          buf += 16;
+            buf += 16;
             k -= 16;
         }
         if (k != 0) do {
             s1 += *buf++;
-	          s2 += s1;
+            s2 += s1;
         } while (--k);
         s1 %= BASE;
         s2 %= BASE;

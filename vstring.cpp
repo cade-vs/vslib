@@ -1,12 +1,11 @@
 /*
  *
  *  VSTRING Library
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
  *  SEE vstring.h FOR FURTHER INFORMATION AND CREDITS
- *
- *  $Id: vstring.cpp,v 1.26 2008/01/18 18:40:46 cade Exp $
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
@@ -1741,13 +1740,13 @@ VString str_reduce_path( const char* path ) // removes ".."s
     int j = i - 1;
     while( j >= 0 && dest[j] != '/' ) j--;
     ASSERT( j >= -1 );
-	if ( j < 0 )
-	  {
-	  if ( dest[0] == '/' )
-	    str_del( dest, 0, 3 );
-	  }
-	else
-	  str_del( dest, j+1, i+3-j );
+  if ( j < 0 )
+    {
+    if ( dest[0] == '/' )
+      str_del( dest, 0, 3 );
+    }
+  else
+    str_del( dest, j+1, i+3-j );
     }
   return dest;
 }

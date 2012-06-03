@@ -1,7 +1,8 @@
 /*
  *
  *  VSTRING Library
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
  *  VSTRING library provides vast set of string manipulation features
@@ -18,9 +19,8 @@
  *  free to contact me at:
  *
  *  Vladi Belperchinov-Shabanski "Cade"
- *  <cade@biscom.net>
- *  <cade@datamax.bg>
- *  http://soul.datamax.bg/~cade
+ *  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
+ *  http://cade.datamax.bg/
  *
  *  NOTE: vstring was initially (and loosely) based on
  *        `cxstring' lib (c) Ivo Baylov 1998.
@@ -28,8 +28,6 @@
  *
  *  This file (vstring.h and vstring.cpp) implements plain string-only
  *  manipulations. For further functionality see vstrlib.h and vstrlib.cpp.
- *
- *  $Id: vstring.h,v 1.24 2008/01/18 18:40:46 cade Exp $
  *
  */
 

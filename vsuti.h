@@ -1,10 +1,9 @@
 /*
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1998-2003
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
- *
- * $Id: vsuti.h,v 1.9 2004/04/04 23:18:20 cade Exp $
  *
  */
 
@@ -40,7 +39,7 @@
 
 /* max filename length */
 #ifndef MAX_PATH
-#define MAX_PATH	512
+#define MAX_PATH  512
 #endif
 
 /*###########################################################################*/
@@ -105,7 +104,7 @@ VString tilde_expand( const char* a_path );
 **
 *****************************************************************************/
 
-int make_path( const char *s, 
+int make_path( const char *s,
         long mode = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
 
 /*****************************************************************************
@@ -131,7 +130,7 @@ int dosstat( DIR *dir, struct stat *stbuf );
 
 /*****************************************************************************
 **
-** ftwalk() traverses directory tree and calls func() for every entri it 
+** ftwalk() traverses directory tree and calls func() for every entri it
 ** encounters. It supports DOS FAT filesystems under DJGPP.
 **
 *****************************************************************************/
@@ -147,7 +146,7 @@ int ftwalk( const char *origin_dir,
                          const char* fname,     /* full file name */
                          const struct stat* st, /* stat struture or NULL */
                          int is_link,           /* 1 if link */
-                         int flag ), 
+                         int flag ),
             int level = -1 );
 
 /*****************************************************************************
