@@ -2,24 +2,24 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Wed Dec 29 04:46:52 2004 #########################
+### Created by makemake.pl on Fri Oct 11 01:42:00 2013 #########################
 
 
 ### GLOBAL TARGETS #############################################################
 
-default: all
+default: mm_update all
 
-re: rebuild
+re: mm_update rebuild
 
-li: link
+li: mm_update link
 
-all: modules libvslib.a libvscon.a test 
+all: mm_update libvslib.a libvscon.a test 
 
-clean: clean-modules clean-libvslib.a clean-libvscon.a clean-test 
+clean: mm_update clean-libvslib.a clean-libvscon.a clean-test 
 
-rebuild: rebuild-modules rebuild-libvslib.a rebuild-libvscon.a rebuild-test 
+rebuild: mm_update rebuild-libvslib.a rebuild-libvscon.a rebuild-test 
 
-link: link-modules link-libvslib.a link-libvscon.a link-test 
+link: mm_update link-libvslib.a link-libvscon.a link-test 
 
 ### GLOBAL (AND USER) DEFS #####################################################
 
@@ -179,7 +179,7 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 .OBJ.libvscon.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c conmenu.cpp          -o .OBJ.libvscon.a/conmenu.o
 .OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
-  scroll.h
+ scroll.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
 .OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
@@ -232,19 +232,8 @@ link-test: .OBJ.test $(OBJ_3)
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp             -o .OBJ.test/test.o
 
 
-### MODULES ####################################################################
-
-modules:
-	true
-
-clean-modules:
-	true
-
-rebuild-modules:
-	true
-
-link-modules:
-	true
+mm_update:
+	
 
 
 ### MAKEMAKE ENDS HERE #########################################################
