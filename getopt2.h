@@ -1,5 +1,4 @@
 /*
- *  $Header: /cvs/vslib/getopt2.h,v 1.3 2007/12/16 13:53:36 cade Exp $
  *
  *  Copyright (C) 1994 Arno Schaefer
  *
@@ -8,6 +7,7 @@
  *  PO: ANSI C
  *
  */
+
 /* see getopt.h for changes */
 #ifndef GETOPT_H
 #define GETOPT_H

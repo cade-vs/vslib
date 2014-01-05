@@ -1,5 +1,4 @@
 /*
- *  $Header: /cvs/vslib/getopt2.cpp,v 1.2 2001/10/28 13:53:02 cade Exp $
  *
  *  Copyright (C) 1994 Arno Schaefer
  *

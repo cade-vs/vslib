@@ -1,7 +1,7 @@
 /*
  *
  *  VSTRING Library
- *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2014
  *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *  Distributed under the GPL license, you should receive copy of GPL!
  *

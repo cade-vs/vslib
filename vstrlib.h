@@ -1,15 +1,15 @@
 /*
  *
  *  VSTRING Library supporting structures and functions
- *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2012
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2014
  *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
  *  VSTRLIB library provides string data structures which mimic Perl's.
  *  There are several classes:
  *
- *  VArray -- array of VString elements
- *  VTrie -- associative array (hash) of VString elements
+ *  VArray  -- array of VString elements
+ *  VTrie   -- associative array (hash) of VString elements
  *  VRegexp -- regular expression helper class
  *
  */
