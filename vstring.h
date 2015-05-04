@@ -1,7 +1,7 @@
 /*
  *
  *  VSTRING Library
- *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2014
+ *  (c) Vladi Belperchinov-Shabanski "Cade" 1996-2015
  *  http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *  Distributed under the GPL license, you should receive copy of GPL!
  *
@@ -287,7 +287,7 @@ public:
   friend VString& str_cut_spc  ( VString& target ); // does `Cut(" ");'
 
   friend VString& str_pad  ( VString& target, int len, char ch = ' ' );
-  friend VString& str_comma( VString& target, char delim = ',' );
+  friend VString& str_comma( VString& target, char delim = '\'' );
 
   // next 3 functions are safe! so if you get/set out f the VString range!
   friend void str_set_ch( VString& target, int pos, const char ch ); // sets `ch' char at position `pos'
@@ -373,7 +373,7 @@ public:
 
   // insert `commas' for 1000's delimiter or use another delimiter
   // VString supposed to be a integer or real w/o `e' format
-  char* str_comma( char* target, char delim = ',' );
+  char* str_comma( char* target, char delim = '\'' );
 
   // translate chars from `from' to `to'
   // length of `from' MUST be equal to length of `to'

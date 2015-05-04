@@ -25,8 +25,8 @@ link: mm_update link-libvslib.a link-libvscon.a link-test
 
 
 AR = ar rv
-CC = g++
-LD = g++
+CC = clang++
+LD = clang++
 MKDIR = mkdir -p
 RANLIB = ranlib
 RMDIR = rm -rf
@@ -36,8 +36,8 @@ SRC = *.c *.cpp *.cc *.cxx
 
 ### TARGET 1: libvslib.a #######################################################
 
-CC_1       = g++
-LD_1       = g++
+CC_1       = clang++
+LD_1       = clang++
 AR_1       = ar rv
 RANLIB_1   = ranlib
 CCFLAGS_1  = -I. -O2 $(CCDEF) 

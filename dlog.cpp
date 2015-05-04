@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2014
+ * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2015
  * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
@@ -67,9 +67,9 @@ void TLogFile::log( const char *fname, int line, const char *msg )
   while(tmp[strlen(tmp) - 1] == '\n') tmp[strlen(tmp) - 1] = 0;
   strcat( tmp, "\n" );
 
-  fprintf( f, tmp );
-  if (on_stdout) fprintf( stdout, tmp );
-  if (on_stderr) fprintf( stderr, tmp );
+  fprintf( f, "%s", tmp );
+  if (on_stdout) fprintf( stdout, "%s", tmp );
+  if (on_stderr) fprintf( stderr, "%s", tmp );
 
   if (!keep_open && f != NULL) close();
 

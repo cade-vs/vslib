@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2014
+ * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2015
  * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
@@ -87,13 +87,13 @@
     #endif
   }
 
-  int con_max_x() { return ti.screenwidth; }
+  int con_max_x() { return ti.screenwidth;  }
   int con_max_y() { return ti.screenheight; }
   int con_x() { return wherex(); }
   int con_y() { return wherey(); }
   void con_fg( int color ) { __fg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); }
   void con_bg( int color ) { __bg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); }
-  void con_ta( int attr ) { __ta = attr; __bg = COLORBG(attr); __fg = COLORFG(attr); textattr( attr ); }
+  void con_ta( int attr  ) { __ta = attr;  __bg = COLORBG(attr); __fg = COLORFG(attr); textattr( attr ); }
   void con_xy( int x, int y ) { gotoxy( x, y ); }
 
   void con_chide() { _setcursortype( _NOCURSOR ); }
