@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Fri Oct 11 01:42:00 2013 #########################
+### Created by makemake.pl on Sun Aug 23 07:16:13 2015 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -25,8 +25,8 @@ link: mm_update link-libvslib.a link-libvscon.a link-test
 
 
 AR = ar rv
-CC = clang++
-LD = clang++
+CC = g++
+LD = g++
 MKDIR = mkdir -p
 RANLIB = ranlib
 RMDIR = rm -rf
@@ -40,8 +40,8 @@ CC_1       = g++
 LD_1       = g++
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I. -O2 $(CCDEF) 
-LDFLAGS_1  = $(LDDEF)
+CCFLAGS_1  = -I. -O2 $(CCDEF)  
+LDFLAGS_1  = $(LDDEF) 
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
 TARGET_1   = libvslib.a
@@ -81,7 +81,7 @@ OBJ_1= \
 .OBJ.libvslib.a: 
 	$(MKDIR) .OBJ.libvslib.a
 
-libvslib.a:  .OBJ.libvslib.a $(OBJ_1)
+libvslib.a:   .OBJ.libvslib.a $(OBJ_1)
 	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
 	$(RANLIB_1) $(TARGET_1)
 
@@ -129,8 +129,8 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF) 
-LDFLAGS_2  = $(LDDEF)
+CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF)  
+LDFLAGS_2  = $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
 TARGET_2   = libvscon.a
@@ -158,7 +158,7 @@ OBJ_2= \
 .OBJ.libvscon.a: 
 	$(MKDIR) .OBJ.libvscon.a
 
-libvscon.a:  .OBJ.libvscon.a $(OBJ_2)
+libvscon.a:   .OBJ.libvscon.a $(OBJ_2)
 	$(AR_2) $(ARFLAGS_2) $(TARGET_2) $(OBJ_2)
 	$(RANLIB_2) $(TARGET_2)
 
@@ -183,9 +183,9 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 .OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
  scroll.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
-.OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h yascreen.h
+.OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
-.OBJ.libvscon.a/yascreen.o: yascreen.c  yascreen.h
+.OBJ.libvscon.a/yascreen.o: yascreen.c  yascreen.c
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c yascreen.c           -o .OBJ.libvscon.a/yascreen.o
 
 
@@ -195,8 +195,8 @@ CC_3       = g++
 LD_3       = g++
 AR_3       = ar rv
 RANLIB_3   = ranlib
-CCFLAGS_3  = -g -I. $(CCDEF) -DTEST 
-LDFLAGS_3  = -g -L. -lvslib -lvscon -lpcre -lncurses $(LDDEF)
+CCFLAGS_3  = -g -I. $(CCDEF) -DTEST  
+LDFLAGS_3  = -g -L. -lvslib -lvscon -lpcre -lncurses $(LDDEF) 
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
 TARGET_3   = test
@@ -204,7 +204,7 @@ TARGET_3   = test
 ### SOURCES FOR TARGET 3: test #################################################
 
 SRC_3= \
-     test.cpp \
+     t/test.cpp \
 
 #### OBJECTS FOR TARGET 3: test ################################################
 
@@ -216,7 +216,7 @@ OBJ_3= \
 .OBJ.test: 
 	$(MKDIR) .OBJ.test
 
-test: libvslib.a .OBJ.test $(OBJ_3)
+test: libvslib.a  .OBJ.test $(OBJ_3)
 	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
 
 clean-test: 
@@ -232,8 +232,8 @@ link-test: .OBJ.test $(OBJ_3)
 
 ### TARGET OBJECTS FOR TARGET 3: test ##########################################
 
-.OBJ.test/test.o: test.cpp  test.cpp vstrlib.h vstring.h
-	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c test.cpp             -o .OBJ.test/test.o
+.OBJ.test/test.o: t/test.cpp 
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c t/test.cpp           -o .OBJ.test/test.o
 
 
 mm_update:
