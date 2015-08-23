@@ -381,16 +381,23 @@
 
   int con_init()
   {
-	ya_s=yascreen_init(0,0);
-	if (!ya_s)
-		ya_s=yascreen_init(80,25);
+    if (ya_s)
+    {
+      if (-1==yascreen_resize(ya_s,0,0))
+        yascreen_resize(ya_s,80,25);
+      yascreen_term_set(ya_s,YAS_NOBUFF|YAS_NOSIGN|YAS_NOECHO);
+      yascreen_altbuf(ya_s,1);
+      yascreen_cursor(ya_s,0);
+      con_ta(7);
+      yascreen_redraw(ya_s);
+      return 0;
+    }
+    ya_s=yascreen_init(0,0);
+    if (!ya_s)
+      ya_s=yascreen_init(80,25);
     yascreen_term_set(ya_s,YAS_NOBUFF|YAS_NOSIGN|YAS_NOECHO);
-	yascreen_altbuf(ya_s,1);
-	yascreen_cursor(ya_s,0);
-    /* Color initialization */
-    //for ( __bg=0; __bg<8; __bg++ )
-    //   for ( __fg=0; __fg<8; __fg++ )
-    //      init_pair( CON_PAIR(__fg,__bg), colortab(__fg), colortab(__bg));
+    yascreen_altbuf(ya_s,1);
+    yascreen_cursor(ya_s,0);
     con_ta(7);
     return 0;
   }
@@ -401,17 +408,19 @@
     yascreen_altbuf(ya_s,0);
     yascreen_cursor(ya_s,1);
     yascreen_term_restore(ya_s);
-    yascreen_free(ya_s);
+    //yascreen_free(ya_s);
+    //ya_s=NULL;
   }
 
   void con_suspend()
   {
-    yascreen_altbuf(ya_s,0);
+    con_done();
   }
 
   void con_restore()
   {
-    yascreen_altbuf(ya_s,1);
+    con_init();
+    yascreen_update(ya_s);
   }
 
   void con_ta( int attr )
@@ -419,7 +428,7 @@
     __ta = attr;
     __fg = COLORFG(attr);
     __bg = COLORBG(attr);
-	__attr = YAS_FGCOLOR(colortab(__fg%8))|YAS_BGCOLOR(colortab(__bg%8))|((__bg>7)*YAS_ITALIC)|((__fg>7)*YAS_BOLD);
+    __attr = YAS_FGCOLOR(colortab(__fg%8))|YAS_BGCOLOR(colortab(__bg%8))|((__bg>7)*YAS_ITALIC)|((__fg>7)*YAS_BOLD);
   }
 
   void con_ce( int attr )
@@ -461,8 +470,8 @@
   void con_puts( const char *s )
   {
     yascreen_putsxy(ya_s,__x,__y,__attr,s);
-	__x=yascreen_x(ya_s);
-	__y=yascreen_y(ya_s);
+    __x=yascreen_x(ya_s);
+    __y=yascreen_y(ya_s);
     yascreen_update(ya_s);
   }
 
@@ -501,8 +510,8 @@
 
   void con_xy( int x, int y )
   {
-	__x=x-1;
-	__y=y-1;
+    __x=x-1;
+    __y=y-1;
     yascreen_cursor_xy(ya_s,__x,__y);
   }
 
@@ -531,15 +540,9 @@
     int i;
     i=yascreen_getch(ya_s);
     if (i==-1) i=0;
-    /*if (i == 27)
-      if (con_kbhit())
-        i = KEY_PREFIX + wgetch(conio_scr);*/
-	// TODO: properly translate key code
-    //#ifndef _NO_ALT_ESCAPE_SAME_
-    //if (i == KEY_PREFIX + 27) i = 27;
-    //#endif
     return(i);
   }
+
   void con_beep()
   {
     printf( "\007" );
