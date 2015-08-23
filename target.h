@@ -81,6 +81,14 @@
   #define _TARGET_DESCRIPTION_  "UNKNOWN/UNKNOWN"
 #endif
 
+#ifdef _TARGET_UNIX_
+  #ifdef USE_YASCREEN
+    #define _TARGET_HAVE_YASCREEN
+  #else
+    #define _TARGET_HAVE_CURSES
+  #endif
+#endif
+
 /****************************************** go error unless known :/ *******/
 
 #ifdef _TARGET_UNKNOWN_

@@ -323,7 +323,8 @@ int make_path( const char *s, long mode )
 char* expand_path( const char *src, char *dest )
 {
   #ifdef _TARGET_UNIX_
-  realpath( src, dest);
+  if (!realpath( src, dest))
+    strcpy( dest, src );
   #endif
 
   #ifdef _TARGET_GO32_

@@ -17,12 +17,18 @@
 #endif
 
 #ifdef _TARGET_UNIX_
-  #if defined(_TARGET_LINUX_)
-  #include <curses.h>
-  #elif defined(_TARGET_NETBSD_)
-  #include <ncurses.h>
+  #ifdef _TARGET_HAVE_YASCREEN
+    #define inline
+    #include <yascreen.h>
+    #undef inline
   #else
-  #include <curses.h>
+    #if defined(_TARGET_LINUX_)
+    #include <curses.h>
+    #elif defined(_TARGET_NETBSD_)
+    #include <ncurses.h>
+    #else
+    #include <curses.h>
+    #endif
   #endif
   #include <stdlib.h>
 #endif
@@ -213,11 +219,9 @@
   #define KEY_ALT_N     (KEY_PREFIX + 49)
   #define KEY_ALT_M     (KEY_PREFIX + 50)
 
-#endif
-
 /******* UNIX/NCURSES ******************************************************/
 
-#ifdef _TARGET_UNIX_
+#elif defined(_TARGET_HAVE_CURSES)
 
   #define KEY_F1        (KEY_F(0) + 1)
   #define KEY_F2        (KEY_F(0) + 2)
@@ -305,6 +309,98 @@
   #define KEY_ALT_B     (KEY_PREFIX + 'b')
   #define KEY_ALT_N     (KEY_PREFIX + 'n')
   #define KEY_ALT_M     (KEY_PREFIX + 'm')
+
+#elif defined(_TARGET_HAVE_YASCREEN)
+
+  #define KEY_IC YAS_K_INS
+  #define KEY_BACKSPACE YAS_K_BSP
+  #define KEY_LEFT YAS_K_LEFT
+  #define KEY_RIGHT YAS_K_RIGHT
+  #define KEY_UP YAS_K_UP
+  #define KEY_DOWN YAS_K_DOWN
+  #define KEY_HOME YAS_K_HOME
+  #define KEY_END YAS_K_END
+  #define KEY_DC YAS_K_DEL
+  #define KEY_PPAGE YAS_K_PGUP
+  #define KEY_NPAGE YAS_K_PGDN
+
+  #define KEY_ALT_A YAS_K_ALT('a')
+  #define KEY_ALT_B YAS_K_ALT('b')
+  #define KEY_ALT_C YAS_K_ALT('c')
+  #define KEY_ALT_D YAS_K_ALT('d')
+  #define KEY_ALT_E YAS_K_ALT('e')
+  #define KEY_ALT_F YAS_K_ALT('f')
+  #define KEY_ALT_G YAS_K_ALT('g')
+  #define KEY_ALT_H YAS_K_ALT('h')
+  #define KEY_ALT_I YAS_K_ALT('i')
+  #define KEY_ALT_J YAS_K_ALT('j')
+  #define KEY_ALT_K YAS_K_ALT('k')
+  #define KEY_ALT_L YAS_K_ALT('l')
+  #define KEY_ALT_M YAS_K_ALT('m')
+  #define KEY_ALT_N YAS_K_ALT('n')
+  #define KEY_ALT_R YAS_K_ALT('r')
+  #define KEY_ALT_S YAS_K_ALT('s')
+  #define KEY_ALT_X YAS_K_ALT('x')
+  #define KEY_ALT_Z YAS_K_ALT('z')
+  #define KEY_ALT_0 YAS_K_ALT('0')
+  #define KEY_ALT_1 YAS_K_ALT('1')
+  #define KEY_ALT_2 YAS_K_ALT('2')
+  #define KEY_ALT_3 YAS_K_ALT('3')
+  #define KEY_ALT_4 YAS_K_ALT('4')
+  #define KEY_ALT_5 YAS_K_ALT('5')
+  #define KEY_ALT_6 YAS_K_ALT('6')
+  #define KEY_ALT_7 YAS_K_ALT('7')
+  #define KEY_ALT_8 YAS_K_ALT('8')
+  #define KEY_ALT_9 YAS_K_ALT('9')
+  #define KEY_ALT_EQ YAS_K_ALT('=')
+
+  #define KEY_F1 YAS_K_F1
+  #define KEY_F2 YAS_K_F2
+  #define KEY_F3 YAS_K_F3
+  #define KEY_F4 YAS_K_F4
+  #define KEY_F5 YAS_K_F5
+  #define KEY_F6 YAS_K_F6
+  #define KEY_F7 YAS_K_F7
+  #define KEY_F8 YAS_K_F8
+  #define KEY_F9 YAS_K_F9
+  #define KEY_F10 YAS_K_F10
+
+  #define KEY_SH_F1 YAS_K_S_F1
+  #define KEY_SH_F2 YAS_K_S_F2
+  #define KEY_SH_F3 YAS_K_S_F3
+  #define KEY_SH_F4 YAS_K_S_F4
+  #define KEY_SH_F5 YAS_K_S_F5
+  #define KEY_SH_F6 YAS_K_S_F6
+  #define KEY_SH_F7 YAS_K_S_F7
+  #define KEY_SH_F8 YAS_K_S_F8
+  #define KEY_SH_F9 YAS_K_S_F9
+  #define KEY_SH_F10 YAS_K_S_F10
+
+  #define KEY_CTRL_F1   (-1)
+  #define KEY_CTRL_F2   (-1)
+  #define KEY_CTRL_F3   (-1)
+  #define KEY_CTRL_F4   (-1)
+  #define KEY_CTRL_F5   (-1)
+  #define KEY_CTRL_F6   (-1)
+  #define KEY_CTRL_F7   (-1)
+  #define KEY_CTRL_F8   (-1)
+  #define KEY_CTRL_F9   (-1)
+  #define KEY_CTRL_F10  (-1)
+
+  #define KEY_ALT_F1    (-1)
+  #define KEY_ALT_F2    (-1)
+  #define KEY_ALT_F3    (-1)
+  #define KEY_ALT_F4    (-1)
+  #define KEY_ALT_F5    (-1)
+  #define KEY_ALT_F6    (-1)
+  #define KEY_ALT_F7    (-1)
+  #define KEY_ALT_F8    (-1)
+  #define KEY_ALT_F9    (-1)
+  #define KEY_ALT_F10   (-1)
+
+#else
+
+  #error One of ncurses/yascreen libraries is required under UNIX
 
 #endif
 

@@ -142,6 +142,7 @@ SRC_2= \
      conmenu.cpp \
      form_in.cpp \
      unicon.cpp \
+     yascreen.c \
 
 #### OBJECTS FOR TARGET 2: libvscon.a ##########################################
 
@@ -150,6 +151,7 @@ OBJ_2= \
      .OBJ.libvscon.a/conmenu.o \
      .OBJ.libvscon.a/form_in.o \
      .OBJ.libvscon.a/unicon.o \
+     .OBJ.libvscon.a/yascreen.o \
 
 ### TARGET DEFINITION FOR TARGET 2: libvscon.a #################################
 
@@ -181,8 +183,10 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 .OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
  scroll.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
-.OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
+.OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h yascreen.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
+.OBJ.libvscon.a/yascreen.o: yascreen.c  yascreen.h
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c yascreen.c           -o .OBJ.libvscon.a/yascreen.o
 
 
 ### TARGET 3: test #############################################################

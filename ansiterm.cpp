@@ -130,14 +130,14 @@
 
   void AnsiPuts( const char *s )
   {
-    printf( s );
+    puts( s );
   }
 
   void AnsiPuts( const char *s, int attr )
   {
     int _ta = a_ta;
     AnsiTA( attr );
-    printf( s );
+    puts( s );
     AnsiTA( _ta  );
   }
 

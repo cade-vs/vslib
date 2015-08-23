@@ -67,9 +67,9 @@ void TLogFile::log( const char *fname, int line, const char *msg )
   while(tmp[strlen(tmp) - 1] == '\n') tmp[strlen(tmp) - 1] = 0;
   strcat( tmp, "\n" );
 
-  fprintf( f, "%s", tmp );
-  if (on_stdout) fprintf( stdout, "%s", tmp );
-  if (on_stderr) fprintf( stderr, "%s", tmp );
+  fputs( tmp, f );
+  if (on_stdout) fputs( tmp, stdout );
+  if (on_stderr) fputs( tmp, stderr );
 
   if (!keep_open && f != NULL) close();
 
