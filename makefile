@@ -23,6 +23,19 @@ link: mm_update link-libvslib.a link-libvscon.a link-test
 
 ### GLOBAL (AND USER) DEFS #####################################################
 
+ifdef USE_YASCREEN
+CCDEF:=$(CCDEF) -DUSE_YASCREEN
+LDDEF:=$(LDDEF) -lyascreen
+else
+CCDEF:=$(CCDEF) -I/usr/include/ncurses
+LDDEF:=$(LDDEF) -lncurses
+endif
+
+ifdef USE_FLTO
+CCDEF:=$(CCDEF) -flto
+LDDEF:=$(LDDEF) -flto
+endif
+
 
 AR = ar rv
 CC = g++
@@ -129,7 +142,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF)  
+CCFLAGS_2  = -I. -O2 $(CCDEF)  
 LDFLAGS_2  = $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -142,7 +155,6 @@ SRC_2= \
      conmenu.cpp \
      form_in.cpp \
      unicon.cpp \
-     yascreen.c \
 
 #### OBJECTS FOR TARGET 2: libvscon.a ##########################################
 
@@ -151,7 +163,6 @@ OBJ_2= \
      .OBJ.libvscon.a/conmenu.o \
      .OBJ.libvscon.a/form_in.o \
      .OBJ.libvscon.a/unicon.o \
-     .OBJ.libvscon.a/yascreen.o \
 
 ### TARGET DEFINITION FOR TARGET 2: libvscon.a #################################
 
@@ -185,8 +196,6 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
 .OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
-.OBJ.libvscon.a/yascreen.o: yascreen.c  yascreen.c
-	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c yascreen.c           -o .OBJ.libvscon.a/yascreen.o
 
 
 ### TARGET 3: test #############################################################
@@ -196,7 +205,7 @@ LD_3       = g++
 AR_3       = ar rv
 RANLIB_3   = ranlib
 CCFLAGS_3  = -g -I. $(CCDEF) -DTEST  
-LDFLAGS_3  = -g -L. -lvslib -lvscon -lpcre -lncurses $(LDDEF) 
+LDFLAGS_3  = -g -L. -lvslib -lvscon -lpcre $(LDDEF) 
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
 TARGET_3   = test
