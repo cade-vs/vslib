@@ -142,7 +142,10 @@ SRC_2= \
      conmenu.cpp \
      form_in.cpp \
      unicon.cpp \
-     yascreen.c \
+
+ifdef USE_YASCREEN
+SRC_2+=yascreen.c
+endif
 
 #### OBJECTS FOR TARGET 2: libvscon.a ##########################################
 
@@ -151,7 +154,10 @@ OBJ_2= \
      .OBJ.libvscon.a/conmenu.o \
      .OBJ.libvscon.a/form_in.o \
      .OBJ.libvscon.a/unicon.o \
-     .OBJ.libvscon.a/yascreen.o \
+
+ifdef USE_YASCREEN
+OBJ_2+=.OBJ.libvscon.a/yascreen.o
+endif
 
 ### TARGET DEFINITION FOR TARGET 2: libvscon.a #################################
 
@@ -183,10 +189,15 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 .OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
  scroll.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
+ifdef USE_YASCREEN
 .OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h yascreen.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
 .OBJ.libvscon.a/yascreen.o: yascreen.c  yascreen.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c yascreen.c           -o .OBJ.libvscon.a/yascreen.o
+else
+.OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
+	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
+endif
 
 
 ### TARGET 3: test #############################################################
