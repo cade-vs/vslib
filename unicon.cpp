@@ -124,7 +124,7 @@
 **
 ****************************************************************************/
 
-#ifdef _TARGET_UNIX_
+#ifdef _TARGET_HAVE_CURSES
 
 /****************************************************************************
 ** This part is loosely based on `linconio':
@@ -361,7 +361,201 @@
     fflush( stdout );
   }
 
-#endif /* _TARGET_UNIX_ */
+#endif /* _TARGET_HAVE_CURSES */
+
+// target have yascreen curses replacement
+#ifdef _TARGET_HAVE_YASCREEN
+#include <stdio.h>
+
+  int __fg;
+  int __bg;
+  int __ta;
+  int __x=0;
+  int __y=0;
+  uint32_t __attr=0;
+  yascreen *ya_s=NULL;
+
+  /* Some internals... */
+  int colortab(int a) /* convert UNIX/Curses Color code to DOS-standard */
+  {
+     switch(a) {
+        case cBLACK   : return YAS_BLACK;
+        case cBLUE    : return YAS_BLUE;
+        case cGREEN   : return YAS_GREEN;
+        case cCYAN    : return YAS_CYAN;
+        case cRED     : return YAS_RED;
+        case cMAGENTA : return YAS_MAGENTA;
+        case cYELLOW  : return YAS_YELLOW;
+        case cWHITE   : return YAS_WHITE;
+     }
+     return 0;
+  }
+
+  int con_init()
+  {
+	ya_s=yascreen_init(0,0);
+    yascreen_term_set(ya_s,YAS_NOBUFF|YAS_NOSIGN|YAS_NOECHO);
+	yascreen_altbuf(ya_s,1);
+	yascreen_cursor(ya_s,0);
+    /* Color initialization */
+    //for ( __bg=0; __bg<8; __bg++ )
+    //   for ( __fg=0; __fg<8; __fg++ )
+    //      init_pair( CON_PAIR(__fg,__bg), colortab(__fg), colortab(__bg));
+    con_ta(7);
+    return 0;
+  }
+
+  void con_done()
+  {
+    yascreen_clear(ya_s);
+    yascreen_altbuf(ya_s,0);
+    yascreen_cursor(ya_s,1);
+    yascreen_term_restore(ya_s);
+    yascreen_free(ya_s);
+  }
+
+  void con_suspend()
+  {
+    yascreen_altbuf(ya_s,0);
+  }
+
+  void con_restore()
+  {
+    yascreen_altbuf(ya_s,1);
+  }
+
+  void con_ta( int attr )
+  {
+    __ta = attr;
+    __fg = COLORFG(attr);
+    __bg = COLORBG(attr);
+	__attr = YAS_FGCOLOR(colortab(__fg%8))|YAS_BGCOLOR(colortab(__bg%8))|((__bg>7)*YAS_ITALIC)|((__fg>7)*YAS_BOLD);
+  }
+
+  void con_ce( int attr )
+  {
+    if (attr != -1)
+      {
+      int ta = __ta;
+      con_ta( attr );
+      yascreen_printxy(ya_s,__x,__y,__attr,"%*s",yascreen_sx(ya_s),"");
+      yascreen_update(ya_s);
+      con_ta( ta );
+      }
+    else
+      {
+      yascreen_printxy(ya_s,__x,__y,__attr,"%*s",yascreen_sx(ya_s),"");
+      yascreen_update(ya_s);
+      }
+  }
+
+  void con_cs( int attr )
+  {
+    if (attr != -1)
+      {
+      int ta = __ta;
+      con_ta( attr );
+      yascreen_clear_mem(ya_s,__attr);
+      __x=__y=0;
+      yascreen_update(ya_s);
+      con_ta( ta );
+      }
+    else
+      {
+      yascreen_clear_mem(ya_s,__attr);
+      __x=__y=0;
+      yascreen_update(ya_s);
+      }
+  }
+
+  void con_puts( const char *s )
+  {
+    yascreen_putsxy(ya_s,__x,__y,__attr,s);
+	__x=yascreen_x(ya_s);
+	__y=yascreen_y(ya_s);
+    yascreen_update(ya_s);
+  }
+
+  int con_max_x()
+  {
+    return yascreen_sx(ya_s);
+  }
+
+  int con_max_y()
+  {
+    return yascreen_sy(ya_s);
+  }
+
+  int con_x()
+  {
+    return(__x+1);
+  }
+
+  int con_y()
+  {
+    return(__y+1);
+  }
+
+  void con_fg( int color )
+  {
+    __fg=color;
+    con_ta( CONCOLOR( __fg, __bg ) );
+  }
+
+  void con_bg( int color )
+  {
+    __bg=color;
+    con_ta( CONCOLOR( __fg, __bg ) );
+  }
+
+
+  void con_xy( int x, int y )
+  {
+	__x=x-1;
+	__y=y-1;
+    yascreen_cursor_xy(ya_s,__x,__y);
+  }
+
+  void con_chide()
+  {
+    con_xy( 1, 1 );
+    yascreen_cursor(ya_s,0);
+  }
+
+  void con_cshow()
+  {
+    yascreen_cursor(ya_s,1);
+  }
+
+  int con_kbhit()
+  {
+    int i=yascreen_peekch(ya_s);
+
+    if (i==-1)
+      i=0;
+    return(i);
+  }
+
+  int con_getch()
+  {
+    int i;
+    i=yascreen_getch(ya_s);
+    if (i==-1) i=0;
+    /*if (i == 27)
+      if (con_kbhit())
+        i = KEY_PREFIX + wgetch(conio_scr);*/
+	// TODO: properly translate key code
+    //#ifndef _NO_ALT_ESCAPE_SAME_
+    //if (i == KEY_PREFIX + 27) i = 27;
+    //#endif
+    return(i);
+  }
+  void con_beep()
+  {
+    printf( "\007" );
+    fflush( stdout );
+  }
+#endif
 
 /****************************************************************************
 **
