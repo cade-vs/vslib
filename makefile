@@ -31,6 +31,11 @@ CCDEF:=$(CCDEF) -I/usr/include/ncurses
 LDDEF:=$(LDDEF) -lncurses
 endif
 
+ifdef USE_FLTO
+CCDEF:=$(CCDEF) -flto
+LDDEF:=$(LDDEF) -flto
+endif
+
 
 AR = ar rv
 CC = g++
