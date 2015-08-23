@@ -266,34 +266,22 @@
 
   int con_max_x()
   {
-    int x;
-    int y;
-    getmaxyx(conio_scr,y,x);
-    return(x);
+    return getmaxx(conio_scr);
   }
 
   int con_max_y()
   {
-    int x;
-    int y;
-    getmaxyx(conio_scr,y,x);
-    return(y);
+    return getmaxy(conio_scr);
   }
 
   int con_x()
   {
-    int y;
-    int x;
-    getyx(conio_scr,y,x);
-    return(x+1);
+    return getcurx(conio_scr)+1;
   }
 
   int con_y()
   {
-    int y;
-    int x;
-    getyx(conio_scr,y,x);
-    return(y+1);
+    return getcury(conio_scr)+1;
   }
 
   void con_fg( int color )
