@@ -382,6 +382,8 @@
   int con_init()
   {
 	ya_s=yascreen_init(0,0);
+	if (!ya_s)
+		ya_s=yascreen_init(80,25);
     yascreen_term_set(ya_s,YAS_NOBUFF|YAS_NOSIGN|YAS_NOECHO);
 	yascreen_altbuf(ya_s,1);
 	yascreen_cursor(ya_s,0);
