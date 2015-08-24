@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Sun Aug 23 07:16:13 2015 #########################
+### Created by makemake.pl on Mon Aug 24 03:00:18 2015 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -13,13 +13,13 @@ re: mm_update rebuild
 
 li: mm_update link
 
-all: mm_update libvslib.a libvscon.a test 
+all: mm_update modules libvslib.a libvscon.a libvscony.a test 
 
-clean: mm_update clean-libvslib.a clean-libvscon.a clean-test 
+clean: mm_update clean-modules clean-libvslib.a clean-libvscon.a clean-libvscony.a clean-test 
 
-rebuild: mm_update rebuild-libvslib.a rebuild-libvscon.a rebuild-test 
+rebuild: mm_update rebuild-modules rebuild-libvslib.a rebuild-libvscon.a rebuild-libvscony.a rebuild-test 
 
-link: mm_update link-libvslib.a link-libvscon.a link-test 
+link: mm_update link-modules link-libvslib.a link-libvscon.a link-libvscony.a link-test 
 
 ### GLOBAL (AND USER) DEFS #####################################################
 
@@ -28,6 +28,7 @@ AR = ar rv
 CC = g++
 LD = g++
 MKDIR = mkdir -p
+MODULES = pcre yas
 RANLIB = ranlib
 RMDIR = rm -rf
 RMFILE = rm -f
@@ -142,7 +143,6 @@ SRC_2= \
      conmenu.cpp \
      form_in.cpp \
      unicon.cpp \
-     yascreen.c \
 
 #### OBJECTS FOR TARGET 2: libvscon.a ##########################################
 
@@ -151,7 +151,6 @@ OBJ_2= \
      .OBJ.libvscon.a/conmenu.o \
      .OBJ.libvscon.a/form_in.o \
      .OBJ.libvscon.a/unicon.o \
-     .OBJ.libvscon.a/yascreen.o \
 
 ### TARGET DEFINITION FOR TARGET 2: libvscon.a #################################
 
@@ -185,55 +184,134 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
 .OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
-.OBJ.libvscon.a/yascreen.o: yascreen.c  yascreen.c
-	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c yascreen.c           -o .OBJ.libvscon.a/yascreen.o
 
 
-### TARGET 3: test #############################################################
+### TARGET 3: libvscony.a ######################################################
 
 CC_3       = g++
 LD_3       = g++
 AR_3       = ar rv
 RANLIB_3   = ranlib
-CCFLAGS_3  = -g -I. $(CCDEF) -DTEST  
-LDFLAGS_3  = -g -L. -lvslib -lvscon -lpcre -lncurses $(LDDEF) 
+CCFLAGS_3  = -I. -I../yascreen -DUSE_YASCREEN -O2 $(CCDEF)  
+LDFLAGS_3  = $(LDDEF) 
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
-TARGET_3   = test
+TARGET_3   = libvscony.a
 
-### SOURCES FOR TARGET 3: test #################################################
+### SOURCES FOR TARGET 3: libvscony.a ##########################################
 
 SRC_3= \
-     t/test.cpp \
+     ansiterm.cpp \
+     conmenu.cpp \
+     form_in.cpp \
+     unicon.cpp \
 
-#### OBJECTS FOR TARGET 3: test ################################################
+#### OBJECTS FOR TARGET 3: libvscony.a #########################################
 
 OBJ_3= \
+     .OBJ.libvscony.a/ansiterm.o \
+     .OBJ.libvscony.a/conmenu.o \
+     .OBJ.libvscony.a/form_in.o \
+     .OBJ.libvscony.a/unicon.o \
+
+### TARGET DEFINITION FOR TARGET 3: libvscony.a ################################
+
+.OBJ.libvscony.a: 
+	$(MKDIR) .OBJ.libvscony.a
+
+libvscony.a:   .OBJ.libvscony.a $(OBJ_3)
+	$(AR_3) $(ARFLAGS_3) $(TARGET_3) $(OBJ_3)
+	$(RANLIB_3) $(TARGET_3)
+
+clean-libvscony.a: 
+	$(RMFILE) $(TARGET_3)
+	$(RMDIR) .OBJ.libvscony.a
+
+rebuild-libvscony.a: clean-libvscony.a libvscony.a
+
+link-libvscony.a: .OBJ.libvscony.a $(OBJ_3)
+	$(RMFILE) libvscony.a
+	$(AR_3) $(ARFLAGS_3) $(TARGET_3) $(OBJ_3)
+	$(RANLIB_3) $(TARGET_3)
+
+
+### TARGET OBJECTS FOR TARGET 3: libvscony.a ###################################
+
+.OBJ.libvscony.a/ansiterm.o: ansiterm.cpp  ansiterm.cpp ansiterm.h
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c ansiterm.cpp         -o .OBJ.libvscony.a/ansiterm.o
+.OBJ.libvscony.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c conmenu.cpp          -o .OBJ.libvscony.a/conmenu.o
+.OBJ.libvscony.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
+ scroll.h
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c form_in.cpp          -o .OBJ.libvscony.a/form_in.o
+.OBJ.libvscony.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
+	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c unicon.cpp           -o .OBJ.libvscony.a/unicon.o
+
+
+### TARGET 4: test #############################################################
+
+CC_4       = g++
+LD_4       = g++
+AR_4       = ar rv
+RANLIB_4   = ranlib
+CCFLAGS_4  = -g -I. $(CCDEF) -DTEST  
+LDFLAGS_4  = -g -L. -lvslib -lvscon -lpcre -lncurses $(LDDEF) 
+DEPFLAGS_4 = 
+ARFLAGS_4  = 
+TARGET_4   = test
+
+### SOURCES FOR TARGET 4: test #################################################
+
+SRC_4= \
+     t/test.cpp \
+
+#### OBJECTS FOR TARGET 4: test ################################################
+
+OBJ_4= \
      .OBJ.test/test.o \
 
-### TARGET DEFINITION FOR TARGET 3: test #######################################
+### TARGET DEFINITION FOR TARGET 4: test #######################################
 
 .OBJ.test: 
 	$(MKDIR) .OBJ.test
 
-test: libvslib.a  .OBJ.test $(OBJ_3)
-	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
+test: libvslib.a  .OBJ.test $(OBJ_4)
+	$(LD_4) $(OBJ_4) $(LDFLAGS_4) -o $(TARGET_4)
 
 clean-test: 
-	$(RMFILE) $(TARGET_3)
+	$(RMFILE) $(TARGET_4)
 	$(RMDIR) .OBJ.test
 
 rebuild-test: clean-test test
 
-link-test: .OBJ.test $(OBJ_3)
+link-test: .OBJ.test $(OBJ_4)
 	$(RMFILE) test
-	$(LD_3) $(OBJ_3) $(LDFLAGS_3) -o $(TARGET_3)
+	$(LD_4) $(OBJ_4) $(LDFLAGS_4) -o $(TARGET_4)
 
 
-### TARGET OBJECTS FOR TARGET 3: test ##########################################
+### TARGET OBJECTS FOR TARGET 4: test ##########################################
 
 .OBJ.test/test.o: t/test.cpp 
-	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c t/test.cpp           -o .OBJ.test/test.o
+	$(CC_4) $(CFLAGS_4) $(CCFLAGS_4) -c t/test.cpp           -o .OBJ.test/test.o
+
+
+### MODULES ####################################################################
+
+modules:
+	$(MAKE) -C pcre 
+	$(MAKE) -C yas 
+
+clean-modules:
+	$(MAKE) -C pcre clean
+	$(MAKE) -C yas clean
+
+rebuild-modules:
+	$(MAKE) -C pcre rebuild
+	$(MAKE) -C yas rebuild
+
+link-modules:
+	$(MAKE) -C pcre link
+	$(MAKE) -C yas link
 
 
 mm_update:
