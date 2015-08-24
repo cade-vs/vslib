@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Mon Aug 24 03:00:18 2015 #########################
+### Created by makemake.pl on Mon Aug 24 03:06:27 2015 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -13,35 +13,21 @@ re: mm_update rebuild
 
 li: mm_update link
 
-all: mm_update modules libvslib.a libvscon.a libvscony.a test 
+all: mm_update libvslib.a libvscon.a libvscony.a test 
 
-clean: mm_update clean-modules clean-libvslib.a clean-libvscon.a clean-libvscony.a clean-test 
+clean: mm_update clean-libvslib.a clean-libvscon.a clean-libvscony.a clean-test 
 
-rebuild: mm_update rebuild-modules rebuild-libvslib.a rebuild-libvscon.a rebuild-libvscony.a rebuild-test 
+rebuild: mm_update rebuild-libvslib.a rebuild-libvscon.a rebuild-libvscony.a rebuild-test 
 
-link: mm_update link-modules link-libvslib.a link-libvscon.a link-libvscony.a link-test 
+link: mm_update link-libvslib.a link-libvscon.a link-libvscony.a link-test 
 
 ### GLOBAL (AND USER) DEFS #####################################################
-
-ifdef USE_YASCREEN
-CCDEF:=$(CCDEF) -DUSE_YASCREEN
-LDDEF:=$(LDDEF) -lyascreen
-else
-CCDEF:=$(CCDEF) -I/usr/include/ncurses
-LDDEF:=$(LDDEF) -lncurses
-endif
-
-ifdef USE_FLTO
-CCDEF:=$(CCDEF) -flto
-LDDEF:=$(LDDEF) -flto
-endif
 
 
 AR = ar rv
 CC = g++
 LD = g++
 MKDIR = mkdir -p
-MODULES = pcre yas
 RANLIB = ranlib
 RMDIR = rm -rf
 RMFILE = rm -f
@@ -143,7 +129,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -O2 $(CCDEF)  
+CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF)  
 LDFLAGS_2  = $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -306,25 +292,6 @@ link-test: .OBJ.test $(OBJ_4)
 
 .OBJ.test/test.o: t/test.cpp 
 	$(CC_4) $(CFLAGS_4) $(CCFLAGS_4) -c t/test.cpp           -o .OBJ.test/test.o
-
-
-### MODULES ####################################################################
-
-modules:
-	$(MAKE) -C pcre 
-	$(MAKE) -C yas 
-
-clean-modules:
-	$(MAKE) -C pcre clean
-	$(MAKE) -C yas clean
-
-rebuild-modules:
-	$(MAKE) -C pcre rebuild
-	$(MAKE) -C yas rebuild
-
-link-modules:
-	$(MAKE) -C pcre link
-	$(MAKE) -C yas link
 
 
 mm_update:
