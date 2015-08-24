@@ -53,7 +53,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
       }
     con_xy( x + scroll.pos() - scroll.page() + 1 , y );
     ch = con_getch();
-    if( ch >= 32 && ch <= 255 && ch != 127 && str_len(str) < maxlen - 1 )
+    if( ch >= 32 && ch <= 255 && ch != KEY_BACKSPACE && str_len(str) < maxlen - 1 )
       {
       if (firsthit)
         {

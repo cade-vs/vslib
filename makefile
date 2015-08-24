@@ -23,6 +23,19 @@ link: mm_update link-modules link-libvslib.a link-libvscon.a link-libvscony.a li
 
 ### GLOBAL (AND USER) DEFS #####################################################
 
+ifdef USE_YASCREEN
+CCDEF:=$(CCDEF) -DUSE_YASCREEN
+LDDEF:=$(LDDEF) -lyascreen
+else
+CCDEF:=$(CCDEF) -I/usr/include/ncurses
+LDDEF:=$(LDDEF) -lncurses
+endif
+
+ifdef USE_FLTO
+CCDEF:=$(CCDEF) -flto
+LDDEF:=$(LDDEF) -flto
+endif
+
 
 AR = ar rv
 CC = g++
@@ -130,7 +143,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF)  
+CCFLAGS_2  = -I. -O2 $(CCDEF)  
 LDFLAGS_2  = $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
