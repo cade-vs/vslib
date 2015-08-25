@@ -437,14 +437,12 @@
       {
       int ta = __ta;
       con_ta( attr );
-      yascreen_printxy(ya_s,__x,__y,__attr,"%*s",yascreen_sx(ya_s),"");
-      yascreen_update(ya_s);
+      yascreen_printxyu(ya_s,__x,__y,__attr,"%*s",yascreen_sx(ya_s),"");
       con_ta( ta );
       }
     else
       {
-      yascreen_printxy(ya_s,__x,__y,__attr,"%*s",yascreen_sx(ya_s),"");
-      yascreen_update(ya_s);
+      yascreen_printxyu(ya_s,__x,__y,__attr,"%*s",yascreen_sx(ya_s),"");
       }
   }
 
@@ -469,10 +467,9 @@
 
   void con_puts( const char *s )
   {
-    yascreen_putsxy(ya_s,__x,__y,__attr,s);
+    yascreen_putsxyu(ya_s,__x,__y,__attr,s);
     __x=yascreen_x(ya_s);
     __y=yascreen_y(ya_s);
-    yascreen_update(ya_s);
   }
 
   int con_max_x()
