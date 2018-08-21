@@ -408,8 +408,8 @@
     yascreen_altbuf(ya_s,0);
     yascreen_cursor(ya_s,1);
     yascreen_term_restore(ya_s);
-    //yascreen_free(ya_s);
-    //ya_s=NULL;
+    yascreen_free(ya_s);
+    ya_s=NULL;
   }
 
   void con_suspend()
