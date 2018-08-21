@@ -236,7 +236,7 @@
     return target;
   }
 
-  VString &str_copy( VString &target, const char* source, int pos, int len ) // returns `len' chars from `pos'
+  VString &str_copy( VString &target, const char* source, int pos = 0, int len = -1 ) // returns `len' chars from `pos'
   {
     //FIXME: too many strlen()'s...
     if ( pos < 0 )
@@ -333,7 +333,7 @@
     return str_cut( target, " " );
   }
 
-  VString &str_pad( VString &target, int len, char ch )
+  VString &str_pad( VString &target, int len, char ch = ' ' )
   {
     target.resize( (len > 0) ? len : -len );
     str_pad( target.box->s, len, ch );
@@ -341,7 +341,7 @@
     return target;
   }
 
-  VString &str_comma( VString &target, char delim )
+  VString &str_comma( VString &target, char delim = '\'' )
   {
     int new_size = str_len( target ) / 3 + str_len( target );
     target.resize( new_size );
