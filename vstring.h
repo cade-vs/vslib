@@ -272,7 +272,7 @@ public:
   friend VString& str_ins_ch ( VString& target, int pos, char ch ); // inserts `ch' in position `pos'
   friend VString& str_replace( VString& target, const char* out, const char* in ); // replace `out' w. `in'
 
-  friend VString& str_copy  ( VString& target, const char* source, int pos, int len ); // returns `len' chars from `pos'
+  friend VString& str_copy  ( VString& target, const char* source, int pos = 0, int len = -1 ); // returns `len' chars from `pos'
   friend VString& str_left  ( VString& target, const char* source, int len ); // returns `len' chars from the left
   friend VString& str_right ( VString& target, const char* source, int len ); // returns `len' chars from the right
   friend VString& str_sleft ( VString& target, int len ); // SelfLeft -- just as 'Left' but works on `this'
@@ -286,8 +286,8 @@ public:
   friend VString& str_cut      ( VString& target, const char* charlist ); // does `CutR(charlist);CutL(charlist);'
   friend VString& str_cut_spc  ( VString& target ); // does `Cut(" ");'
 
-  friend VString& str_pad  ( VString& target, int len, char ch );
-  friend VString& str_comma( VString& target, char delim );
+  friend VString& str_pad  ( VString& target, int len, char ch = ' ' );
+  friend VString& str_comma( VString& target, char delim = '\'' );
 
   // next 3 functions are safe! so if you get/set out f the VString range!
   friend void str_set_ch( VString& target, int pos, const char ch ); // sets `ch' char at position `pos'
