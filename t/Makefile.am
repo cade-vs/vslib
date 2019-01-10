@@ -1,4 +1,4 @@
-AM_CXXFLAGS = -I$(top_srcdir)/vslib
+AM_CXXFLAGS = -Wall -I$(top_srcdir)/vslib
 
 check_PROGRAMS = test_vslib
 
