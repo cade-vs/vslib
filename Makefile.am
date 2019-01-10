@@ -1,6 +1,5 @@
-SUBDIRS = t # tests
-
 noinst_LIBRARIES = libvslib.a libvscon.a libvscony.a
+check_LIBRARIES = $(noinst_LIBRARIES)
 
 AM_CXXFLAGS = -Wall
 
@@ -57,4 +56,3 @@ noinst_HEADERS += \
   unicon.h  \
   form_in.h \
   conmenu.h
-  
