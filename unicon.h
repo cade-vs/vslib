@@ -10,14 +10,14 @@
 #ifndef _UNICON_H_
 #define _UNICON_H_
 
+#ifdef HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include "target.h"
 
 #ifdef _TARGET_UNKNOWN_
   #error "I don't know what is the target platform"
-#endif
-
-#ifdef HAVE_CONFIG_H
-  #include "config.h"
 #endif
 
 #ifdef _TARGET_UNIX_

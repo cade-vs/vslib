@@ -3,9 +3,6 @@ check_LIBRARIES = $(noinst_LIBRARIES)
 
 AM_CXXFLAGS = -Wall
 
-# DEFS is needed because we are using different sets of Makefiles
-DEFS = -DHAVE_CONFIG_H
-
 libvslib_a_SOURCES = \
      clusters.cpp \
      dlog.cpp \
