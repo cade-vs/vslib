@@ -1,4 +1,4 @@
-noinst_LIBRARIES = libvslib.a libvscon.a libvscony.a
+noinst_LIBRARIES = libvslib.a libvscon.a
 check_LIBRARIES = $(noinst_LIBRARIES)
 
 AM_CXXFLAGS = -Wall
@@ -19,22 +19,13 @@ libvslib_a_SOURCES = \
      vsuti.cpp \
      vscrc.cpp
 
-#libvslib_a_LIBADD = @CURSES_LIBS@
-
-# Rules for libvscony.a
 libvscon_a_SOURCES = \
      ansiterm.cpp \
      conmenu.cpp \
      form_in.cpp \
      unicon.cpp
 
-libvscon_CXXFLAGS = $(AM_CXXFLAGS)
-libvscon_CXXFLAGS += @CURSES_CFLAGS@
-
-# Rules for libvscony.a
-libvscony_a_CXXFLAGS = $(AM_CXXFLAGS)
-libvscony_a_CXXFLAGS += -I$(top_srcdir)/yascreen -DUSE_YASCREEN
-libvscony_a_SOURCES = $(libvscon_a_SOURCES)
+libvscon_a_CXXFLAGS = $(AM_CXXFLAGS)
 
 # needed for 'make dist' and 'make distcheck'
 noinst_HEADERS = \

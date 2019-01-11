@@ -112,16 +112,10 @@ am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
 libvscon_a_AR = $(AR) $(ARFLAGS)
 libvscon_a_LIBADD =
-am_libvscon_a_OBJECTS = ansiterm.$(OBJEXT) conmenu.$(OBJEXT) \
-	form_in.$(OBJEXT) unicon.$(OBJEXT)
+am_libvscon_a_OBJECTS = libvscon_a-ansiterm.$(OBJEXT) \
+	libvscon_a-conmenu.$(OBJEXT) libvscon_a-form_in.$(OBJEXT) \
+	libvscon_a-unicon.$(OBJEXT)
 libvscon_a_OBJECTS = $(am_libvscon_a_OBJECTS)
-libvscony_a_AR = $(AR) $(ARFLAGS)
-libvscony_a_LIBADD =
-am__objects_1 = libvscony_a-ansiterm.$(OBJEXT) \
-	libvscony_a-conmenu.$(OBJEXT) libvscony_a-form_in.$(OBJEXT) \
-	libvscony_a-unicon.$(OBJEXT)
-am_libvscony_a_OBJECTS = $(am__objects_1)
-libvscony_a_OBJECTS = $(am_libvscony_a_OBJECTS)
 libvslib_a_AR = $(AR) $(ARFLAGS)
 libvslib_a_LIBADD =
 am_libvslib_a_OBJECTS = clusters.$(OBJEXT) dlog.$(OBJEXT) \
@@ -161,10 +155,8 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(libvscon_a_SOURCES) $(libvscony_a_SOURCES) \
-	$(libvslib_a_SOURCES)
-DIST_SOURCES = $(libvscon_a_SOURCES) $(libvscony_a_SOURCES) \
-	$(libvslib_a_SOURCES)
+SOURCES = $(libvscon_a_SOURCES) $(libvslib_a_SOURCES)
+DIST_SOURCES = $(libvscon_a_SOURCES) $(libvslib_a_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -287,7 +279,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LIBRARIES = libvslib.a libvscon.a libvscony.a
+noinst_LIBRARIES = libvslib.a libvscon.a
 check_LIBRARIES = $(noinst_LIBRARIES)
 AM_CXXFLAGS = -Wall
 libvslib_a_SOURCES = \
@@ -303,22 +295,13 @@ libvslib_a_SOURCES = \
      vsuti.cpp \
      vscrc.cpp
 
-
-#libvslib_a_LIBADD = @CURSES_LIBS@
-
-# Rules for libvscony.a
 libvscon_a_SOURCES = \
      ansiterm.cpp \
      conmenu.cpp \
      form_in.cpp \
      unicon.cpp
 
-libvscon_CXXFLAGS = $(AM_CXXFLAGS) @CURSES_CFLAGS@
-
-# Rules for libvscony.a
-libvscony_a_CXXFLAGS = $(AM_CXXFLAGS) -I$(top_srcdir)/yascreen \
-	-DUSE_YASCREEN
-libvscony_a_SOURCES = $(libvscon_a_SOURCES)
+libvscon_a_CXXFLAGS = $(AM_CXXFLAGS)
 
 # needed for 'make dist' and 'make distcheck'
 
@@ -371,11 +354,6 @@ libvscon.a: $(libvscon_a_OBJECTS) $(libvscon_a_DEPENDENCIES) $(EXTRA_libvscon_a_
 	$(AM_V_AR)$(libvscon_a_AR) libvscon.a $(libvscon_a_OBJECTS) $(libvscon_a_LIBADD)
 	$(AM_V_at)$(RANLIB) libvscon.a
 
-libvscony.a: $(libvscony_a_OBJECTS) $(libvscony_a_DEPENDENCIES) $(EXTRA_libvscony_a_DEPENDENCIES) 
-	$(AM_V_at)-rm -f libvscony.a
-	$(AM_V_AR)$(libvscony_a_AR) libvscony.a $(libvscony_a_OBJECTS) $(libvscony_a_LIBADD)
-	$(AM_V_at)$(RANLIB) libvscony.a
-
 libvslib.a: $(libvslib_a_OBJECTS) $(libvslib_a_DEPENDENCIES) $(EXTRA_libvslib_a_DEPENDENCIES) 
 	$(AM_V_at)-rm -f libvslib.a
 	$(AM_V_AR)$(libvslib_a_AR) libvslib.a $(libvslib_a_OBJECTS) $(libvslib_a_LIBADD)
@@ -393,29 +371,29 @@ distclean-compile:
 .cpp.obj:
 	$(AM_V_CXX)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-libvscony_a-ansiterm.o: ansiterm.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-ansiterm.o `test -f 'ansiterm.cpp' || echo '$(srcdir)/'`ansiterm.cpp
+libvscon_a-ansiterm.o: ansiterm.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-ansiterm.o `test -f 'ansiterm.cpp' || echo '$(srcdir)/'`ansiterm.cpp
 
-libvscony_a-ansiterm.obj: ansiterm.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-ansiterm.obj `if test -f 'ansiterm.cpp'; then $(CYGPATH_W) 'ansiterm.cpp'; else $(CYGPATH_W) '$(srcdir)/ansiterm.cpp'; fi`
+libvscon_a-ansiterm.obj: ansiterm.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-ansiterm.obj `if test -f 'ansiterm.cpp'; then $(CYGPATH_W) 'ansiterm.cpp'; else $(CYGPATH_W) '$(srcdir)/ansiterm.cpp'; fi`
 
-libvscony_a-conmenu.o: conmenu.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-conmenu.o `test -f 'conmenu.cpp' || echo '$(srcdir)/'`conmenu.cpp
+libvscon_a-conmenu.o: conmenu.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-conmenu.o `test -f 'conmenu.cpp' || echo '$(srcdir)/'`conmenu.cpp
 
-libvscony_a-conmenu.obj: conmenu.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-conmenu.obj `if test -f 'conmenu.cpp'; then $(CYGPATH_W) 'conmenu.cpp'; else $(CYGPATH_W) '$(srcdir)/conmenu.cpp'; fi`
+libvscon_a-conmenu.obj: conmenu.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-conmenu.obj `if test -f 'conmenu.cpp'; then $(CYGPATH_W) 'conmenu.cpp'; else $(CYGPATH_W) '$(srcdir)/conmenu.cpp'; fi`
 
-libvscony_a-form_in.o: form_in.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-form_in.o `test -f 'form_in.cpp' || echo '$(srcdir)/'`form_in.cpp
+libvscon_a-form_in.o: form_in.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-form_in.o `test -f 'form_in.cpp' || echo '$(srcdir)/'`form_in.cpp
 
-libvscony_a-form_in.obj: form_in.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-form_in.obj `if test -f 'form_in.cpp'; then $(CYGPATH_W) 'form_in.cpp'; else $(CYGPATH_W) '$(srcdir)/form_in.cpp'; fi`
+libvscon_a-form_in.obj: form_in.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-form_in.obj `if test -f 'form_in.cpp'; then $(CYGPATH_W) 'form_in.cpp'; else $(CYGPATH_W) '$(srcdir)/form_in.cpp'; fi`
 
-libvscony_a-unicon.o: unicon.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-unicon.o `test -f 'unicon.cpp' || echo '$(srcdir)/'`unicon.cpp
+libvscon_a-unicon.o: unicon.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-unicon.o `test -f 'unicon.cpp' || echo '$(srcdir)/'`unicon.cpp
 
-libvscony_a-unicon.obj: unicon.cpp
-	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscony_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscony_a-unicon.obj `if test -f 'unicon.cpp'; then $(CYGPATH_W) 'unicon.cpp'; else $(CYGPATH_W) '$(srcdir)/unicon.cpp'; fi`
+libvscon_a-unicon.obj: unicon.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libvscon_a_CXXFLAGS) $(CXXFLAGS) -c -o libvscon_a-unicon.obj `if test -f 'unicon.cpp'; then $(CYGPATH_W) 'unicon.cpp'; else $(CYGPATH_W) '$(srcdir)/unicon.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
