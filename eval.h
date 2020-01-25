@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2015
+ * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2020
  * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
@@ -12,7 +12,7 @@
 
 //
 // this evaluates math expression with recursive parser etc.
-// (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1996-1998
+// (c) Vladi Belperchinov-Shabanski "Cade" <cade@biscom.net> 1996-2020
 //
 
 extern int EvalResult;
