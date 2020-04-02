@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Tue Aug 25 03:11:01 2015 #########################
+### Created by makemake.pl on Fri Apr  3 01:29:56 2020 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -40,7 +40,7 @@ CC_1       = g++
 LD_1       = g++
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I. -O2 $(CCDEF)  
+CCFLAGS_1  = -I../vstring -I. -O2 $(CCDEF)  
 LDFLAGS_1  = $(LDDEF) 
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -56,8 +56,6 @@ SRC_1= \
      getopt2.cpp \
      scroll.cpp \
      vslib.cpp \
-     vstring.cpp \
-     vstrlib.cpp \
      vsuti.cpp \
      vscrc.cpp \
 
@@ -71,8 +69,6 @@ OBJ_1= \
      .OBJ.libvslib.a/getopt2.o \
      .OBJ.libvslib.a/scroll.o \
      .OBJ.libvslib.a/vslib.o \
-     .OBJ.libvslib.a/vstring.o \
-     .OBJ.libvslib.a/vstrlib.o \
      .OBJ.libvslib.a/vsuti.o \
      .OBJ.libvslib.a/vscrc.o \
 
@@ -113,13 +109,9 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c scroll.cpp           -o .OBJ.libvslib.a/scroll.o
 .OBJ.libvslib.a/vslib.o: vslib.cpp  vslib.cpp
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vslib.cpp            -o .OBJ.libvslib.a/vslib.o
-.OBJ.libvslib.a/vstring.o: vstring.cpp  vstring.cpp vstring.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstring.cpp          -o .OBJ.libvslib.a/vstring.o
-.OBJ.libvslib.a/vstrlib.o: vstrlib.cpp  vstrlib.cpp vstrlib.h vstring.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vstrlib.cpp          -o .OBJ.libvslib.a/vstrlib.o
-.OBJ.libvslib.a/vsuti.o: vsuti.cpp  vsuti.cpp vsuti.h target.h vstring.h vstrlib.h
+.OBJ.libvslib.a/vsuti.o: vsuti.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vsuti.cpp            -o .OBJ.libvslib.a/vsuti.o
-.OBJ.libvslib.a/vscrc.o: vscrc.cpp  vscrc.cpp vsuti.h target.h vstring.h
+.OBJ.libvslib.a/vscrc.o: vscrc.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vscrc.cpp            -o .OBJ.libvslib.a/vscrc.o
 
 
@@ -129,7 +121,7 @@ CC_2       = g++
 LD_2       = g++
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I. -I/usr/include/ncurses -O2 $(CCDEF)  
+CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O2 $(CCDEF)  
 LDFLAGS_2  = $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -178,8 +170,7 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c ansiterm.cpp         -o .OBJ.libvscon.a/ansiterm.o
 .OBJ.libvscon.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c conmenu.cpp          -o .OBJ.libvscon.a/conmenu.o
-.OBJ.libvscon.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
- scroll.h
+.OBJ.libvscon.a/form_in.o: form_in.cpp 
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
 .OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
@@ -191,7 +182,7 @@ CC_3       = g++
 LD_3       = g++
 AR_3       = ar rv
 RANLIB_3   = ranlib
-CCFLAGS_3  = -I. -I../yascreen -DUSE_YASCREEN -O2 $(CCDEF)  
+CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O2 $(CCDEF)  
 LDFLAGS_3  = $(LDDEF) 
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
@@ -240,8 +231,7 @@ link-libvscony.a: .OBJ.libvscony.a $(OBJ_3)
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c ansiterm.cpp         -o .OBJ.libvscony.a/ansiterm.o
 .OBJ.libvscony.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c conmenu.cpp          -o .OBJ.libvscony.a/conmenu.o
-.OBJ.libvscony.a/form_in.o: form_in.cpp  form_in.cpp form_in.h unicon.h target.h vstring.h clusters.h \
- scroll.h
+.OBJ.libvscony.a/form_in.o: form_in.cpp 
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c form_in.cpp          -o .OBJ.libvscony.a/form_in.o
 .OBJ.libvscony.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c unicon.cpp           -o .OBJ.libvscony.a/unicon.o
@@ -253,8 +243,8 @@ CC_4       = g++
 LD_4       = g++
 AR_4       = ar rv
 RANLIB_4   = ranlib
-CCFLAGS_4  = -g -I. $(CCDEF) -DTEST  
-LDFLAGS_4  = -g -L. -lvslib -lvscon -lpcre -lncurses $(LDDEF) 
+CCFLAGS_4  = -g -I../vstring -I. $(CCDEF) -DTEST  
+LDFLAGS_4  = -g -L../vstring -L. -lvstring -lvslib -lvscon -lpcre -lncurses $(LDDEF) 
 DEPFLAGS_4 = 
 ARFLAGS_4  = 
 TARGET_4   = test
