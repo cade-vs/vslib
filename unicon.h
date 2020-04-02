@@ -10,6 +10,10 @@
 #ifndef _UNICON_H_
 #define _UNICON_H_
 
+#ifdef HAVE_CONFIG_H
+  #include "config.h"
+#endif
+
 #include "target.h"
 
 #ifdef _TARGET_UNKNOWN_
@@ -22,7 +26,26 @@
     #include <yascreen.h>
     #undef inline
   #else
-    #if defined(_TARGET_LINUX_)
+    #if HAVE_CONFIG_H
+      // This will find the curses header on most systems. If it isn't found,
+      // the user will receive an error and compilation will terminate.
+      // These are defined when ../configure is run, and suggested use is
+      // mentioned in the autoconf documentation
+      // <https://www.gnu.org/software/autoconf-archive/ax_with_curses.html>
+      #if defined HAVE_NCURSESW_CURSES_H
+      #  include <ncursesw/curses.h>
+      #elif defined HAVE_NCURSESW_H
+      #  include <ncursesw.h>
+      #elif defined HAVE_NCURSES_CURSES_H
+      #  include <ncurses/curses.h>
+      #elif defined HAVE_NCURSES_H
+      #  include <ncurses.h>
+      #elif defined HAVE_CURSES_H
+      #  include <curses.h>
+      #else
+      #  error "SysV or X/Open-compatible Curses header file required"
+      #endif
+    #elif defined(_TARGET_LINUX_)
     #include <curses.h>
     #elif defined(_TARGET_NETBSD_)
     #include <ncurses.h>

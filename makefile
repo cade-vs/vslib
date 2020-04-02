@@ -25,8 +25,8 @@ link: mm_update link-libvslib.a link-libvscon.a link-libvscony.a link-test
 
 
 AR = ar rv
-CC = g++
-LD = g++
+CC = $(CXX)
+LD = $(CXX)
 MKDIR = mkdir -p
 RANLIB = ranlib
 RMDIR = rm -rf
@@ -36,8 +36,8 @@ SRC = *.c *.cpp *.cc *.cxx
 
 ### TARGET 1: libvslib.a #######################################################
 
-CC_1       = g++
-LD_1       = g++
+CC_1       = $(CXX)
+LD_1       = $(CXX)
 AR_1       = ar rv
 RANLIB_1   = ranlib
 CCFLAGS_1  = -I../vstring -I. -O2 $(CCDEF)  
@@ -117,8 +117,8 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 
 ### TARGET 2: libvscon.a #######################################################
 
-CC_2       = g++
-LD_2       = g++
+CC_2       = $(CXX)
+LD_2       = $(CXX)
 AR_2       = ar rv
 RANLIB_2   = ranlib
 CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O2 $(CCDEF)  
@@ -178,8 +178,8 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 
 ### TARGET 3: libvscony.a ######################################################
 
-CC_3       = g++
-LD_3       = g++
+CC_3       = $(CXX)
+LD_3       = $(CXX)
 AR_3       = ar rv
 RANLIB_3   = ranlib
 CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O2 $(CCDEF)  
@@ -239,8 +239,8 @@ link-libvscony.a: .OBJ.libvscony.a $(OBJ_3)
 
 ### TARGET 4: test #############################################################
 
-CC_4       = g++
-LD_4       = g++
+CC_4       = $(CXX)
+LD_4       = $(CXX)
 AR_4       = ar rv
 RANLIB_4   = ranlib
 CCFLAGS_4  = -g -I../vstring -I. $(CCDEF) -DTEST  
