@@ -264,7 +264,7 @@ OBJ_4= \
 .OBJ.test: 
 	$(MKDIR) .OBJ.test
 
-test: libvslib.a  .OBJ.test $(OBJ_4)
+test: libvscon.a libvslib.a  .OBJ.test $(OBJ_4)
 	$(LD_4) $(OBJ_4) $(LDFLAGS_4) -o $(TARGET_4)
 
 clean-test: 
