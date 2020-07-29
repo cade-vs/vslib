@@ -25,6 +25,10 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <sys/param.h>
+#ifdef _TARGET_LINUX_
+#include <linux/limits.h>
+#define MAX_PATH PATH_MAX
+#endif
 #endif
 
 #include <assert.h>
