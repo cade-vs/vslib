@@ -40,10 +40,14 @@
 
 /*###########################################################################*/
 /* MISC defines */
+#ifdef _TARGET_LINUX_
+  #include <linux/limits.h>
+  #define MAX_PATH PATH_MAX
+#endif
 
 /* max filename length */
 #ifndef MAX_PATH
-#define MAX_PATH  512
+  #define MAX_PATH  512
 #endif
 
 /*###########################################################################*/
