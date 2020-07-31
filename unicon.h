@@ -303,6 +303,7 @@
   #define KEY_ALT_0     (KEY_PREFIX + '0')
   #define KEY_ALT_MINUS (KEY_PREFIX + '-')
   #define KEY_ALT_EQ    (KEY_PREFIX + '=')
+  #define KEY_ALT_BACKSPACE (KEY_PREFIX + KEY_BACKSPACE )
 
   #define KEY_ALT_Q     (KEY_PREFIX + 'q')
   #define KEY_ALT_W     (KEY_PREFIX + 'w')
@@ -376,6 +377,8 @@
   #define KEY_ALT_8 YAS_K_ALT('8')
   #define KEY_ALT_9 YAS_K_ALT('9')
   #define KEY_ALT_EQ YAS_K_ALT('=')
+  #define KEY_ALT_MINUS YAS_K_ALT('-')
+  #define KEY_ALT_BACKSPACE YAS_K_ALT( KEY_BACKSPACE )
 
   #define KEY_F1 YAS_K_F1
   #define KEY_F2 YAS_K_F2

@@ -396,7 +396,7 @@
     if (!ya_s)
       ya_s=yascreen_init(80,25);
     if (!ya_s)
-		return 1;
+    return 1;
     yascreen_term_set(ya_s,YAS_NOBUFF|YAS_NOSIGN|YAS_NOECHO);
     yascreen_altbuf(ya_s,1);
     yascreen_cursor(ya_s,0);
@@ -410,8 +410,8 @@
     yascreen_altbuf(ya_s,0);
     yascreen_cursor(ya_s,1);
     yascreen_term_restore(ya_s);
-//    yascreen_free(ya_s);
-//    ya_s=NULL;
+    yascreen_free(ya_s);
+    ya_s=NULL;
   }
 
   void con_suspend()
