@@ -2,12 +2,12 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Thu Jul 30 22:16:56 2020 #########################
+### Created by makemake.pl on Thu Aug  6 03:03:47 2020 #########################
 
 
 ### GLOBAL TARGETS #############################################################
 
-default: mm_update all
+default: mm_update  libvslib.a  libvscon.a  libvscony.a 
 
 re: mm_update rebuild
 
@@ -24,11 +24,10 @@ link: mm_update link-libvslib.a link-libvscon.a link-libvscony.a link-test
 ### GLOBAL (AND USER) DEFS #####################################################
 
 
-AR = ar rv
-CC = g++
-LD = g++
+AR ?= ar
+LD = $(CXX)
 MKDIR = mkdir -p
-RANLIB = ranlib
+RANLIB ?= ranlib
 RMDIR = rm -rf
 RMFILE = rm -f
 SRC = *.c *.cpp *.cc *.cxx
@@ -36,12 +35,12 @@ SRC = *.c *.cpp *.cc *.cxx
 
 ### TARGET 1: libvslib.a #######################################################
 
-CC_1       = $(CC)
-LD_1       = $(LD)
-AR_1       = $(AR)
+CC_1       = $(CXX)
+LD_1       = $(CXX)
+AR_1       = $(AR) rv
 RANLIB_1   = $(RANLIB)
-CCFLAGS_1  = -I../vstring -I. -O2 $(CCDEF)  
-LDFLAGS_1  = $(LDDEF) 
+CCFLAGS_1  = -I../vstring -I. -O2 $(CFLAGS) $(CCDEF)  
+LDFLAGS_1  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
 TARGET_1   = libvslib.a
@@ -87,6 +86,8 @@ clean-libvslib.a:
 
 rebuild-libvslib.a: clean-libvslib.a libvslib.a
 
+re-libvslib.a: rebuild-libvslib.a
+
 link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 	$(RMFILE) libvslib.a
 	$(AR_1) $(ARFLAGS_1) $(TARGET_1) $(OBJ_1)
@@ -95,19 +96,19 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 
 ### TARGET OBJECTS FOR TARGET 1: libvslib.a ####################################
 
-.OBJ.libvslib.a/clusters.o: clusters.cpp  clusters.cpp clusters.h
+.OBJ.libvslib.a/clusters.o: clusters.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c clusters.cpp         -o .OBJ.libvslib.a/clusters.o
-.OBJ.libvslib.a/dlog.o: dlog.cpp  dlog.cpp dlog.h
+.OBJ.libvslib.a/dlog.o: dlog.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c dlog.cpp             -o .OBJ.libvslib.a/dlog.o
-.OBJ.libvslib.a/eval.o: eval.cpp  eval.cpp eval.h
+.OBJ.libvslib.a/eval.o: eval.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c eval.cpp             -o .OBJ.libvslib.a/eval.o
-.OBJ.libvslib.a/fnmatch2.o: fnmatch2.cpp  fnmatch2.cpp fnmatch2.h
+.OBJ.libvslib.a/fnmatch2.o: fnmatch2.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c fnmatch2.cpp         -o .OBJ.libvslib.a/fnmatch2.o
-.OBJ.libvslib.a/getopt2.o: getopt2.cpp  getopt2.cpp getopt2.h
+.OBJ.libvslib.a/getopt2.o: getopt2.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c getopt2.cpp          -o .OBJ.libvslib.a/getopt2.o
-.OBJ.libvslib.a/scroll.o: scroll.cpp  scroll.cpp scroll.h
+.OBJ.libvslib.a/scroll.o: scroll.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c scroll.cpp           -o .OBJ.libvslib.a/scroll.o
-.OBJ.libvslib.a/vslib.o: vslib.cpp  vslib.cpp
+.OBJ.libvslib.a/vslib.o: vslib.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vslib.cpp            -o .OBJ.libvslib.a/vslib.o
 .OBJ.libvslib.a/vsuti.o: vsuti.cpp 
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c vsuti.cpp            -o .OBJ.libvslib.a/vsuti.o
@@ -117,12 +118,12 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 
 ### TARGET 2: libvscon.a #######################################################
 
-CC_2       = $(CC)
-LD_2       = $(LD)
-AR_2       = $(AR)
+CC_2       = $(CXX)
+LD_2       = $(CXX)
+AR_2       = $(AR) rv
 RANLIB_2   = $(RANLIB)
-CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O2 $(CCDEF)  
-LDFLAGS_2  = $(LDDEF) 
+CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O2 $(CFLAGS) $(CCDEF)  
+LDFLAGS_2  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
 TARGET_2   = libvscon.a
@@ -158,6 +159,8 @@ clean-libvscon.a:
 
 rebuild-libvscon.a: clean-libvscon.a libvscon.a
 
+re-libvscon.a: rebuild-libvscon.a
+
 link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 	$(RMFILE) libvscon.a
 	$(AR_2) $(ARFLAGS_2) $(TARGET_2) $(OBJ_2)
@@ -166,24 +169,24 @@ link-libvscon.a: .OBJ.libvscon.a $(OBJ_2)
 
 ### TARGET OBJECTS FOR TARGET 2: libvscon.a ####################################
 
-.OBJ.libvscon.a/ansiterm.o: ansiterm.cpp  ansiterm.cpp ansiterm.h
+.OBJ.libvscon.a/ansiterm.o: ansiterm.cpp 
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c ansiterm.cpp         -o .OBJ.libvscon.a/ansiterm.o
-.OBJ.libvscon.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
+.OBJ.libvscon.a/conmenu.o: conmenu.cpp 
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c conmenu.cpp          -o .OBJ.libvscon.a/conmenu.o
 .OBJ.libvscon.a/form_in.o: form_in.cpp 
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c form_in.cpp          -o .OBJ.libvscon.a/form_in.o
-.OBJ.libvscon.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
+.OBJ.libvscon.a/unicon.o: unicon.cpp 
 	$(CC_2) $(CFLAGS_2) $(CCFLAGS_2) -c unicon.cpp           -o .OBJ.libvscon.a/unicon.o
 
 
 ### TARGET 3: libvscony.a ######################################################
 
-CC_3       = $(CC)
-LD_3       = $(LD)
-AR_3       = $(AR)
+CC_3       = $(CXX)
+LD_3       = $(CXX)
+AR_3       = $(AR) rv
 RANLIB_3   = $(RANLIB)
-CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O2 $(CCDEF)  
-LDFLAGS_3  = $(LDDEF) 
+CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O2 $(CFLAGS) $(CCDEF)  
+LDFLAGS_3  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
 TARGET_3   = libvscony.a
@@ -219,6 +222,8 @@ clean-libvscony.a:
 
 rebuild-libvscony.a: clean-libvscony.a libvscony.a
 
+re-libvscony.a: rebuild-libvscony.a
+
 link-libvscony.a: .OBJ.libvscony.a $(OBJ_3)
 	$(RMFILE) libvscony.a
 	$(AR_3) $(ARFLAGS_3) $(TARGET_3) $(OBJ_3)
@@ -227,24 +232,24 @@ link-libvscony.a: .OBJ.libvscony.a $(OBJ_3)
 
 ### TARGET OBJECTS FOR TARGET 3: libvscony.a ###################################
 
-.OBJ.libvscony.a/ansiterm.o: ansiterm.cpp  ansiterm.cpp ansiterm.h
+.OBJ.libvscony.a/ansiterm.o: ansiterm.cpp 
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c ansiterm.cpp         -o .OBJ.libvscony.a/ansiterm.o
-.OBJ.libvscony.a/conmenu.o: conmenu.cpp  conmenu.cpp conmenu.h
+.OBJ.libvscony.a/conmenu.o: conmenu.cpp 
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c conmenu.cpp          -o .OBJ.libvscony.a/conmenu.o
 .OBJ.libvscony.a/form_in.o: form_in.cpp 
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c form_in.cpp          -o .OBJ.libvscony.a/form_in.o
-.OBJ.libvscony.a/unicon.o: unicon.cpp  unicon.cpp unicon.h target.h
+.OBJ.libvscony.a/unicon.o: unicon.cpp 
 	$(CC_3) $(CFLAGS_3) $(CCFLAGS_3) -c unicon.cpp           -o .OBJ.libvscony.a/unicon.o
 
 
 ### TARGET 4: test #############################################################
 
-CC_4       = $(CC)
-LD_4       = $(LD)
-AR_4       = $(AR)
+CC_4       = $(CXX)
+LD_4       = $(CXX)
+AR_4       = $(AR) rv
 RANLIB_4   = $(RANLIB)
-CCFLAGS_4  = -g -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O0 -DTEST $(CCDEF)  
-LDFLAGS_4  = -g -L../vstring -L. -lvstring -lvslib -lvscon -lpcre -lncurses $(LDDEF) 
+CCFLAGS_4  = -g -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O0 -DTEST $(CFLAGS) $(CCDEF)  
+LDFLAGS_4  = -g -L../vstring -L. -lvstring -lvslib -lvscon -lpcre -lncurses $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_4 = 
 ARFLAGS_4  = 
 TARGET_4   = test
@@ -272,6 +277,8 @@ clean-test:
 	$(RMDIR) .OBJ.test
 
 rebuild-test: clean-test test
+
+re-test: rebuild-test
 
 link-test: .OBJ.test $(OBJ_4)
 	$(RMFILE) test
