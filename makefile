@@ -2,12 +2,12 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Thu Aug  6 03:03:47 2020 #########################
+### Created by makemake.pl on Thu Aug  6 03:19:02 2020 #########################
 
 
 ### GLOBAL TARGETS #############################################################
 
-default: mm_update  libvslib.a  libvscon.a  libvscony.a 
+default: mm_update  libvslib.a  libvscon.a 
 
 re: mm_update rebuild
 
