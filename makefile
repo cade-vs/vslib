@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Thu Aug  6 03:19:02 2020 #########################
+### Created by makemake.pl on Thu Aug  6 03:45:22 2020 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -39,7 +39,7 @@ CC_1       = $(CXX)
 LD_1       = $(CXX)
 AR_1       = $(AR) rv
 RANLIB_1   = $(RANLIB)
-CCFLAGS_1  = -I../vstring -I. -O2 $(CFLAGS) $(CCDEF)  
+CCFLAGS_1  = -I../vstring -I. -O2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_1  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -122,7 +122,7 @@ CC_2       = $(CXX)
 LD_2       = $(CXX)
 AR_2       = $(AR) rv
 RANLIB_2   = $(RANLIB)
-CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O2 $(CFLAGS) $(CCDEF)  
+CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_2  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -185,7 +185,7 @@ CC_3       = $(CXX)
 LD_3       = $(CXX)
 AR_3       = $(AR) rv
 RANLIB_3   = $(RANLIB)
-CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O2 $(CFLAGS) $(CCDEF)  
+CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_3  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
@@ -248,7 +248,7 @@ CC_4       = $(CXX)
 LD_4       = $(CXX)
 AR_4       = $(AR) rv
 RANLIB_4   = $(RANLIB)
-CCFLAGS_4  = -g -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O0 -DTEST $(CFLAGS) $(CCDEF)  
+CCFLAGS_4  = -g -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O0 -DTEST $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_4  = -g -L../vstring -L. -lvstring -lvslib -lvscon -lpcre -lncurses $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_4 = 
 ARFLAGS_4  = 
