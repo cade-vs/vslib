@@ -119,7 +119,7 @@
     if ( _pos  < _page ) return 0;
     if ( _pagesize < 0 ) return 0;
     if ( _pagestep < 1 ) return 0;
-    if ( _pos >= _page + _pagesize ) return 0;
+//    if ( _pos >= _page + _pagesize ) return 0;
     return 1;
   }
 

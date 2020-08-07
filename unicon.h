@@ -448,6 +448,7 @@
 
   void con_suspend(); // suspends console (before system() for example)
   void con_restore(); // restores console after suspend
+  void con_reset_screen_size(); // reset screen info on screen resize, called in SIGWINCH
 
   void con_ce( int attr = -1 ); // clear to end-of-line
   void con_cs( int attr = -1 ); // clear screen

@@ -45,6 +45,7 @@
 
   void con_suspend() { return; }
   void con_restore() { return; }
+  void con_reset_screen_size() { return; }
 
   void con_ce( int attr )
   {
@@ -187,6 +188,7 @@
     // intrflush(conio_scr,FALSE); //
     idlok(conio_scr,TRUE);      // hardware line ins/del (required?)
     idcok(conio_scr,TRUE);      // hardware char ins/del (required?)
+    // nodelay(conio_scr,FALSE);   // blocking getch()
     scrollok(conio_scr,TRUE);   // scroll screen if required (cursor at bottom)
     /* Color initialization */
     for ( __bg=0; __bg<8; __bg++ )
@@ -210,6 +212,12 @@
   void con_restore()
   {
     con_init();
+  }
+
+  void con_reset_screen_size()
+  {
+    //ungetch( KEY_RESIZE );
+    //nodelay(conio_scr,TRUE);   // non-blocking getch()
   }
 
   void con_ta( int attr )
@@ -423,6 +431,11 @@
   {
     con_init();
     yascreen_update(ya_s);
+  }
+
+  void con_reset_screen_size()
+  {
+    yascreen_pushch(ya_s,YAS_SCREEN_SIZE);
   }
 
   void con_ta( int attr )
