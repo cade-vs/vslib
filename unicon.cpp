@@ -362,6 +362,7 @@
 // target have yascreen curses replacement
 #ifdef _TARGET_HAVE_YASCREEN
 #include <stdio.h>
+#include <signal.h>
 
   int __fg;
   int __bg;
@@ -387,8 +388,15 @@
      return 0;
   }
 
+  void con_yas_sigwinch( int sig )
+  {
+    signal( SIGWINCH, con_yas_sigwinch ); // (re)setup signal handler
+    con_reset_screen_size();
+  }
+
   int con_init()
   {
+    signal( SIGWINCH, con_yas_sigwinch ); // (re)setup signal handler
     if (ya_s)
     {
       yascreen_term_set(ya_s,YAS_NOBUFF|YAS_NOSIGN|YAS_NOECHO);

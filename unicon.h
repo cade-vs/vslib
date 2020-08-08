@@ -424,6 +424,7 @@
   #define KEY_ALT_F9    (-1)
   #define KEY_ALT_F10   (-1)
 
+  #define KEY_RESIZE    YAS_SCREEN_SIZE
 #else
 
   #error One of ncurses/yascreen libraries is required under UNIX
