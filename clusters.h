@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * (c) Vladi Belperchinov-Shabanski "Cade" 1996-2020
+ * Copyright (c) 1996-2020 Vladi Belperchinov-Shabanski "Cade" 
  * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
@@ -297,7 +297,7 @@ class BSet
     void set_all1() { if ( data ) memset( data, 0xff, datasize ); };
     void set_all0() { if ( data ) memset( data, 0x00, datasize ); };
 
-    const int operator [] ( int pn )
+    int operator [] ( int pn )
        { ASSERT( pn >= 0 && pn < size  ); return get( pn ); };
 
     int resize( int p_size );
