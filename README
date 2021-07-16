@@ -1,7 +1,9 @@
 
   VSLIB
 
-  Copyright (c) 1996-2020 Vladi Belperchinov-Shabanski "Cade" 
+  Copyright (c) 1996-2021 Vladi Belperchinov-Shabanski "Cade" 
+                          <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
+                          http://cade.noxrun.com
 
   Some files are taken "as is" from other packages and/or software
   implementations. All the appropriate credits are intact. All files
@@ -39,10 +41,4 @@
   this will rebuild VSLIB using the included version of PCRE
 
   LICENSE AGREEMENT: GPL, SEE `COPYING' FOR THE FULL TEXT.
-
-                              Vladi Belperchinov-Shabanski "Cade"
-                              http://cade.datamax.bg/
-                              <cade@biscom.net>
-                              <cade@datamax.bg>
-                              <cade@bis.bg>
 
