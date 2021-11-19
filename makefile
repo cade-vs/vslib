@@ -2,7 +2,7 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Fri Nov 19 02:20:53 2021 #########################
+### Created by makemake.pl on Fri Nov 19 03:12:12 2021 #########################
 
 
 ### GLOBAL TARGETS #############################################################
@@ -248,7 +248,7 @@ CC_4       = $(CXX)
 LD_4       = $(CXX)
 AR_4       = $(AR) rv
 RANLIB_4   = $(RANLIB)
-CCFLAGS_4  = -g -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O0 -DTEST $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
+CCFLAGS_4  = -g -I../vstring -I../vstring/pcre2 -I. -I../yascreen -DUSE_YASCREEN -O0 -DTEST $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_4  = -g -L../vstring -L../vstring/pcre2 -L. -lvstring -lvslib -lvscon -lpcre2 -lncurses $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_4 = 
 ARFLAGS_4  = 
