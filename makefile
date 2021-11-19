@@ -2,12 +2,12 @@
 ### MAKEMAKE STARTS HERE #######################################################
 
 
-### Created by makemake.pl on Thu Aug  6 03:45:22 2020 #########################
+### Created by makemake.pl on Fri Nov 19 02:20:53 2021 #########################
 
 
 ### GLOBAL TARGETS #############################################################
 
-default: mm_update  libvslib.a  libvscon.a 
+default: mm_update  libvslib.a  libvscon.a  libvscony.a 
 
 re: mm_update rebuild
 
@@ -249,7 +249,7 @@ LD_4       = $(CXX)
 AR_4       = $(AR) rv
 RANLIB_4   = $(RANLIB)
 CCFLAGS_4  = -g -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O0 -DTEST $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
-LDFLAGS_4  = -g -L../vstring -L. -lvstring -lvslib -lvscon -lpcre -lncurses $(LDFLAGS) $(LDDEF) 
+LDFLAGS_4  = -g -L../vstring -L../vstring/pcre2 -L. -lvstring -lvslib -lvscon -lpcre2 -lncurses $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_4 = 
 ARFLAGS_4  = 
 TARGET_4   = test
