@@ -17,7 +17,17 @@ class ScrollPos
     int _pos;
     int _page;
     int _pagesize;
-    int _pagestep; // step to change page on up/down out of the current page
+    
+    
+    /* 
+    _pagestep -- step to change page on up/down out of the current page
+    if _pagestep is between 0 and 1 it is considered percentage of _pagesize
+    (with minimum step of 1)
+    if _pagestep is 1 or above it is considered integer fixed step
+    (limited to size of _pagesize)
+    */
+    double _pagestep; 
+          
 
     int _size;
 
@@ -42,10 +52,11 @@ class ScrollPos
       { _page = a_page; }
     void set_pagesize( int a_pagesize )
       { _pagesize = a_pagesize;
-        if ( _pagesize < 0 ) _pagesize = 0; }
-    void set_pagestep( int a_pagestep )
+        if( _pagesize < 0 ) _pagesize = 0; 
+        if( _pagestep >= 1 and _pagestep > _pagesize ) _pagestep = _pagesize; }
+    void set_pagestep( double a_pagestep )
       { _pagestep = a_pagestep;
-        if ( _pagestep < 1 ) _pagestep = 1; }
+        if( _pagestep <= 0 ) _pagestep = 1; }
 
     int min() { return _min; }
     int max() { return _max; }

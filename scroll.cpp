@@ -42,7 +42,15 @@
       else
         _pos = _min;
       }
-    if ( _pos < _page ) _page--;
+    // if ( _pos < _page ) _page--;
+    if ( _pos < _page ) 
+      if( int( _pagestep ) != 1 && _pos - _pagesize < 0 )
+        _page = 0;
+      else  
+        {
+        int pstep = _pagestep >= 1 ? int( _pagestep ) : _pagestep * _pagesize;
+        _page -= pstep < 1 ? 1 : pstep;
+        }
     fix();
   }
 
@@ -58,7 +66,15 @@
       else
         _pos = _max;
       }
-    if ( _pos > _page + _pagesize - 1 ) _page++;
+    //if ( _pos > _page + _pagesize - 1 ) _page++;
+    if ( _pos > _page + _pagesize - 1 ) 
+      if( int( _pagestep ) != 1 && _max - _pos < _pagesize ) 
+        _page = _max - _pos;
+      else  
+        {
+        int pstep = _pagestep >= 1 ? int( _pagestep ) : _pagestep * _pagesize;
+        _page += pstep < 1 ? 1 : pstep;
+        }
     fix();
   }
 
@@ -118,7 +134,7 @@
     if ( _page > _max ) return 0;
     if ( _pos  < _page ) return 0;
     if ( _pagesize < 0 ) return 0;
-    if ( _pagestep < 1 ) return 0;
+    if ( _pagestep < 0 ) return 0;
 //    if ( _pos >= _page + _pagesize ) return 0;
     return 1;
   }

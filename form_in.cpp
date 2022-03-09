@@ -31,6 +31,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
   ScrollPos scroll;
   scroll.set_min_max( 0, str_len( str ) );
   scroll.set_pagesize( fieldlen );
+  scroll.set_pagestep( 0.3 );
   scroll.go( str_len(str) );
 
   int show = 1;
@@ -46,7 +47,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, VStri
       str_pad( tmp, -scroll.pagesize() );
       tmp = " " + tmp + " ";
       if ( scroll.page() > 0 ) str_set_ch( tmp, 0, '<' );
-      if ( scroll.page()+scroll.pagesize() < str_len(str) ) str_set_ch( tmp, str_len(tmp)-1, '>' );
+      if ( scroll.page() + scroll.pagesize() < str_len(str) ) str_set_ch( tmp, str_len(tmp)-1, '>' );
       con_out(x, y, tmp, firsthit ? EditStrFH : EditStrBF );
       show = 0;
       opage = scroll.page();
