@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include "vstrlib.h"
+#include "vsuti.h"
 
 void test1()
 {
@@ -386,6 +387,24 @@ void test8()
   printf( "************************ test 5 ends here\n" );
 }
 
+void test9()
+{
+  VString fn;
+  
+  fn = "1'\"#\\2`&;*()[]{}~!@%^:.txt";
+  char t[512];
+
+  shell_escape( fn, t );
+  printf( "char*:    [%s]\n", t );
+
+  VString v2 = shell_escape( fn.data() );
+  printf( "vstr:     [%s]\n", v2.data() );
+  
+  int c = shell_escape( fn );
+  printf( "vstr ipl: [%s] %d\n", fn.data(), c );
+  
+}
+
 int main( int argc, char* argv[] )
 {
 
@@ -449,6 +468,8 @@ int main( int argc, char* argv[] )
   test5();
   test6();
   test7();
+  test8();
+  test9();
   //*/
   return 0;
 }

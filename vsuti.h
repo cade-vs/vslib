@@ -126,6 +126,16 @@ VString expand_path( const char* src );
 
 /*****************************************************************************
 **
+** shell_escape() escapes shell special characters
+**
+*****************************************************************************/
+
+char* shell_escape( const char *src, char *dest );
+VString shell_escape( const char* src );
+int shell_escape( VString &dest );
+
+/*****************************************************************************
+**
 ** dosstat() is fast stat() designed for DOS FAT filesystems under DJGPP.
 **
 *****************************************************************************/

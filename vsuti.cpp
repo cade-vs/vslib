@@ -343,6 +343,56 @@ VString expand_path( const char* src )
 
 /*****************************************************************************
 **
+** shell_escape() escapes shell special characters    '\"`&;*()[]{}!^:
+**
+*****************************************************************************/
+
+const char* shell_special_chars = "'\"\\`;&*()[]{}!^: ";
+
+char* shell_escape( const char *src, char *dest )
+{
+  int sl = strlen( src );
+  int z = 0;
+  for( int i = 0; i < sl; i++ )
+    {      
+    if( strchr( shell_special_chars, src[i] ) )
+      dest[z++] = '\\';
+    dest[z++] = src[i];
+    }
+  dest[z] = 0;  
+  return dest;  
+}
+
+VString shell_escape( const char* src )
+{
+  VString dest;
+  int sl = strlen( src );
+  for( int i = 0; i < sl; i++ )
+    {      
+    if( strchr( shell_special_chars, src[i] ) )
+      str_add_ch( dest, '\\' );
+    str_add_ch( dest, src[i] );
+    }
+  return dest;  
+}
+
+int shell_escape( VString &dest )
+{
+  int c;
+  int sl = strlen( dest );
+  for( int i = 0; i < sl; i++ )
+    {      
+    if( ! strchr( shell_special_chars, dest[i] ) ) continue;
+    str_ins_ch( dest, i, '\\' );
+    sl++;
+    i++;
+    c++;
+    }
+  return c;  
+}
+
+/*****************************************************************************
+**
 ** dosstat() is fast stat() designed for DOS FAT filesystems under DJGPP.
 **
 *****************************************************************************/
