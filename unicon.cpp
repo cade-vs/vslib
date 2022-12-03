@@ -331,7 +331,7 @@
     i=wgetch(conio_scr);
     nodelay(conio_scr,FALSE);
     if (i==-1)
-      i=0;
+      return 0;
     else
       ungetch(i);
     return(i);
