@@ -1,7 +1,7 @@
 /****************************************************************************
  *
- * Copyright (c) 1996-2020 Vladi Belperchinov-Shabanski "Cade" 
- * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
+ *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade" 
+ *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
@@ -575,6 +575,44 @@
 ** COMMON Part
 **
 ****************************************************************************/
+
+  int con_getwch( wchar_t *pwc )
+  {
+    if( pwc ) *pwc = 0;
+    char s[6];
+    int  z = 0;
+    s[z] = 0;
+    int ch = con_getch();
+    if( ch > 255 ) return ch; // control key
+
+    int x = -1;
+         if( (ch & 0x80) == 0x00 ) x = 0;
+    else if( (ch & 0xE0) == 0xC0 ) x = 1;
+    else if( (ch & 0xF0) == 0xE0 ) x = 2;
+    else if( (ch & 0xF8) == 0xF0 ) x = 3;
+
+    s[z++] = ch;
+    s[z] = 0;
+    while( x > 0 )
+      {
+      ch = con_getch();
+      if( (ch & 0xC0) != 0x80 ) return -1;
+      s[z++] = ch;
+      s[z] = 0;
+      x--;
+      }
+    int r;
+    if( pwc ) r = mbtowc( pwc, s, MB_CUR_MAX );
+    return 0;
+  }
+
+  wchar_t con_getwch()
+  {
+  wchar_t wch;
+  int ctrl = con_getwch( &wch );
+  if( wch == 0 && ctrl > 0 ) wch = KEY_WIDE_CTRL_PREFIX + ctrl;
+  return wch;
+  }
 
   void con_out( int x, int y, const char *s )
   {

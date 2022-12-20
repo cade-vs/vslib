@@ -1,9 +1,9 @@
 /****************************************************************************
  *
- * Copyright (c) 1996-2020 Vladi Belperchinov-Shabanski "Cade" 
- * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
+ *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade" 
+ *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
  *
- * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
+ *  SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
  ****************************************************************************/
 
@@ -15,10 +15,6 @@
 #endif
 
 #include "target.h"
-
-#ifdef _TARGET_UNKNOWN_
-  #error "I don't know what is the target platform"
-#endif
 
 #ifdef _TARGET_UNIX_
   #ifdef _TARGET_HAVE_YASCREEN
@@ -336,17 +332,17 @@
 
 #elif defined(_TARGET_HAVE_YASCREEN)
 
-  #define KEY_IC YAS_K_INS
+  #define KEY_IC        YAS_K_INS
   #define KEY_BACKSPACE YAS_K_BSP
-  #define KEY_LEFT YAS_K_LEFT
-  #define KEY_RIGHT YAS_K_RIGHT
-  #define KEY_UP YAS_K_UP
-  #define KEY_DOWN YAS_K_DOWN
-  #define KEY_HOME YAS_K_HOME
-  #define KEY_END YAS_K_END
-  #define KEY_DC YAS_K_DEL
-  #define KEY_PPAGE YAS_K_PGUP
-  #define KEY_NPAGE YAS_K_PGDN
+  #define KEY_LEFT      YAS_K_LEFT
+  #define KEY_RIGHT     YAS_K_RIGHT
+  #define KEY_UP        YAS_K_UP
+  #define KEY_DOWN      YAS_K_DOWN
+  #define KEY_HOME      YAS_K_HOME
+  #define KEY_END       YAS_K_END
+  #define KEY_DC        YAS_K_DEL
+  #define KEY_PPAGE     YAS_K_PGUP
+  #define KEY_NPAGE     YAS_K_PGDN
 
   #define KEY_ALT_A YAS_K_ALT('a')
   #define KEY_ALT_B YAS_K_ALT('b')
@@ -438,6 +434,11 @@
   #define KEY_DELETE    KEY_DC
   #define KEY_DEL       KEY_DC
 
+  #define KEY_WIDE_CTRL_PREFIX     0xF0000
+  #define KEY_WIDE_CTRL_PREFIX_END 0xFFFFD
+  #define KEY_WIDE(k)              (KEY_WIDE_CTRL_PREFIX+(k))
+  #define KEY_IS_WIDE_CTRL(k)      (((k)>=KEY_WIDE_CTRL_PREFIX)&&((k)<=KEY_WIDE_CTRL_PREFIX_END))
+
 /****************************************************************************
 **
 ** Functions
@@ -476,8 +477,11 @@
   void con_xy( int x, int y ); // move cursor to position x,y
 
   int con_kbhit(); // return != 0 if key is waiting in "keyboard" buffer
-  int con_getch(); // get single char from the "keyboard"
   void con_beep(); // make a "beep" sound
+
+  int con_getch(); // get single char from the "keyboard"
+  int con_getwch( wchar_t *pwc ); // return control key or 0 for wide char at pwc, -1 for error
+  wchar_t con_getwch(); // return wide char or control key (control is in the range above 0x10'0000), -1 for error
 
 #endif /* _UNICON_H_ */
 /****************************************************************************

@@ -1,9 +1,9 @@
 /****************************************************************************
  *
- * Copyright (c) 1996-2020 Vladi Belperchinov-Shabanski "Cade" 
- * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
+ *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade" 
+ *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
  *
- * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
+ *  SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
  ****************************************************************************/
 
@@ -12,6 +12,8 @@
 
 #include <vstring.h>
 #include <vstrlib.h>
+#include <wstring.h>
+#include <wstrlib.h>
 #include <fnmatch2.h>
 #include <getopt2.h>
 #include <vsuti.h>

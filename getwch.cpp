@@ -1,3 +1,12 @@
+/****************************************************************************
+ *
+ *  Copyright (c) 2022 Vladi Belperchinov-Shabanski "Cade" 
+ *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
+ *
+ *  SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
+ *
+ ****************************************************************************/
+
 #include <wchar.h>
 #include <locale.h>
 #include <ncursesw/curses.h>

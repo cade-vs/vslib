@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 # include <wchar.h>
+#include "vstring.h"
 #include "vstrlib.h"
 #include "vsuti.h"
 
@@ -475,6 +476,6 @@ int main( int argc, char* argv[] )
   
   
   wint_t ch = getwc( stdin );
-  printf( "wchar: %lu\n", ch );
+  printf( "wchar: %u\n", ch );
   return 0;
 }

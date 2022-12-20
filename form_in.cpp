@@ -1,12 +1,14 @@
 /****************************************************************************
  *
- * Copyright (c) 1996-2020 Vladi Belperchinov-Shabanski "Cade" 
- * http://cade.datamax.bg/  <cade@biscom.net> <cade@bis.bg> <cade@datamax.bg>
+ *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade" 
+ *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
  *
- * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
+ *  SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
  *
  ****************************************************************************/
 
+#include <vstring.h>
+#include <wstring.h>
 #include "form_in.h"
 #include "scroll.h"
 
@@ -136,11 +138,10 @@ int TextInputWS( int x, int y, const char *prompt, int maxlen, int fieldlen, VSt
 {
   int res = 0;
   int insert = 1;
-  VString str = *strres;
-  VString tmp;
-  int ch;
-
-  wchar_t *work = new wchar_t[ mbstowcs( NULL, *strres, 0 ) ];
+  WString str;
+  str.set_failsafe( strres->data() );
+  WString tmp;
+  int ctrl;
 
   ScrollPos scroll;
   scroll.set_min_max( 0, str_len( str ) );
@@ -159,25 +160,28 @@ int TextInputWS( int x, int y, const char *prompt, int maxlen, int fieldlen, VSt
       {
       str_copy( tmp, str, scroll.page(), scroll.pagesize() );
       str_pad( tmp, -scroll.pagesize() );
-      tmp = " " + tmp + " ";
-      if ( scroll.page() > 0 ) str_set_ch( tmp, 0, '<' );
-      if ( scroll.page() + scroll.pagesize() < str_len(str) ) str_set_ch( tmp, str_len(tmp)-1, '>' );
-      con_out(x, y, tmp, firsthit ? EditStrFH : EditStrBF );
+      tmp = L" " + tmp + L" ";
+      if ( scroll.page() > 0 ) str_set_ch( tmp, 0, L'<' );
+      if ( scroll.page() + scroll.pagesize() < str_len(str) ) str_set_ch( tmp, str_len(tmp)-1, L'>' );
+      VString str_out = tmp.data();
+      con_out( x, y, str_out, firsthit ? EditStrFH : EditStrBF );
       show = 0;
       opage = scroll.page();
       }
     con_xy( x + scroll.pos() - scroll.page() + 1 , y );
-    ch = con_getch();
-    if( ch >= 32 && ch <= 255 && ch != KEY_BACKSPACE && str_len(str) < maxlen - 1 )
+    
+    wchar_t wch;
+    ctrl = con_getwch( &wch );
+    if( wch >= 32 && ctrl != KEY_BACKSPACE && str_len(str) < maxlen - 1 )
       {
       if (firsthit)
         {
-        str = "";
+        str = L"";
         scroll.go(0);
         firsthit = 0;
         }
         if (!insert) str_del( str, scroll.pos(), 1 );
-        str_ins_ch( str, scroll.pos(), ch );
+        str_ins_ch( str, scroll.pos(), wch );
         scroll.set_min_max( 0, str_len( str ) );
         scroll.go( scroll.pos() );
         scroll.down();
@@ -189,39 +193,39 @@ int TextInputWS( int x, int y, const char *prompt, int maxlen, int fieldlen, VSt
       firsthit = 0;
       }
 
-    if( ch == 27 )
+    if( wch == 27 )
       {
       res = 0;
       break;
       } else
-    if( ch == 13 )
+    if( wch == 13 )
       {
-      *strres = str;
+      *strres = str.data();
       res = 1;
       break;
       } else
-    if( ch == KEY_CTRL_U )
+    if( wch == KEY_CTRL_U )
       {
       scroll.go(0);
-      str = "";
+      str = L"";
       show = 1;
       } else
-    if( (ch == KEY_BACKSPACE || ch == 8 ) && (scroll.pos() > 0) )
+    if( (ctrl == KEY_BACKSPACE || wch == 8 ) && (scroll.pos() > 0) )
       {
       scroll.up();
       str_del( str, scroll.pos(), 1 );
       show = 1;
       } else
-    if ( ch == KEY_IC    ) insert = !insert; else
-    if ( ch == KEY_LEFT  ) scroll.up(); else
-    if ( ch == KEY_RIGHT ) scroll.down(); else
+    if ( ctrl == KEY_IC    ) insert = !insert; else
+    if ( ctrl == KEY_LEFT  ) scroll.up(); else
+    if ( ctrl == KEY_RIGHT ) scroll.down(); else
     /*
-    if ( ch == KEY_PPAGE ) scroll.ppage(); else
-    if ( ch == KEY_NPAGE ) scroll.npage(); else
+    if ( ctrl == KEY_PPAGE ) scroll.ppage(); else
+    if ( ctrl == KEY_NPAGE ) scroll.npage(); else
     */
-    if ( ch == KEY_HOME || ch == KEY_CTRL_A ) scroll.go(0); else
-    if ( ch == KEY_END  || ch == KEY_CTRL_E ) scroll.go(str_len(str)); else
-    if ( ( ch == KEY_DC || ch == KEY_CTRL_D ) && scroll.pos() < str_len(str) )
+    if ( ctrl == KEY_HOME || ctrl == KEY_CTRL_A || wch == 1 ) scroll.go(0); else
+    if ( ctrl == KEY_END  || ctrl == KEY_CTRL_E || wch == 5 ) scroll.go(str_len(str)); else
+    if ( ( ctrl == KEY_DC || ctrl == KEY_CTRL_D || wch == 4 ) && scroll.pos() < str_len(str) )
       {
       str_del( str, scroll.pos(), 1 );
       show = 1;
@@ -229,7 +233,10 @@ int TextInputWS( int x, int y, const char *prompt, int maxlen, int fieldlen, VSt
     if ( handlekey )
       {
       int npos = scroll.pos();
-      handlekey( ch, str, npos );
+      
+      VString hstr = str.data();
+      handlekey( wch, hstr, npos );
+      str = hstr.data();
       scroll.set_min_max( 0, str_len( str ) );
       scroll.go( scroll.pos() );
       if (scroll.pos() != npos) scroll.go( npos );
