@@ -24,7 +24,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, WStri
 
   ScrollPos scroll;
   scroll.set_min_max( 0, str_len( work ) );
-  scroll.set_pagesize( fieldlen );
+  scroll.set_pagesize( fieldlen - 2 );
   scroll.set_pagestep( 0.3 );
   scroll.go( str_len( work ) );
 
@@ -42,7 +42,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, WStri
       str_pad( work_out, - scroll.pagesize() );
       work_out = L"[" + work_out + L"]"; // used to be spaces
       if ( scroll.page() > 0 ) str_set_ch( work_out, 0, L'<' );
-      if ( scroll.page() + scroll.pagesize() < str_len( work_out ) ) str_set_ch( work_out, str_len(work_out)-1, L'>' );
+      if ( scroll.page() + scroll.pagesize() < str_len( work ) ) str_set_ch( work_out, -1, L'>' );
       VString str_out = work_out;
       con_out( x, y, str_out, firsthit ? EditStrFH : EditStrBF );
       show = 0;
