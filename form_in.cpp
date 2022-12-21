@@ -52,7 +52,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, WStri
     
     wchar_t wch;
     wch = con_getwch();
-    if( wch >= 32 && wch != KEY_BACKSPACE && str_len( work ) < maxlen - 1 )
+    if( ( ! KEY_IS_WIDE_CTRL( wch ) ) && wch >= 32 && wch != KEY_BACKSPACE && str_len( work ) < maxlen - 1 )
       {
       if (firsthit)
         {
@@ -90,22 +90,22 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, WStri
       work.undef();
       show = 1;
       } else
-    if( (wch == KEY_BACKSPACE || wch == 8 ) && (scroll.pos() > 0) )
+    if( ( wch == KEY_BACKSPACE || wch == 8 ) && (scroll.pos() > 0) )
       {
       scroll.up();
       str_del( work, scroll.pos(), 1 );
       show = 1;
       } else
-    if ( wch == KEY_IC    ) insert = !insert; else
-    if ( wch == KEY_LEFT  ) scroll.up(); else
-    if ( wch == KEY_RIGHT ) scroll.down(); else
+    if ( wch == KEY_WIDE(KEY_IC)    ) insert = !insert; else
+    if ( wch == KEY_WIDE(KEY_LEFT)  ) scroll.up(); else
+    if ( wch == KEY_WIDE(KEY_RIGHT) ) scroll.down(); else
     /*
     if ( wch == KEY_PPAGE ) scroll.ppage(); else
     if ( wch == KEY_NPAGE ) scroll.npage(); else
     */
-    if ( wch == KEY_HOME || wch == KEY_CTRL_A || wch == 1 ) scroll.go(0); else
-    if ( wch == KEY_END  || wch == KEY_CTRL_E || wch == 5 ) scroll.go(str_len(work)); else
-    if ( ( wch == KEY_DC || wch == KEY_CTRL_D || wch == 4 ) && scroll.pos() < str_len(work) )
+    if ( wch == KEY_WIDE(KEY_HOME) || wch == KEY_CTRL_A ) scroll.go(0); else
+    if ( wch == KEY_WIDE(KEY_END)  || wch == KEY_CTRL_E ) scroll.go(str_len(work)); else
+    if ( ( wch == KEY_WIDE(KEY_DC) || wch == KEY_CTRL_D ) && scroll.pos() < str_len(work) )
       {
       str_del( work, scroll.pos(), 1 );
       show = 1;
