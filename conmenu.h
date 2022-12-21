@@ -10,14 +10,16 @@
 #ifndef _CONMENU_H_
 #define _CONMENU_H_
 
+#include <vstring.h>
+#include <wstring.h>
 #include <vstrlib.h>
 
 struct  ToggleEntry
 {
-  int  key;
-  char name[64];
-  int  *data;
-  const char **states;
+  int     key;
+  wchar_t name[64];
+  int     *data;
+  const wchar_t **states;
 };
 
 struct ConMenuInfo
@@ -30,20 +32,22 @@ struct ConMenuInfo
   int ti; // title color
 
   int bo; // should view borders?
-
-  int ec; // exit char (used by con_menu_box)
-  int ac; // alternative confirm (used by menu box)
-
   int st; // scroll type -- 1 dynamic and 0 normal/static
+
+  wchar_t ec; // exit char (used by con_menu_box)
+  wchar_t ac; // alternative confirm (used by menu box)
+
+/*
   char hide_magic[32];
+*/  
 };
 
 extern ConMenuInfo con_default_menu_info;
 
-int con_toggle_box( int x, int y, const char *title, ToggleEntry* toggles, ConMenuInfo *menu_info );
-int con_menu_box( int x, int y, const char *title, VArray *va, int hotkeys, ConMenuInfo *menu_info );
+int con_toggle_box( int x, int y, const wchar_t *title, ToggleEntry* toggles, ConMenuInfo *menu_info );
+int con_menu_box( int x, int y, const wchar_t *title, WArray *wa, int hotkeys, ConMenuInfo *menu_info );
 
 /* show full screen varray list (w/o last two lines of the screen) */
-int con_full_box( int x, int y, const char *title, VArray *va, ConMenuInfo *menu_info );
+int con_full_box( int x, int y, const wchar_t *title, WArray *wa, ConMenuInfo *menu_info );
 
 #endif //_CONMENU_H_

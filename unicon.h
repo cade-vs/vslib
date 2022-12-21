@@ -101,6 +101,11 @@
 
 /******* common ************************************************************/
 
+  #define KEY_WIDE_CTRL_PREFIX     0xF0000
+  #define KEY_WIDE_CTRL_PREFIX_END 0xFFFFD
+  #define KEY_WIDE(k)              (KEY_WIDE_CTRL_PREFIX+(k))
+  #define KEY_IS_WIDE_CTRL(k)      (((k)>=KEY_WIDE_CTRL_PREFIX)&&((k)<=KEY_WIDE_CTRL_PREFIX_END))
+
   #define KEY_CTRL_A    1
   #define KEY_CTRL_B    2
   #define KEY_CTRL_C    3
@@ -433,11 +438,6 @@
   #define KEY_INS       KEY_IC
   #define KEY_DELETE    KEY_DC
   #define KEY_DEL       KEY_DC
-
-  #define KEY_WIDE_CTRL_PREFIX     0xF0000
-  #define KEY_WIDE_CTRL_PREFIX_END 0xFFFFD
-  #define KEY_WIDE(k)              (KEY_WIDE_CTRL_PREFIX+(k))
-  #define KEY_IS_WIDE_CTRL(k)      (((k)>=KEY_WIDE_CTRL_PREFIX)&&((k)<=KEY_WIDE_CTRL_PREFIX_END))
 
 /****************************************************************************
 **
