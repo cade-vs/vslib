@@ -23,7 +23,7 @@ int con_toggle_box( int x, int y, const wchar_t *title, ToggleEntry* toggles, Co
 
   int maxlen = 0;
   int count  = 0;
-  while( toggles[count].key != -1 )
+  while( toggles[count].key != 0 )
     {
     int sl = str_len( toggles[count].name );
     if (sl > maxlen) maxlen = sl;
