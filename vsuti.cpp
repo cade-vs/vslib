@@ -379,7 +379,7 @@ VString shell_escape( const char* src )
 
 int shell_escape( VString &dest )
 {
-  int c;
+  int c = 0;
   int sl = strlen( dest );
   for( int i = 0; i < sl; i++ )
     {      
