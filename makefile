@@ -40,7 +40,7 @@ CC_1       = $(CXX)
 LD_1       = $(CXX)
 AR_1       = ar rv
 RANLIB_1   = ranlib
-CCFLAGS_1  = -I../vstring -I../vstring/pcre2 -I. -O2 -Wpedantic -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
+CCFLAGS_1  = -I../vstring -I../vstring/pcre2 -I. -O3 -Wpedantic -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_1  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_1 = 
 ARFLAGS_1  = 
@@ -123,7 +123,7 @@ CC_2       = $(CXX)
 LD_2       = $(CXX)
 AR_2       = ar rv
 RANLIB_2   = ranlib
-CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O2 -Wpedantic -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
+CCFLAGS_2  = -I../vstring -I. -I/usr/include/ncurses -O3 -Wpedantic -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_2  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_2 = 
 ARFLAGS_2  = 
@@ -186,7 +186,7 @@ CC_3       = $(CXX)
 LD_3       = $(CXX)
 AR_3       = ar rv
 RANLIB_3   = ranlib
-CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O2 -Wpedantic -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
+CCFLAGS_3  = -I../vstring -I. -I../yascreen -DUSE_YASCREEN -O3 -Wpedantic -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 $(CFLAGS) $(CPPFLAGS) $(CCDEF)  
 LDFLAGS_3  = $(LDFLAGS) $(LDDEF) 
 DEPFLAGS_3 = 
 ARFLAGS_3  = 
