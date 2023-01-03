@@ -275,6 +275,7 @@ class BSet
     char *data;
 
     BSet();
+    BSet( const BSet& b );
     BSet( const char* str );
     ~BSet();
 

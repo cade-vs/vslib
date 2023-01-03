@@ -314,6 +314,15 @@ void FLCluster::dump()
       resize( 256 );
       }
 
+    BSet::BSet( const BSet& b )
+      {
+      data = NULL;
+      size = 0;
+      datasize = 0;
+      resize( b.size );
+      memcpy( data, b.data, datasize );
+      }
+
     BSet::BSet( const char* str )
       {
       data = NULL;
