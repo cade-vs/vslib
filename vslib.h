@@ -14,7 +14,6 @@
 #include <vstrlib.h>
 #include <wstring.h>
 #include <wstrlib.h>
-#include <fnmatch2.h>
 #include <getopt2.h>
 #include <vsuti.h>
 #include <dlog.h>

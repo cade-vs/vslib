@@ -119,7 +119,7 @@ libvscon_a_OBJECTS = $(am_libvscon_a_OBJECTS)
 libvslib_a_AR = $(AR) $(ARFLAGS)
 libvslib_a_LIBADD =
 am_libvslib_a_OBJECTS = clusters.$(OBJEXT) dlog.$(OBJEXT) \
-	eval.$(OBJEXT) fnmatch2.$(OBJEXT) getopt2.$(OBJEXT) \
+	eval.$(OBJEXT) getopt2.$(OBJEXT) \
 	scroll.$(OBJEXT) vslib.$(OBJEXT) vstring.$(OBJEXT) \
 	vstrlib.$(OBJEXT) vsuti.$(OBJEXT) vscrc.$(OBJEXT)
 libvslib_a_OBJECTS = $(am_libvslib_a_OBJECTS)
@@ -284,7 +284,6 @@ libvslib_a_SOURCES = \
      clusters.cpp \
      dlog.cpp \
      eval.cpp \
-     fnmatch2.cpp \
      getopt2.cpp \
      scroll.cpp \
      vslib.cpp \
@@ -305,7 +304,7 @@ libvscon_a_CXXFLAGS = $(AM_CXXFLAGS)
 
 # headers for libvscon    
 noinst_HEADERS = dlog.h target.h vstring.h clusters.h eval.h getopt2.h \
-	vstrlib.h fnmatch2.h scroll.h vslib.h vsuti.h ansiterm.h \
+	vstrlib.h scroll.h vslib.h vsuti.h ansiterm.h \
 	unicon.h form_in.h conmenu.h
 all: all-am
 

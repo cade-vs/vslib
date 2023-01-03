@@ -52,7 +52,6 @@ SRC_1= \
      clusters.cpp \
      dlog.cpp \
      eval.cpp \
-     fnmatch2.cpp \
      getopt2.cpp \
      scroll.cpp \
      vslib.cpp \
@@ -65,7 +64,6 @@ OBJ_1= \
      .OBJ.libvslib.a/clusters.o \
      .OBJ.libvslib.a/dlog.o \
      .OBJ.libvslib.a/eval.o \
-     .OBJ.libvslib.a/fnmatch2.o \
      .OBJ.libvslib.a/getopt2.o \
      .OBJ.libvslib.a/scroll.o \
      .OBJ.libvslib.a/vslib.o \
@@ -103,8 +101,6 @@ link-libvslib.a: .OBJ.libvslib.a $(OBJ_1)
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c dlog.cpp             -o .OBJ.libvslib.a/dlog.o
 .OBJ.libvslib.a/eval.o: eval.cpp  eval.cpp eval.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c eval.cpp             -o .OBJ.libvslib.a/eval.o
-.OBJ.libvslib.a/fnmatch2.o: fnmatch2.cpp  fnmatch2.cpp fnmatch2.h
-	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c fnmatch2.cpp         -o .OBJ.libvslib.a/fnmatch2.o
 .OBJ.libvslib.a/getopt2.o: getopt2.cpp  getopt2.cpp getopt2.h
 	$(CC_1) $(CFLAGS_1) $(CCFLAGS_1) -c getopt2.cpp          -o .OBJ.libvslib.a/getopt2.o
 .OBJ.libvslib.a/scroll.o: scroll.cpp  scroll.cpp scroll.h
