@@ -52,7 +52,7 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, WStri
     
     wchar_t wch;
     wch = con_getwch();
-    if( ( ! KEY_IS_WIDE_CTRL( wch ) ) && wch >= 32 && wch != KEY_BACKSPACE && str_len( work ) < maxlen - 1 )
+    if( ( ! UKEY_IS_WIDE_CTRL( wch ) ) && wch >= 32 && wch != UKEY_BACKSPACE && str_len( work ) < maxlen - 1 )
       {
       if (firsthit)
         {
@@ -84,28 +84,28 @@ int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, WStri
       res = 1;
       break;
       } else
-    if( wch == KEY_CTRL_U )
+    if( wch == UKEY_CTRL_U )
       {
       scroll.go(0);
       work.undef();
       show = 1;
       } else
-    if( ( wch == KEY_BACKSPACE || wch == 8 ) && (scroll.pos() > 0) )
+    if( ( wch == UKEY_BACKSPACE || wch == 8 ) && (scroll.pos() > 0) )
       {
       scroll.up();
       str_del( work, scroll.pos(), 1 );
       show = 1;
       } else
-    if ( wch == KEY_WIDE(KEY_IC)    ) insert = !insert; else
-    if ( wch == KEY_WIDE(KEY_LEFT)  ) scroll.up(); else
-    if ( wch == KEY_WIDE(KEY_RIGHT) ) scroll.down(); else
+    if ( wch == UKEY_INS    ) insert = !insert; else
+    if ( wch == UKEY_LEFT  ) scroll.up(); else
+    if ( wch == UKEY_RIGHT ) scroll.down(); else
     /*
-    if ( wch == KEY_PPAGE ) scroll.ppage(); else
-    if ( wch == KEY_NPAGE ) scroll.npage(); else
+    if ( wch == UKEY_PGUP ) scroll.ppage(); else
+    if ( wch == UKEY_PGDN ) scroll.npage(); else
     */
-    if ( wch == KEY_WIDE(KEY_HOME) || wch == KEY_CTRL_A ) scroll.go(0); else
-    if ( wch == KEY_WIDE(KEY_END)  || wch == KEY_CTRL_E ) scroll.go(str_len(work)); else
-    if ( ( wch == KEY_WIDE(KEY_DC) || wch == KEY_CTRL_D ) && scroll.pos() < str_len(work) )
+    if ( wch == UKEY_HOME  || wch == UKEY_CTRL_A ) scroll.go(0); else
+    if ( wch == UKEY_END   || wch == UKEY_CTRL_E ) scroll.go(str_len(work)); else
+    if ( ( wch == UKEY_DEL || wch == UKEY_CTRL_D ) && scroll.pos() < str_len(work) )
       {
       str_del( work, scroll.pos(), 1 );
       show = 1;

@@ -18,8 +18,8 @@ int main( int argc, char** argv )
   while(4)
     {
     int ch = con_getch();
-    if(ch==3)break;
-    printf( "%x\r\n", ch );
+    if( ch == UKEY_CTRL_C )break;
+    printf( "%d %x\r\n", ch, ch );
     }
   con_done();
 }

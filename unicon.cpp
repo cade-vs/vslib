@@ -11,116 +11,6 @@
 
 /****************************************************************************
 **
-** DJGPP/DOS Part
-**
-****************************************************************************/
-
-#ifdef _TARGET_GO32_
-
-#include <pc.h>
-#include <dos.h>
-#include <conio.h>
-#include "vstring.h"
-
-  int original_ta;
-
-  text_info ti;
-  int __fg;
-  int __bg;
-  int __ta;
-
-  int con_init()
-  {
-    gppconio_init();
-    gettextinfo( &ti );
-    original_ta = ti.attribute;
-    return 0;
-  }
-
-  void con_done()
-  {
-    textattr( original_ta );
-    return;
-  }
-
-  void con_suspend() { return; }
-  void con_restore() { return; }
-  void con_reset_screen_size() { return; }
-
-  void con_ce( int attr )
-  {
-    if (attr != -1)
-      {
-      int ta = __ta;
-      textattr( attr );
-      clreol();
-      textattr( ta );
-      }
-    else
-      clreol();
-  }
-
-  void con_cs( int attr )
-  {
-    if (attr != -1)
-      {
-      int ta = __ta;
-      textattr( attr );
-      clrscr();
-      gotoxy(1,1);
-      textattr( ta );
-      }
-    else
-      {
-      clrscr();
-      gotoxy(1,1);
-      }
-  }
-
-  void con_puts( const char *s )
-  {
-    #ifdef _TARGET_GO32_
-    VString str = s;
-    str_replace( str, "\n", "\r\n" );
-    cputs( str );
-    #else
-    cputs( s );
-    #endif
-  }
-
-  int con_max_x() { return ti.screenwidth;  }
-  int con_max_y() { return ti.screenheight; }
-  int con_x() { return wherex(); }
-  int con_y() { return wherey(); }
-  void con_fg( int color ) { __fg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); }
-  void con_bg( int color ) { __bg = color; __ta = CONCOLOR(__fg,__bg); textattr( __ta ); }
-  void con_ta( int attr  ) { __ta = attr;  __bg = COLORBG(attr); __fg = COLORFG(attr); textattr( attr ); }
-  void con_xy( int x, int y ) { gotoxy( x, y ); }
-
-  void con_chide() { _setcursortype( _NOCURSOR ); }
-  void con_cshow() { _setcursortype( _NORMALCURSOR ); }
-
-  int con_kbhit() { return kbhit(); }
-  int con_getch()
-  {
-    char ch = getch();
-    if ( ch == 0 )
-      return KEY_PREFIX + getch();
-    else
-      return ch;
-  }
-
-  void con_beep()
-  {
-    sound(800);
-    delay(1); // 1/10 second
-    sound(0);
-  }
-
-#endif /* _TARGET_GO32_ */
-
-/****************************************************************************
-**
 ** UNIX Part
 **
 ****************************************************************************/
@@ -339,22 +229,47 @@
 
   int con_getch()
   {
-    int i;
-    i=wgetch(conio_scr);
-    if (i==-1) i=0;
-    if (i == 27)
-      if (con_kbhit())
-        i = KEY_PREFIX + wgetch(conio_scr);
-    #ifndef _NO_ALT_ESCAPE_SAME_
-    if (i == KEY_PREFIX + 27) i = 27;
-    #endif
-    return(i);
+    int i = wgetch(conio_scr);
+    if( i == -1 ) i = 0;
+    if( i == 27 )
+      if( con_kbhit() )
+        i = UKEY_ALT_PREFIX + wgetch(conio_scr);
+    return( i > 0xFF ? UKEY_WIDE(i) : i );
   }
 
   void con_beep()
   {
     printf( "\007" );
     fflush( stdout );
+  }
+
+  wchar_t con_getwch()
+  {
+    wchar_t wch = 0;
+    char s[6];
+    int  z = 0;
+    s[z] = 0;
+    int ch = con_getch();
+    if( UKEY_IS_WIDE_CTRL( ch ) ) return ch; // control key
+
+    int x = -1;
+         if( (ch & 0x80) == 0x00 ) x = 0;
+    else if( (ch & 0xE0) == 0xC0 ) x = 1;
+    else if( (ch & 0xF0) == 0xE0 ) x = 2;
+    else if( (ch & 0xF8) == 0xF0 ) x = 3;
+
+    s[z++] = ch;
+    s[z] = 0;
+    while( x > 0 )
+      {
+      ch = con_getch();
+      if( (ch & 0xC0) != 0x80 ) return -1;
+      s[z++] = ch;
+      s[z] = 0;
+      x--;
+      }
+    int r = mbtowc( &wch, s, MB_CUR_MAX );
+    return wch;
   }
 
 #endif /* _TARGET_HAVE_CURSES */
@@ -548,19 +463,16 @@
 
   int con_kbhit()
   {
-    int i=yascreen_peekch(ya_s);
-
-    if (i==-1)
-      i=0;
+    int i = yascreen_peekch(ya_s);
+    if( i == YAS_K_NONE ) i = 0;
     return(i);
   }
 
   int con_getch()
   {
-    int i;
-    i=yascreen_getch(ya_s);
-    if (i==-1) i=0;
-    return(i);
+    int i = yascreen_getch( ya_s );
+    if( i == YAS_K_NONE ) i = 0;
+    return( i );
   }
 
   void con_beep()
@@ -568,6 +480,14 @@
     printf( "\007" );
     fflush( stdout );
   }
+
+  wchar_t con_getwch()
+  {
+    wchar_t w = yascreen_getwch( ya_s );
+    if( w == YAS_K_NONE ) w = 0;
+    return( w );
+  }
+
 #endif
 
 /****************************************************************************
@@ -576,43 +496,6 @@
 **
 ****************************************************************************/
 
-  int con_getwch( wchar_t *pwc )
-  {
-    if( pwc ) *pwc = 0;
-    char s[6];
-    int  z = 0;
-    s[z] = 0;
-    int ch = con_getch();
-    if( ch > 255 ) return ch; // control key
-
-    int x = -1;
-         if( (ch & 0x80) == 0x00 ) x = 0;
-    else if( (ch & 0xE0) == 0xC0 ) x = 1;
-    else if( (ch & 0xF0) == 0xE0 ) x = 2;
-    else if( (ch & 0xF8) == 0xF0 ) x = 3;
-
-    s[z++] = ch;
-    s[z] = 0;
-    while( x > 0 )
-      {
-      ch = con_getch();
-      if( (ch & 0xC0) != 0x80 ) return -1;
-      s[z++] = ch;
-      s[z] = 0;
-      x--;
-      }
-    int r;
-    if( pwc ) r = mbtowc( pwc, s, MB_CUR_MAX );
-    return 0;
-  }
-
-  wchar_t con_getwch()
-  {
-  wchar_t wch;
-  int ctrl = con_getwch( &wch );
-  if( wch == 0 && ctrl > 0 ) wch = KEY_WIDE_CTRL_PREFIX + ctrl;
-  return wch;
-  }
 
   void con_out( int x, int y, const char *s )
   {

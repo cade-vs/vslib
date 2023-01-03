@@ -116,14 +116,14 @@ int con_toggle_box( int x, int y, const wchar_t *title, ToggleEntry* toggles, Co
     wchar_t wch = con_getwch();
     menu_info->ec = wch;
 
-    if ( wch == KEY_WIDE(KEY_UP)    ) scroll.up();
-    if ( wch == KEY_WIDE(KEY_DOWN)  ) scroll.down();
-    if ( wch == KEY_WIDE(KEY_NPAGE) ) scroll.npage();
-    if ( wch == KEY_WIDE(KEY_PPAGE) ) scroll.ppage();
-    if ( wch == KEY_WIDE(KEY_HOME)  ) scroll.home();
-    if ( wch == KEY_WIDE(KEY_END)   ) scroll.end();
+    if ( wch == UKEY_UP   ) scroll.up();
+    if ( wch == UKEY_DOWN ) scroll.down();
+    if ( wch == UKEY_PGUP ) scroll.npage();
+    if ( wch == UKEY_PGDN ) scroll.ppage();
+    if ( wch == UKEY_HOME ) scroll.home();
+    if ( wch == UKEY_END  ) scroll.end();
 
-    if ( wch == 27 || wch == 8 ||  wch == KEY_WIDE(KEY_BACKSPACE) ) return 0; // exit on ESC or BS
+    if ( wch == 27 || wch == 8 ||  wch == UKEY_BACKSPACE ) return 0; // exit on ESC or BS
 //    if ( ch < 0 || ch > 255 ) continue; //FIXME: unicode?
     if ( wch == 13 /* && wcsncmp(L"--", toggles[scroll.pos].name, 2) */ ) return 1;
     z = ( wch == L' ' ) ? scroll.pos() : str_find( hots, wch );
@@ -220,14 +220,14 @@ int con_menu_box( int x, int y, const wchar_t *title, WArray *wa, int hotkeys, C
     wchar_t wch = con_getwch();
     menu_info->ec = wch;
 
-    if ( wch == KEY_WIDE(KEY_UP)    ) scroll.up();
-    if ( wch == KEY_WIDE(KEY_DOWN)  ) scroll.down();
-    if ( wch == KEY_WIDE(KEY_NPAGE) ) scroll.npage();
-    if ( wch == KEY_WIDE(KEY_PPAGE) ) scroll.ppage();
-    if ( wch == KEY_WIDE(KEY_HOME)  ) scroll.home();
-    if ( wch == KEY_WIDE(KEY_END)   ) scroll.end();
+    if ( wch == UKEY_UP   ) scroll.up();
+    if ( wch == UKEY_DOWN ) scroll.down();
+    if ( wch == UKEY_PGUP ) scroll.npage();
+    if ( wch == UKEY_PGDN ) scroll.ppage();
+    if ( wch == UKEY_HOME ) scroll.home();
+    if ( wch == UKEY_END  ) scroll.end();
 
-    if ( wch == 27 || wch == 8 ||  wch == KEY_WIDE(KEY_BACKSPACE) )
+    if ( wch == 27 || wch == 8 ||  wch == UKEY_BACKSPACE )
       {
       // exit on ESC or BS
       menu_info->ac = 0;
@@ -301,14 +301,14 @@ int con_full_box( int x, int y, const wchar_t *title, WArray *wa, ConMenuInfo *m
       {
       case 27 : menu_info->ec = 27; return -1; break;
       case  8 : menu_info->ec =  8; return -1; break;
-      case KEY_WIDE(KEY_BACKSPACE) : menu_info->ec =  KEY_WIDE(KEY_BACKSPACE); return -1; break;
+      case UKEY_BACKSPACE : menu_info->ec =  UKEY_BACKSPACE; return -1; break;
       case 13 : menu_info->ec = 13; return scroll.pos(); break;
-      case KEY_WIDE(KEY_UP)    : scroll.up(); break;
-      case KEY_WIDE(KEY_DOWN)  : scroll.down(); break;
-      case KEY_WIDE(KEY_NPAGE) : scroll.npage(); break;
-      case KEY_WIDE(KEY_PPAGE) : scroll.ppage(); break;
-      case KEY_WIDE(KEY_HOME)  : scroll.home(); break;
-      case KEY_WIDE(KEY_END)   : scroll.end(); break;
+      case UKEY_UP   : scroll.up(); break;
+      case UKEY_DOWN : scroll.down(); break;
+      case UKEY_PGUP : scroll.npage(); break;
+      case UKEY_PGDN : scroll.ppage(); break;
+      case UKEY_HOME : scroll.home(); break;
+      case UKEY_END  : scroll.end(); break;
       default:
         if ( towlower( wch ) == towlower( menu_info->ac ) )
           {
