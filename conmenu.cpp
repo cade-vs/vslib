@@ -118,8 +118,8 @@ int con_toggle_box( int x, int y, const wchar_t *title, ToggleEntry* toggles, Co
 
     if ( wch == UKEY_UP   ) scroll.up();
     if ( wch == UKEY_DOWN ) scroll.down();
-    if ( wch == UKEY_PGUP ) scroll.npage();
-    if ( wch == UKEY_PGDN ) scroll.ppage();
+    if ( wch == UKEY_PGUP ) scroll.ppage();
+    if ( wch == UKEY_PGDN ) scroll.npage();
     if ( wch == UKEY_HOME ) scroll.home();
     if ( wch == UKEY_END  ) scroll.end();
 
@@ -222,8 +222,8 @@ int con_menu_box( int x, int y, const wchar_t *title, WArray *wa, int hotkeys, C
 
     if ( wch == UKEY_UP   ) scroll.up();
     if ( wch == UKEY_DOWN ) scroll.down();
-    if ( wch == UKEY_PGUP ) scroll.npage();
-    if ( wch == UKEY_PGDN ) scroll.ppage();
+    if ( wch == UKEY_PGUP ) scroll.ppage();
+    if ( wch == UKEY_PGDN ) scroll.npage();
     if ( wch == UKEY_HOME ) scroll.home();
     if ( wch == UKEY_END  ) scroll.end();
 
@@ -305,8 +305,8 @@ int con_full_box( int x, int y, const wchar_t *title, WArray *wa, ConMenuInfo *m
       case 13 : menu_info->ec = 13; return scroll.pos(); break;
       case UKEY_UP   : scroll.up(); break;
       case UKEY_DOWN : scroll.down(); break;
-      case UKEY_PGUP : scroll.npage(); break;
-      case UKEY_PGDN : scroll.ppage(); break;
+      case UKEY_PGUP : scroll.ppage(); break;
+      case UKEY_PGDN : scroll.npage(); break;
       case UKEY_HOME : scroll.home(); break;
       case UKEY_END  : scroll.end(); break;
       default:
