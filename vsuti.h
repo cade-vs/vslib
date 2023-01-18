@@ -58,7 +58,7 @@ typedef unsigned long int crc32_t;
 #define CRC32NULL (0xffffffff)
 
 /* should start with `0xffffffff' for `crc' and result is crc = ~crc; */
-crc32_t update_crc32( const unsigned char octet, const crc32_t crc );
+inline crc32_t update_crc32( const unsigned char octet, const crc32_t crc );
 
 crc32_t mem_crc32( const void* buff, int size );
 crc32_t str_crc32( const char *s );

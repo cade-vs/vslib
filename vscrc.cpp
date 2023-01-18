@@ -48,7 +48,7 @@ const unsigned long crc_32_tab[256] = {
 };
 
 /* should start with `0xffffffff' for `crc' and result is crc = ~crc; */
-crc32_t update_crc32( const unsigned char octet, const crc32_t crc )
+inline crc32_t update_crc32( const unsigned char octet, const crc32_t crc )
 {
   return (crc_32_tab[(unsigned char)((unsigned char)crc ^ octet)] ^ ((crc >> 8) & 0x00FFFFFFl));
 }
