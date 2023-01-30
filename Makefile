@@ -19,10 +19,10 @@ NCURSES_LD?=$(shell $(PKG_CONFIG) --libs ncursesw)
 
 ALIBS:=libvslib.a libvscon.a libvscony.a
 ifeq ($(YASCREEN_LD),)
-	ALIBS:=$(filter-out libvscony.a,$(ALIBS)
+	ALIBS:=$(filter-out libvscony.a,$(ALIBS))
 endif
 ifeq ($(NCURSES_LD),)
-	ALIBS:=$(filter-out libvscon.a,$(ALIBS)
+	ALIBS:=$(filter-out libvscon.a,$(ALIBS))
 endif
 
 all: $(ALIBS) t/test
@@ -42,7 +42,7 @@ SRCS:=\
 	vsuti.cpp \
 	t/test.cpp
 OBJS:=$(SRCS:.cpp=.o)
-DEPS:=$(OBJS:.o=.d)
+DEPS:=$(OBJS:.o=.d) $(OBJS:.o=.y.d)
 
 ifndef NO_FLTO
 CXXFLAGS?=-O3 -fno-stack-protector -mno-stackrealign
@@ -56,7 +56,7 @@ HAVESREA:=$(shell if $(CXX) -mno-stackrealign -xc -c /dev/null -o /dev/null >/de
 # old comiplers do not have -Wdate-time
 HAVEWDTI:=$(shell if $(CXX) -Wdate-time -xc -c /dev/null -o /dev/null >/dev/null 2>/dev/null;then echo yes;else echo no;fi)
 
-MYCXXFLAGS:=$(CPPFLAGS) $(CXXFLAGS) $(NCCC) -Wall -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -fPIE -I. -I../vstring
+MYCXXFLAGS:=$(CPPFLAGS) $(CXXFLAGS) $(PCRE08_CC) $(PCRE32_CC) $(YASCREEN_CC) $(NCURSES_CC) -Wall -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -fPIE -I. -I../vstring
 ifeq ("$(HAVESREA)","no")
 MYCXXFLAGS:=$(filter-out -mno-stackrealign,$(MYCXXFLAGS))
 endif
@@ -64,7 +64,7 @@ ifeq ("$(HAVEWDTI)","no")
 MYCXXFLAGS:=$(filter-out -Wdate-time,$(MYCXXFLAGS))
 endif
 
-MYLDFLAGS:=$(MYCXXFLAGS) $(LDFLAGS) -fPIE -pie $(PCRE08_CC) $(PCRE32_CC)
+MYLDFLAGS:=$(MYCXXFLAGS) $(LDFLAGS) -fPIE -pie
 MYLIBS:=$(LIBS) $(PCRE08_LD) $(PCRE32_LD)
 
 ifeq ("$(V)","1")
@@ -80,6 +80,12 @@ endif
 	$(Q)$(CXX) $(MYCXXFLAGS) -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
 	$(E) CXX $@
 	$(Q)$(CXX) $(MYCXXFLAGS) -c -o $@ $<
+
+%.y.o: %.cpp
+	$(E) DE $@
+	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+	$(E) CXX $@
+	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -c -o $@ $<
 
 VSLIBOBJ:=\
 	clusters.o \
@@ -103,23 +109,14 @@ VSCONOBJ:=\
 	form_in.o \
 	unicon.o
 
+VSCONYOBJ:=$(VSCONOBJ:.o=.y.o)
+
 libvscon.a: $(VSCONOBJ)
 	$(Q)rm -f $@
 	$(E) AR $@
 	$(Q)$(AR) rv $@ $+
 	$(E) RANLIB $@
 	$(Q)$(RANLIB) $@
-
-VSCONYOBJ:=\
-	conmenu.o \
-	form_in.o \
-	unicony.o
-
-unicony.o: unicon.cpp
-	$(E) DE $@
-	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
-	$(E) CXX $@
-	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -c -o $@ $<
 
 libvscony.a: $(VSCONYOBJ)
 	$(Q)rm -f $@
