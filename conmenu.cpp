@@ -265,7 +265,7 @@ int con_menu_box( int x, int y, const wchar_t *title, WArray *wa, int hotkeys, C
   return -1;
 }
 
-int con_full_box( int x, int y, const wchar_t *title, WArray *wa, ConMenuInfo *menu_info )
+int con_full_box( int x __attribute__((unused)), int y __attribute__((unused)), const wchar_t *title, WArray *wa, ConMenuInfo *menu_info )
 {
   ScrollPos scroll;
   scroll.wrap = 0;
