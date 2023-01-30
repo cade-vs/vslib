@@ -19,10 +19,10 @@ NCURSES_LD?=$(shell $(PKG_CONFIG) --libs ncursesw)
 
 ALIBS:=libvslib.a libvscon.a libvscony.a
 ifeq ($(YASCREEN_LD),)
-	ALIBS:=$(filter-out libvscony.a,$(ALIBS)
+	ALIBS:=$(filter-out libvscony.a,$(ALIBS))
 endif
 ifeq ($(NCURSES_LD),)
-	ALIBS:=$(filter-out libvscon.a,$(ALIBS)
+	ALIBS:=$(filter-out libvscon.a,$(ALIBS))
 endif
 
 all: $(ALIBS) t/test
@@ -42,7 +42,7 @@ SRCS:=\
 	vsuti.cpp \
 	t/test.cpp
 OBJS:=$(SRCS:.cpp=.o)
-DEPS:=$(OBJS:.o=.d)
+DEPS:=$(OBJS:.o=.d) $(OBJS:.o=.y.d)
 
 ifndef NO_FLTO
 CXXFLAGS?=-O3 -fno-stack-protector -mno-stackrealign
@@ -81,6 +81,12 @@ endif
 	$(E) CXX $@
 	$(Q)$(CXX) $(MYCXXFLAGS) -c -o $@ $<
 
+%.y.o: %.cpp
+	$(E) DE $@
+	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
+	$(E) CXX $@
+	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -c -o $@ $<
+
 VSLIBOBJ:=\
 	clusters.o \
 	dlog.o \
@@ -103,23 +109,14 @@ VSCONOBJ:=\
 	form_in.o \
 	unicon.o
 
+VSCONYOBJ:=$(VSCONOBJ:.o=.y.o)
+
 libvscon.a: $(VSCONOBJ)
 	$(Q)rm -f $@
 	$(E) AR $@
 	$(Q)$(AR) rv $@ $+
 	$(E) RANLIB $@
 	$(Q)$(RANLIB) $@
-
-VSCONYOBJ:=\
-	conmenu.o \
-	form_in.o \
-	unicony.o
-
-unicony.o: unicon.cpp
-	$(E) DE $@
-	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -MM -MT $@ -MF $(patsubst %.o,%.d,$@) $<
-	$(E) CXX $@
-	$(Q)$(CXX) $(MYCXXFLAGS) -DUSE_YASCREEN -c -o $@ $<
 
 libvscony.a: $(VSCONYOBJ)
 	$(Q)rm -f $@
