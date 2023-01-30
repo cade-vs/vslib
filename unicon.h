@@ -18,9 +18,7 @@
 
 #ifdef _TARGET_UNIX_
   #ifdef _TARGET_HAVE_YASCREEN
-    #define inline
     #include <yascreen.h>
-    #undef inline
   #else
     #if HAVE_CONFIG_H
       // This will find the curses header on most systems. If it isn't found,

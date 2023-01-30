@@ -15,7 +15,7 @@
 int EditStrBF = CONCOLOR( chWHITE, cBLUE );
 int EditStrFH = CONCOLOR( cBLACK, cWHITE );
 
-int TextInput( int x, int y, const char *prompt, int maxlen, int fieldlen, WString &str_io, void (*handlekey)( int key, WString &str_io, int &pos ) )
+int TextInput( int x, int y, const char *prompt __attribute__((unused)), int maxlen, int fieldlen, WString &str_io, void (*handlekey)( int key, WString &str_io, int &pos ) )
 {
   int res = 0;
   int insert = 1;

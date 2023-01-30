@@ -268,7 +268,9 @@
       s[z] = 0;
       x--;
       }
-    int r = mbtowc( &wch, s, MB_CUR_MAX );
+    if( mbtowc( &wch, s, MB_CUR_MAX ) )
+    {
+    }
     return wch;
   }
 
@@ -303,7 +305,7 @@
      return 0;
   }
 
-  void con_yas_sigwinch( int sig )
+  void con_yas_sigwinch( int sig __attribute__((unused)) )
   {
     signal( SIGWINCH, con_yas_sigwinch ); // (re)setup signal handler
     con_reset_screen_size();
