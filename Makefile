@@ -56,7 +56,7 @@ HAVESREA:=$(shell if $(CXX) -mno-stackrealign -xc -c /dev/null -o /dev/null >/de
 # old comiplers do not have -Wdate-time
 HAVEWDTI:=$(shell if $(CXX) -Wdate-time -xc -c /dev/null -o /dev/null >/dev/null 2>/dev/null;then echo yes;else echo no;fi)
 
-MYCXXFLAGS:=$(CPPFLAGS) $(CXXFLAGS) $(NCCC) -Wall -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -fPIE -I. -I../vstring
+MYCXXFLAGS:=$(CPPFLAGS) $(CXXFLAGS) $(PCRE08_CC) $(PCRE32_CC) $(YASCREEN_CC) $(NCURSES_CC) -Wall -Wextra -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -fPIE -I. -I../vstring
 ifeq ("$(HAVESREA)","no")
 MYCXXFLAGS:=$(filter-out -mno-stackrealign,$(MYCXXFLAGS))
 endif
@@ -64,7 +64,7 @@ ifeq ("$(HAVEWDTI)","no")
 MYCXXFLAGS:=$(filter-out -Wdate-time,$(MYCXXFLAGS))
 endif
 
-MYLDFLAGS:=$(MYCXXFLAGS) $(LDFLAGS) -fPIE -pie $(PCRE08_CC) $(PCRE32_CC)
+MYLDFLAGS:=$(MYCXXFLAGS) $(LDFLAGS) -fPIE -pie
 MYLIBS:=$(LIBS) $(PCRE08_LD) $(PCRE32_LD)
 
 ifeq ("$(V)","1")
