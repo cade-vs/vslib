@@ -10,45 +10,25 @@
 #ifndef _UNICON_H_
 #define _UNICON_H_
 
-#ifdef HAVE_CONFIG_H
-  #include "config.h"
-#endif
-
+#include <stdlib.h>
 #include "target.h"
 
-#ifdef _TARGET_UNIX_
-  #ifdef _TARGET_HAVE_YASCREEN
-    #include <yascreen.h>
-  #else
-    #if HAVE_CONFIG_H
-      // This will find the curses header on most systems. If it isn't found,
-      // the user will receive an error and compilation will terminate.
-      // These are defined when ../configure is run, and suggested use is
-      // mentioned in the autoconf documentation
-      // <https://www.gnu.org/software/autoconf-archive/ax_with_curses.html>
-      #if defined HAVE_NCURSESW_CURSES_H
-      #  include <ncursesw/curses.h>
-      #elif defined HAVE_NCURSESW_H
-      #  include <ncursesw.h>
-      #elif defined HAVE_NCURSES_CURSES_H
-      #  include <ncurses/curses.h>
-      #elif defined HAVE_NCURSES_H
-      #  include <ncurses.h>
-      #elif defined HAVE_CURSES_H
-      #  include <curses.h>
-      #else
-      #  error "SysV or X/Open-compatible Curses header file required"
-      #endif
-    #elif defined(_TARGET_LINUX_)
-    #include <curses.h>
-    #elif defined(_TARGET_NETBSD_)
-    #include <ncurses.h>
-    #else
-    #include <curses.h>
-    #endif
-  #endif
-  #include <stdlib.h>
+#if    defined(_UNICON_USE_CURSES_)
+
+  #include <curses.h>
+
+#elif  defined(_UNICON_USE_YASCREEN_)
+
+  #include <yascreen.h>
+
+#else
+
+  #error One of ncurses/yascreen libraries is required under UNIX
+  #error use compile time -D_UNICON_USE_YASCREEN_  or
+  #error use compile time -D_UNICON_USE_CURSES_  to select wanted library
+
 #endif
+
 
 /****************************************************************************
 **
@@ -144,7 +124,7 @@
 
 /******* UNIX/NCURSES ******************************************************/
 
-#elif defined(_TARGET_HAVE_CURSES)
+#elif defined(_UNICON_USE_CURSES_)
 
   #define UKEY_INS       UKEY_WIDE(KEY_IC)
   #define UKEY_BACKSPACE UKEY_WIDE(KEY_BACKSPACE)
@@ -249,7 +229,7 @@
 
   #define UKEY_RESIZE   KEY_RESIZE
 
-#elif defined(_TARGET_HAVE_YASCREEN)
+#elif defined(_UNICON_USE_YASCREEN_)
 
   #define UKEY_INS       YAS_K_INS
   #define UKEY_BACKSPACE YAS_K_BSP
@@ -344,6 +324,8 @@
 #else
 
   #error One of ncurses/yascreen libraries is required under UNIX
+  #error use compile time -D_UNICON_USE_YASCREEN_  or
+  #error use compile time -D_UNICON_USE_CURSES_  to select wanted library
 
 #endif
 

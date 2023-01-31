@@ -1,10 +1,11 @@
 /****************************************************************************
- *
- *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade" 
- *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
- *
- *  SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
- *
+ #
+ # Copyright (c) 1996-2023 Vladi Belperchinov-Shabanski "Cade" 
+ # https://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg>
+ # https://cade.noxrun.com/projects/vfu     https://github.com/cade-vs/vfu
+ #
+ # SEE 'README','LICENSE' OR 'COPYING' FILE FOR LICENSE AND OTHER DETAILS!
+ #
  ****************************************************************************/
 
 #ifndef _TARGET_H_
@@ -81,14 +82,6 @@
   #define _TARGET_DESCRIPTION_  "UNKNOWN/UNKNOWN"
 #endif
 
-#ifdef _TARGET_UNIX_
-  #ifdef USE_YASCREEN
-    #define _TARGET_HAVE_YASCREEN
-  #else
-    #define _TARGET_HAVE_CURSES
-  #endif
-#endif
-
 /****************************************** go error unless known :/ *******/
 
 #ifdef _TARGET_UNKNOWN_
@@ -98,6 +91,7 @@
 #endif
 
 /******************************************************************* eof ***/
-#endif //_TARGET_H_
+
+#endif /* TOP */
 
 

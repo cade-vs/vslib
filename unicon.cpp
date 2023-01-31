@@ -15,7 +15,7 @@
 **
 ****************************************************************************/
 
-#ifdef _TARGET_HAVE_CURSES
+#ifdef _UNICON_USE_CURSES_
 
 /****************************************************************************
 ** This part is loosely based on `linconio':
@@ -274,10 +274,8 @@
     return wch;
   }
 
-#endif /* _TARGET_HAVE_CURSES */
+#elif defined(_UNICON_USE_YASCREEN_)
 
-// target have yascreen curses replacement
-#ifdef _TARGET_HAVE_YASCREEN
 #include <stdio.h>
 #include <signal.h>
 
@@ -489,6 +487,12 @@
     if( w == YAS_K_NONE ) w = 0;
     return( w );
   }
+
+#else
+
+  #error One of ncurses/yascreen libraries is required under UNIX
+  #error use compile time -D_UNICON_USE_YASCREEN_  or
+  #error use compile time -D_UNICON_USE_CURSES_  to select wanted library
 
 #endif
 
