@@ -18,6 +18,9 @@ int con_toggle_box( int x, int y, const wchar_t *title, ToggleEntry* toggles, Co
   ScrollPos scroll;
   int z;
 
+  if( x < 0 ) x = con_max_x() + x;
+  if( y < 0 ) y = con_max_y() + y;
+
   int w = -1;
   int h = -1;
 
@@ -141,6 +144,9 @@ int con_menu_box( int x, int y, const wchar_t *title, WArray *wa, int hotkeys, C
 {
   ScrollPos scroll;
   int z;
+
+  if( x < 0 ) x = con_max_x() + x;
+  if( y < 0 ) y = con_max_y() + y;
 
   int w = -1;
   int h = -1;
