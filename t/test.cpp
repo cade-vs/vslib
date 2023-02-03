@@ -402,8 +402,7 @@ void test9()
   VString v2 = shell_escape( fn.data() );
   printf( "vstr:     [%s]\n", v2.data() );
   
-  int c = shell_escape( fn );
-  printf( "vstr ipl: [%s] %d\n", fn.data(), c );
+  printf( "vstr ipl: [%s]\n", shell_escape( fn ).data() );
   
 }
 

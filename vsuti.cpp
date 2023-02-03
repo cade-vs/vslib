@@ -358,22 +358,8 @@ char* shell_escape( const char *src, char *dest )
   return dest;  
 }
 
-VString shell_escape( const char* src )
+VString& shell_escape( VString &dest )
 {
-  VString dest;
-  int sl = strlen( src );
-  for( int i = 0; i < sl; i++ )
-    {      
-    if( strchr( shell_special_chars, src[i] ) )
-      str_add_ch( dest, '\\' );
-    str_add_ch( dest, src[i] );
-    }
-  return dest;  
-}
-
-int shell_escape( VString &dest )
-{
-  int c = 0;
   int sl = strlen( dest );
   for( int i = 0; i < sl; i++ )
     {      
@@ -381,9 +367,16 @@ int shell_escape( VString &dest )
     str_ins_ch( dest, i, '\\' );
     sl++;
     i++;
-    c++;
     }
-  return c;  
+  return dest;  
+}
+
+VString shell_escape( const char* src )
+{
+  VString dest;
+  dest = src;
+  shell_escape( dest );
+  return dest;
 }
 
 /*****************************************************************************
