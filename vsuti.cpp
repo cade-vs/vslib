@@ -342,7 +342,7 @@ VString expand_path( const char* src )
 ** this seems to work fine with bash, zsh, csh, tcsh, fish, ksh, dash
 *****************************************************************************/
 
-const char* shell_special_chars = "'\"\\`;&*()[]{}!^:?$<> ";
+const char* shell_special_chars = "'\"\\`;&*()[]{}!^:?$<> |%";
 
 char* shell_escape( const char *src, char *dest )
 {
