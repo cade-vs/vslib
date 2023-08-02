@@ -126,6 +126,8 @@
 
 #elif defined(_UNICON_USE_CURSES_)
 
+  #define UKEY_ALT_PREFIX    1000
+
   #define UKEY_INS       UKEY_WIDE(KEY_IC)
   #define UKEY_BACKSPACE UKEY_WIDE(KEY_BACKSPACE)
   #define UKEY_LEFT      UKEY_WIDE(KEY_LEFT)
@@ -138,7 +140,18 @@
   #define UKEY_PGUP      UKEY_WIDE(KEY_PPAGE)
   #define UKEY_PGDN      UKEY_WIDE(KEY_NPAGE)
 
-  #define UKEY_ALT_PREFIX    1000
+  #define UKEY_ALT_INS       UKEY_WIDE(UKEY_ALT_PREFIX + KEY_IC)
+  #define UKEY_ALT_BACKSPACE UKEY_WIDE(UKEY_ALT_PREFIX + KEY_BACKSPACE)
+  #define UKEY_ALT_LEFT      UKEY_WIDE(UKEY_ALT_PREFIX + KEY_LEFT)
+  #define UKEY_ALT_RIGHT     UKEY_WIDE(UKEY_ALT_PREFIX + KEY_RIGHT)
+  #define UKEY_ALT_UP        UKEY_WIDE(UKEY_ALT_PREFIX + KEY_UP)
+  #define UKEY_ALT_DOWN      UKEY_WIDE(UKEY_ALT_PREFIX + KEY_DOWN)
+  #define UKEY_ALT_HOME      UKEY_WIDE(UKEY_ALT_PREFIX + KEY_HOME)
+  #define UKEY_ALT_END       UKEY_WIDE(UKEY_ALT_PREFIX + KEY_END)
+  #define UKEY_ALT_DEL       UKEY_WIDE(UKEY_ALT_PREFIX + KEY_DC)
+  #define UKEY_ALT_PGUP      UKEY_WIDE(UKEY_ALT_PREFIX + KEY_PPAGE)
+  #define UKEY_ALT_PGDN      UKEY_WIDE(UKEY_ALT_PREFIX + KEY_NPAGE)
+
   #define UKEY_ALT_A     UKEY_WIDE(UKEY_ALT_PREFIX + 'a')
   #define UKEY_ALT_B     UKEY_WIDE(UKEY_ALT_PREFIX + 'b')
   #define UKEY_ALT_C     UKEY_WIDE(UKEY_ALT_PREFIX + 'c')
@@ -176,18 +189,18 @@
   #define UKEY_ALT_9     UKEY_WIDE(UKEY_ALT_PREFIX + '9')
   #define UKEY_ALT_0     UKEY_WIDE(UKEY_ALT_PREFIX + '0')
   #define UKEY_ALT_MINUS UKEY_WIDE(UKEY_ALT_PREFIX + '-')
+  #define UKEY_ALT_PLUS  UKEY_WIDE(UKEY_ALT_PREFIX + '+')
   #define UKEY_ALT_EQ    UKEY_WIDE(UKEY_ALT_PREFIX + '=')
-  #define UKEY_ALT_BACKSPACE UKEY_WIDE(UKEY_ALT_PREFIX + KEY_BACKSPACE )
 
-  #define UKEY_F1        UKEY_WIDE(KEY_F(0) + 1)
-  #define UKEY_F2        UKEY_WIDE(KEY_F(0) + 2)
-  #define UKEY_F3        UKEY_WIDE(KEY_F(0) + 3)
-  #define UKEY_F4        UKEY_WIDE(KEY_F(0) + 4)
-  #define UKEY_F5        UKEY_WIDE(KEY_F(0) + 5)
-  #define UKEY_F6        UKEY_WIDE(KEY_F(0) + 6)
-  #define UKEY_F7        UKEY_WIDE(KEY_F(0) + 7)
-  #define UKEY_F8        UKEY_WIDE(KEY_F(0) + 8)
-  #define UKEY_F9        UKEY_WIDE(KEY_F(0) + 9)
+  #define UKEY_F1        UKEY_WIDE(KEY_F(0) +  1)
+  #define UKEY_F2        UKEY_WIDE(KEY_F(0) +  2)
+  #define UKEY_F3        UKEY_WIDE(KEY_F(0) +  3)
+  #define UKEY_F4        UKEY_WIDE(KEY_F(0) +  4)
+  #define UKEY_F5        UKEY_WIDE(KEY_F(0) +  5)
+  #define UKEY_F6        UKEY_WIDE(KEY_F(0) +  6)
+  #define UKEY_F7        UKEY_WIDE(KEY_F(0) +  7)
+  #define UKEY_F8        UKEY_WIDE(KEY_F(0) +  8)
+  #define UKEY_F9        UKEY_WIDE(KEY_F(0) +  9)
   #define UKEY_F10       UKEY_WIDE(KEY_F(0) + 10)
 
   #define UKEY_SH_F1     UKEY_WIDE(KEY_F(0) + 11)
@@ -216,16 +229,16 @@
   #define UKEY_CTRL_F11  UKEY_WIDE(KEY_F(0) + 33)
   #define UKEY_CTRL_F12  UKEY_WIDE(KEY_F(0) + 34)
                                       
-  #define UKEY_ALT_F1    0
-  #define UKEY_ALT_F2    0
-  #define UKEY_ALT_F3    0
-  #define UKEY_ALT_F4    0
-  #define UKEY_ALT_F5    0
-  #define UKEY_ALT_F6    0
-  #define UKEY_ALT_F7    0
-  #define UKEY_ALT_F8    0
-  #define UKEY_ALT_F9    0
-  #define UKEY_ALT_F10   0
+  #define UKEY_ALT_F1    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  1)
+  #define UKEY_ALT_F2    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  2)
+  #define UKEY_ALT_F3    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  3)
+  #define UKEY_ALT_F4    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  4)
+  #define UKEY_ALT_F5    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  5)
+  #define UKEY_ALT_F6    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  6)
+  #define UKEY_ALT_F7    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  7)
+  #define UKEY_ALT_F8    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  8)
+  #define UKEY_ALT_F9    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  9)
+  #define UKEY_ALT_F10   UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) + 10)
 
   #define UKEY_RESIZE   KEY_RESIZE
 
@@ -242,6 +255,11 @@
   #define UKEY_DEL       YAS_K_DEL
   #define UKEY_PGUP      YAS_K_PGUP
   #define UKEY_PGDN      YAS_K_PGDN
+
+  #define UKEY_ALT_LEFT      YAS_K_A_LEFT
+  #define UKEY_ALT_RIGHT     YAS_K_A_RIGHT
+  #define UKEY_ALT_UP        YAS_K_A_UP
+  #define UKEY_ALT_DOWN      YAS_K_A_DOWN
 
   #define UKEY_ALT_A YAS_K_ALT('a')
   #define UKEY_ALT_B YAS_K_ALT('b')
@@ -271,8 +289,9 @@
   #define UKEY_ALT_7 YAS_K_ALT('7')
   #define UKEY_ALT_8 YAS_K_ALT('8')
   #define UKEY_ALT_9 YAS_K_ALT('9')
-  #define UKEY_ALT_EQ YAS_K_ALT('=')
   #define UKEY_ALT_MINUS YAS_K_ALT('-')
+  #define UKEY_ALT_PLUS  YAS_K_ALT('+')
+  #define UKEY_ALT_EQ    YAS_K_ALT('=')
   #define UKEY_ALT_BACKSPACE YAS_K_ALT( UKEY_BACKSPACE )
 
   #define UKEY_F1        YAS_K_F1

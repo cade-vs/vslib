@@ -7,6 +7,7 @@
  *
  ****************************************************************************/
 
+#include <curses.h>
 #include <wchar.h>
 #include <locale.h>
 #include <ncursesw/curses.h>
