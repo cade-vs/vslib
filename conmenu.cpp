@@ -130,7 +130,7 @@ int con_toggle_box( int x, int y, const wchar_t *title, ToggleEntry* toggles, Co
 //    if ( ch < 0 || ch > 255 ) continue; //FIXME: unicode?
     if ( wch == 13 /* && wcsncmp(L"--", toggles[scroll.pos].name, 2) */ ) return 1;
     z = ( wch == L' ' ) ? scroll.pos() : str_find( hots, wch );
-    if ( z > 0 && wcsncmp(L"--", toggles[z].name, 2) )
+    if ( z > -1 && wcsncmp(L"--", toggles[z].name, 2) )
       {
       int state = *(toggles[z].data) + 1;
       if (toggles[z].states[state] == NULL) state = 0;
