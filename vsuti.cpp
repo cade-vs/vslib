@@ -485,7 +485,7 @@ int __ftwalk_process( const char *origin,
   struct stat   st;
   int           flag;
 
-  if ( level != -1 && level == 0) return 0; /* required level reqched */
+  if ( level != -1 && level == 0) return 0; /* required level reached */
 
   VString this_path = path;
   int this_path_len = str_len( this_path );
@@ -576,9 +576,6 @@ VString get_rc_directory( const char* dir_prefix )
 
   rc_dir = getenv("HOME");
   if ( rc_dir == "" ) rc_dir = "/tmp/";
-  #ifdef _TARGET_GO32_
-  str_tr( rc_dir, "\\", "/" );
-  #endif
   str_fix_path( rc_dir );
 
   int rcprefix = 1;
@@ -593,11 +590,7 @@ VString get_rc_directory( const char* dir_prefix )
       rc_dir += dir_prefix;
     else
       {
-      #ifdef _TARGET_GO32_
-      rc_dir += "_";
-      #else
       rc_dir += ".";
-      #endif
       rc_dir += dir_prefix;
       }
     str_fix_path( rc_dir );
