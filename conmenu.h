@@ -25,7 +25,7 @@ struct  ToggleEntry
 struct ConMenuInfo
 {
   ConMenuInfo() { defaults(); }
-  void defaults() { cn = 112; ch = 47; ti = 95; bo = ec = ac = 0; }
+  void defaults() { cn = 112; ch = 47; ti = 95; td = bo = ec = ac = 0; }
 
   int cn; // normal color
   int ch; // highlight color
@@ -33,6 +33,7 @@ struct ConMenuInfo
 
   int bo; // should view borders?
   int st; // scroll type -- 1 dynamic and 0 normal/static
+  int td; // TAB key is assumed as KEY_DOWN
 
   wchar_t ec; // exit char (used by con_menu_box)
   wchar_t ac; // alternative confirm (used by menu box)
