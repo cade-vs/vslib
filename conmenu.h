@@ -33,7 +33,7 @@ struct ConMenuInfo
 
   int bo; // should view borders?
   int st; // scroll type -- 1 dynamic and 0 normal/static
-  int td; // TAB key is assumed as KEY_DOWN
+  int td; // TAB key is assumed as KEY_DOWN (tab down)
 
   wchar_t ec; // exit char (used by con_menu_box)
   wchar_t ac; // alternative confirm (used by menu box)

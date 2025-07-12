@@ -125,7 +125,7 @@ int con_toggle_box( int x, int y, const wchar_t *title, ToggleEntry* toggles, Co
     if ( wch == UKEY_PGDN ) scroll.npage();
     if ( wch == UKEY_HOME ) scroll.home();
     if ( wch == UKEY_END  ) scroll.end();
-    if ( wch == UKEY_TAB && menu_info.td ) scroll.down();
+    if ( wch == UKEY_TAB && menu_info->td ) scroll.down();
 
     if ( wch == 27 || wch == 8 ||  wch == UKEY_BACKSPACE ) return 0; // exit on ESC or BS
 //    if ( ch < 0 || ch > 255 ) continue; //FIXME: unicode?
@@ -233,7 +233,7 @@ int con_menu_box( int x, int y, const wchar_t *title, WArray *wa, int hotkeys, C
     if ( wch == UKEY_PGDN ) scroll.npage();
     if ( wch == UKEY_HOME ) scroll.home();
     if ( wch == UKEY_END  ) scroll.end();
-    if ( wch == UKEY_TAB && menu_info.td ) scroll.down();
+    if ( wch == UKEY_TAB && menu_info->td ) scroll.down();
 
     if ( wch == 27 || wch == 8 ||  wch == UKEY_BACKSPACE )
       {
