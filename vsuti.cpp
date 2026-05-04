@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade" 
+ *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade"
  *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
  *
  * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
@@ -342,33 +342,22 @@ VString expand_path( const char* src )
 ** this seems to work fine with bash, zsh, csh, tcsh, fish, ksh, dash
 *****************************************************************************/
 
-const char* shell_special_chars = "'\"\\`;&*()[]{}!^:?$<> |%";
 
-char* shell_escape( const char *src, char *dest )
-{
-  int sl = strlen( src );
-  int z = 0;
-  for( int i = 0; i < sl; i++ )
-    {      
-    if( strchr( shell_special_chars, src[i] ) )
-      dest[z++] = '\\';
-    dest[z++] = src[i];
-    }
-  dest[z] = 0;  
-  return dest;  
-}
 
 VString& shell_escape( VString &dest )
 {
+  VString out = "'";
   int sl = strlen( dest );
   for( int i = 0; i < sl; i++ )
-    {      
-    if( ! strchr( shell_special_chars, dest[i] ) ) continue;
-    str_ins_ch( dest, i, '\\' );
-    sl++;
-    i++;
+    {
+    if( dest[i] == '\'' )
+      out += "'\\''";        /* close, escape, reopen */
+    else
+      out += dest[i];
     }
-  return dest;  
+  out += "'";
+  dest = out;
+  return dest;
 }
 
 VString shell_escape( const char* src )

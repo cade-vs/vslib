@@ -394,10 +394,9 @@ void test9()
   VString fn;
   
   fn = "1'\"#\\2`&;*()[]{}~!@%^:.txt";
-  char t[512];
 
-  shell_escape( fn, t );
-  printf( "char*:    [%s]\n", t );
+  shell_escape( fn );
+  printf( "char*:    [%s]\n", fn.data() );
 
   VString v2 = shell_escape( fn.data() );
   printf( "vstr:     [%s]\n", v2.data() );

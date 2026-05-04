@@ -130,7 +130,6 @@ VString expand_path( const char* src );
 **
 *****************************************************************************/
 
-char*    shell_escape( const char *src, char *dest );
 VString& shell_escape( VString &dest );
 VString  shell_escape( const char* src );
 
