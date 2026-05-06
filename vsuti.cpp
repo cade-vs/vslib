@@ -237,45 +237,46 @@ int file_exists( const char* fname )
 /*****************************************************************************
 **
 ** tilde_expand() expands ~/path and ~name/path to real pathname.
-** it uses $HOME environment variable for ~ substitution.
+** it uses /etc/passwd or $HOME environment variable for ~ substitution.
 **
 *****************************************************************************/
 
 VString tilde_expand( const char* a_path )
-{
-#ifdef _TARGET_UNIX_
-  VString path;
-  struct passwd* pwd;
-  if ( !a_path || !a_path[0] || a_path[0] != '~' )
+{ //!ok
+  if ( ! a_path || ! a_path[0] || a_path[0] != '~' )
     return VString( a_path );
 
-  int z = 1; // first after ~
-  while( a_path[z] != '/' && a_path[z] != 0 )
-    str_add_ch( path, a_path[z++] );
+  VString new_home;
 
-  if ( path == "" )
-    path = getenv( "USER" );
-  if ( path != "" )
+  VString user;
+  int user_end = str_find( a_path, '/' );
+  if ( user_end == -1 && a_path[1] != 0 )       /* ~user */
+    user = a_path + 1;
+  else if ( user_end > 1 )                      /* ~user/foo */
+    str_copy( user, a_path, 1, user_end - 1 );
+  else                                          /* ~ or ~/... */
+    user = getenv( "USER" );
+
+  if( user != "" )
     {
-    pwd = getpwnam( path );
-    if (!pwd) return VString( a_path );
-    path = pwd->pw_dir;
+    struct passwd* pwd = getpwnam( user );
+    if( pwd && pwd->pw_dir ) new_home = pwd->pw_dir;
     }
   else
     {
-    char* pw_dir = getenv("HOME");
-    if (!pw_dir) return VString( a_path );
-    path = pw_dir;
+    char* home_dir = getenv("HOME");
+    if( home_dir ) new_home = home_dir;
     }
-  // get rid of trailing `/' if exists
-  str_fix_path( path );
-  str_chop( path );
-  path += a_path + z;
-  return path;
-#else //_TARGET_UNIX_
-  VString path = a_path;
-  return path;
-#endif //_TARGET_UNIX_
+  if( new_home == "" ) return VString( a_path );
+
+  if( user_end == -1 && new_home[-1] != '/' ) new_home += "/";
+
+  if( user_end == -1 )
+    return VString( new_home );
+  else
+    new_home += a_path + user_end;
+
+  return new_home;
 }
 
 /*****************************************************************************
@@ -286,38 +287,29 @@ VString tilde_expand( const char* a_path )
 **
 *****************************************************************************/
 
-int make_path( const char *s, long mode )
-{
-  char str[MAX_PATH];
-  char tmp[MAX_PATH];
-  if ( !s ) return -1;
-  /* leave room for an appended trailing slash + NUL */
-  if ( strlen(s) + 2 > sizeof(tmp) ) return -1;
-  strcpy( tmp, s );
-  str_fix_path( tmp );
-  int l = strlen( tmp );
-  strcpy( str, tmp ); // to hold original expanded path
-  while(1)
+int mkpath( const char *path, mode_t mode )
+{ //!ok
+  char   tmp[PATH_MAX];
+  size_t len;
+  int    n;
+
+  if( ! path || ! path[0] ) return -2;
+
+  len = strlen( path  );
+  if( len + 1 >= sizeof(tmp) ) return -3;
+
+  strncpyz_buf( tmp, path );
+
+  if( tmp[len - 1] != '/' ) strncatz_buf( tmp, "/" );
+
+  for( n = 1; tmp[n]; n++ )
     {
-    while ( l >= 0 && tmp[l] != '/' ) l--;
-    ASSERT( l < 0 || tmp[l] == '/' );
-    if ( l < 0 )
-      break;
-    else
-      tmp[l+1] = 0;
-    if ( access( tmp, F_OK ) == 0 ) break;
-    l--;
+    if( tmp[n] != '/' ) continue;
+    tmp[n] = 0;
+    if( mkdir( tmp, mode ) != 0 && errno != EEXIST ) return -1;
+    tmp[n] = '/';
     }
-  while(1)
-    {
-      l++;
-      while ( str[l] != 0 && str[l] != '/' ) l++;
-      if ( str[l] == 0 ) break;
-      strncpy( tmp, str, l );
-      tmp[l] = 0;
-      int res = mkdir( tmp, mode );
-      if (res) return res;
-    }
+
   return 0;
 }
 
@@ -328,15 +320,15 @@ int make_path( const char *s, long mode )
 *****************************************************************************/
 
 char* expand_path( const char *src, char *dest )
-{
-  if( realpath( src, dest ) == 0 )
+{ //!ok
+  if( ! realpath( src, dest ) )
     strncpyz( dest, src, MAX_PATH );
 
   return dest;
 }
 
 VString expand_path( const char* src )
-{
+{ //!ok
   char temp[MAX_PATH];
   VString dest = expand_path( src, temp );
   return dest;
@@ -349,10 +341,8 @@ VString expand_path( const char* src )
 ** this seems to work fine with bash, zsh, csh, tcsh, fish, ksh, dash
 *****************************************************************************/
 
-
-
 VString& shell_escape( VString &dest )
-{
+{ //!ok
   VString out = "'";
   int sl = strlen( dest );
   for( int i = 0; i < sl; i++ )
@@ -368,7 +358,7 @@ VString& shell_escape( VString &dest )
 }
 
 VString shell_escape( const char* src )
-{
+{ //!ok
   VString dest;
   dest = src;
   shell_escape( dest );
@@ -377,105 +367,19 @@ VString shell_escape( const char* src )
 
 /*****************************************************************************
 **
-** dosstat() is fast stat() designed for DOS FAT filesystems under DJGPP.
-**
-*****************************************************************************/
-
-#ifdef _TARGET_GO32_
-
-/*
-  This is specific to djgpp/libc 2.01 -- if it changes later this
-  must be changed too...
-*/
-
-struct ___DIR {
-  int num_read;
-  char *name;
-  int flags;
-  struct ffblk ff;
-  struct dirent de;
-  int need_fake_dot_dotdot; /* 0=no, 1=.., 2=. */
-}
-
-/* Convert file date and time to time_t value suitable for
-   struct stat fields.  */
-time_t _file_time_stamp(unsigned int dos_ftime)
-{
-  struct tm file_tm;
-  memset(&file_tm, 0, sizeof(struct tm));
-  file_tm.tm_isdst = -1;    /* let mktime() determine if DST is in effect */
-  file_tm.tm_sec  = (dos_ftime & 0x1f) * 2;
-  file_tm.tm_min  = (dos_ftime >>  5) & 0x3f;
-  file_tm.tm_hour = (dos_ftime >> 11) & 0x1f;
-  file_tm.tm_mday = (dos_ftime >> 16) & 0x1f;
-  file_tm.tm_mon  = ((dos_ftime >> 21) & 0x0f) - 1; /* 0 = January */
-  file_tm.tm_year = (dos_ftime >> 25) + 80;
-  return mktime(&file_tm);
-}
-
-int dosstat( DIR *dir, struct stat *statbuf )
-{
-  #define ff_blk (((___DIR*)(dir))->ff)
-
-  #define READ_ACCESS     (S_IRUSR | S_IRGRP | S_IROTH)
-  #define WRITE_ACCESS    S_IWUSR
-  #define EXEC_ACCESS     (S_IXUSR | S_IXGRP | S_IXOTH)
-
-  memset(statbuf, 0, sizeof(struct stat));
-
-  unsigned dos_ftime = 0;
-  dos_ftime = ( (unsigned short)ff_blk.ff_fdate << 16 ) +
-                (unsigned short)ff_blk.ff_ftime;
-
-  statbuf->st_uid     = getuid();
-  statbuf->st_gid     = getgid();
-  statbuf->st_nlink   = 1;
-  statbuf->st_size    = ff_blk.ff_fsize;
-  statbuf->st_mode   |= READ_ACCESS;
-  if ( !(ff_blk.ff_attrib & 0x07) )  /* no R, H or S bits set */
-     statbuf->st_mode |= WRITE_ACCESS;
-  if (ff_blk.ff_attrib & 0x10)
-     statbuf->st_mode |= (S_IFDIR | EXEC_ACCESS);
-  /* Set regular file bit.  */
-  statbuf->st_mode |= S_IFREG;
-
-  /* Time fields. */
-  statbuf->st_atime = statbuf->st_mtime = statbuf->st_ctime =
-    _file_time_stamp(dos_ftime);
-
-  if ( ! strcmp(ff_blk.lfn_magic,"LFN32") )
-    {
-      unsigned xtime;
-      xtime = *(unsigned *)&ff_blk.lfn_ctime;
-      if(xtime)                 /* May be zero if file written w/o lfn active */
-        statbuf->st_ctime = _file_time_stamp(xtime);
-      xtime = *(unsigned *)&ff_blk.lfn_atime;
-      if(xtime > dos_ftime)     /* Accessed time is date only, no time */
-        statbuf->st_atime = _file_time_stamp(xtime);
-    }
-
-  return 0;
-  #undef ff_blk
-}
-
-#endif /* _TARGET_GO32_ */
-
-/*****************************************************************************
-**
-** ftwalk() traverses directory tree and calls func() for every entri it
-** encounters. It supports DOS FAT filesystems under DJGPP.
+** ftwalk() traverses directory tree and calls func() for every entry, dir exit
 **
 *****************************************************************************/
 
 int __ftwalk_process( const char *origin,
                       const char *path,
-                      int (*func)( const char* origin,    /* origin path */
+                      int (*func)( const char* origin,    /* origin path    */
                                    const char* fname,     /* full file name */
-                                   const struct stat* st, /* stat or NULL */
-                                   int is_link,           /* 1 if link */
+                                   const struct stat* st, /* stat, zeroed if error */
+                                   int is_link,           /* 1 if link      */
                                    int flag ),
                       int level = -1 )
-{
+{ //!ok
   DIR           *dir;
   struct dirent *de;
   struct stat   st;
@@ -505,28 +409,36 @@ int __ftwalk_process( const char *origin,
     else
       flag = FTWALK_F;
 
-    int r = func( origin, this_path, &st, is_link, flag );
+    int r;
+
+    // entry handled, directory enter as well if dir
+    r = func( origin, this_path, &st, is_link, flag );
     if ( r )
       {
-        closedir(dir);
-        return r;
+      // func returned non-zero (error) stop here and return back, propagating r
+      closedir(dir);
+      return r;
       }
 
-    if ( flag == FTWALK_D && !is_link )
+    if( flag == FTWALK_D && ! is_link )
       {
       this_path += "/";
       r = __ftwalk_process( origin, this_path, func, level - 1 );
-      if ( r )
+      if( r )
         {
+        // __ftwalk_process returned non-zero (error) stop here and return back, propagating r
         closedir(dir);
         return r;
         }
       str_trim_right( this_path, 1 ); /* remove trailing `/' */
-      int r = func( origin, this_path, &st, is_link, FTWALK_DX );
-      if ( r )
+
+      // directory exit
+      r = func( origin, this_path, &st, is_link, FTWALK_DX );
+      if( r )
         {
-          closedir(dir);
-          return r;
+        // func returned non-zero (error) stop here and return back, propagating r
+        closedir(dir);
+        return r;
         }
       }
     str_sleft( this_path, this_path_len );
@@ -539,20 +451,18 @@ int __ftwalk_process( const char *origin,
 int ftwalk( const char *origin,
             int (*func)( const char* origin,    /* origin path */
                          const char* fname,     /* full file name */
-                         const struct stat* st, /* stat struture or NULL */
+                         const struct stat* st, /* stat, zeroed if error */
                          int is_link,           /* 1 if link */
                          int flag ),
             int level )
-{
-  int r;
-
+{ //!ok
   if ( !origin || !func || !origin[0] ) return 255;
 
   VString o = origin;
-  str_fix_path( o );
+  str_fix_path( o, '/' );
 
-  if ( !file_is_dir( o ) ) return 255;
-  r = __ftwalk_process( o, o, func, level );
+  if ( ! file_is_dir( o ) ) return 255;
+  int r = __ftwalk_process( o, o, func, level );
   return r;
 }
 
@@ -566,29 +476,27 @@ int ftwalk( const char *origin,
 
 
 VString get_rc_directory( const char* dir_prefix )
-{
+{ //!ok
   VString rc_dir;
-
   rc_dir = getenv("HOME");
   if ( rc_dir == "" ) rc_dir = "/tmp/";
-  str_fix_path( rc_dir );
+  str_fix_path( rc_dir, '/' );
 
-  int rcprefix = 1;
-  if (getenv("RC_PREFIX"))
-    rc_dir += getenv("RC_PREFIX");
-  else
-    rcprefix = 0;
-  str_fix_path( rc_dir );
+  const char *rc_prefix = getenv("RC_PREFIX");
+  if( ! rc_prefix || ! rc_prefix[0] ) rc_prefix = NULL;
+  if( rc_prefix )
+    rc_dir += rc_prefix;
+  str_fix_path( rc_dir, '/' );
   if ( dir_prefix && dir_prefix[0] )
     {
-    if ( rcprefix )
+    if ( rc_prefix )
       rc_dir += dir_prefix;
     else
       {
       rc_dir += ".";
       rc_dir += dir_prefix;
       }
-    str_fix_path( rc_dir );
+    str_fix_path( rc_dir, '/' );
     }
   make_path( rc_dir );
   return rc_dir;
