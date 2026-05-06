@@ -77,14 +77,17 @@ crc32_t file_crc32( FILE *f, long buffsize ) /* return CRC32NULL for error */
   while(42)
     {
     long res = fread( buff, 1, buffsize, f );
-    if (res == -1)
-      {
-      fclose( f );
-      return CRC32NULL;
-      }
     long z;
     for ( z = 0; z < res; z++ ) crc = update_crc32( buff[z], crc );
-    if ( res != buffsize ) break;
+    if ( res != buffsize )
+      {
+      if ( ferror(f) )
+        {
+        free( buff );
+        return CRC32NULL;
+        }
+      break;
+      }
     }
   free( buff );
 

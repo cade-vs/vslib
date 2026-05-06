@@ -27,10 +27,12 @@ TLogFile::~TLogFile()
 
 void TLogFile::create( const char *fname, int pkeep_open )
 {
-  strcpy( log_fn, fname );
+  if ( fname == NULL ) { log_fn[0] = 0; f = NULL; return; }
+  snprintf( log_fn, sizeof(log_fn), "%s", fname );
   f = NULL;
   keep_open = pkeep_open;
   open();
+  if ( !f ) return;
   fprintf( f, "\n" );
   if (!keep_open) close();
 }
@@ -51,21 +53,23 @@ void TLogFile::log( const char *fname, int line, const char *msg )
 {
   char tmp[1024];
   if (!keep_open) open();
+  if ( !f ) return;
 
   time_t now;
   time(&now);
   char stime[32];
-  strcpy(stime, asctime(localtime(&now)));
-  if (stime[strlen(stime) - 1] == '\n') stime[strlen(stime) - 1] = 0;
+  snprintf(stime, sizeof(stime), "%s", asctime(localtime(&now)));
+  size_t sl = strlen(stime);
+  if ( sl > 0 && stime[sl - 1] == '\n' ) stime[sl - 1] = 0;
 
 
   if ( fname == NULL || line == -1 )
-    sprintf( tmp, "%s : %s", stime, msg);
+    snprintf( tmp, sizeof(tmp), "%s : %s", stime, msg );
   else
-    sprintf( tmp, "%s [%10s:%-5d] %s", stime, fname, line, msg);
+    snprintf( tmp, sizeof(tmp), "%s [%10s:%-5d] %s", stime, fname, line, msg );
 
-  while(tmp[strlen(tmp) - 1] == '\n') tmp[strlen(tmp) - 1] = 0;
-  strcat( tmp, "\n" );
+  while ( strlen(tmp) > 0 && tmp[strlen(tmp) - 1] == '\n' ) tmp[strlen(tmp) - 1] = 0;
+  if ( strlen(tmp) + 1 < sizeof(tmp) ) strcat( tmp, "\n" );
 
   fputs( tmp, f );
   if (on_stdout) fputs( tmp, stdout );
@@ -82,22 +86,22 @@ void TLogFile::log( const char *msg )
 
 void TLogFile::log( const char *msg, int n )
 {
-  char tmp[255];
-  sprintf( tmp, msg, n );
+  char tmp[1024];
+  snprintf( tmp, sizeof(tmp), msg, n );
   log( NULL, -1, tmp );
 }
 
 void TLogFile::log( const char *msg, const char *arg )
 {
-  char tmp[255];
-  sprintf( tmp, msg, arg );
+  char tmp[1024];
+  snprintf( tmp, sizeof(tmp), msg, arg );
   log( NULL, -1, tmp );
 }
 
 void TLogFile::log( const char *fname, int line, const char *msg, int n )
 {
-  char tmp[255];
-  sprintf( tmp, msg, n );
+  char tmp[1024];
+  snprintf( tmp, sizeof(tmp), msg, n );
   log( fname, line, tmp );
 }
 

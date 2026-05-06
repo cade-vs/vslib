@@ -10,6 +10,7 @@
 #include "vsuti.h"
 #include "vstring.h"
 #include "vstrlib.h"
+#include "vstruti.h"
 
 /*###########################################################################*/
 
@@ -83,13 +84,16 @@ adler32_t file_adler32( FILE *f, long buffsize  )
   while(42)
     {
     long res = fread( buff, 1, buffsize, f );
-    if (res == -1)
-      {
-      fclose( f );
-      return 0;
-      }
     adler = adler32( adler, buff, res );
-    if ( res != buffsize ) break;
+    if ( res != buffsize )
+      {
+      if ( ferror(f) )
+        {
+        free( buff );
+        return 0;
+        }
+      break;
+      }
     }
   free( buff );
 
@@ -286,6 +290,9 @@ int make_path( const char *s, long mode )
 {
   char str[MAX_PATH];
   char tmp[MAX_PATH];
+  if ( !s ) return -1;
+  /* leave room for an appended trailing slash + NUL */
+  if ( strlen(s) + 2 > sizeof(tmp) ) return -1;
   strcpy( tmp, s );
   str_fix_path( tmp );
   int l = strlen( tmp );
@@ -323,7 +330,7 @@ int make_path( const char *s, long mode )
 char* expand_path( const char *src, char *dest )
 {
   if( realpath( src, dest ) == 0 )
-    strcpy( dest, src );
+    strncpyz( dest, src, MAX_PATH );
 
   return dest;
 }
@@ -488,12 +495,11 @@ int __ftwalk_process( const char *origin,
 
     this_path += de->d_name;
     int is_link = file_is_link( this_path );
-    #ifdef _TARGET_GO32_
-    if (dosstat(dir, &st)) /* dosstat() will never return != 0 */
-    #else
     if (stat(this_path, &st))
-    #endif
+      {
       flag = FTWALK_NS;
+      memset( &st, 0, sizeof(st) );
+      }
     else if (S_ISDIR(st.st_mode))
       flag = FTWALK_D;
     else
