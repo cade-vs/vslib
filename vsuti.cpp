@@ -287,7 +287,7 @@ VString tilde_expand( const char* a_path )
 **
 *****************************************************************************/
 
-int mkpath( const char *path, mode_t mode )
+int make_path( const char *path, mode_t mode )
 { //!ok
   char   tmp[PATH_MAX];
   size_t len;

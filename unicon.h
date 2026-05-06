@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *  Copyright (c) 1996-2023 Vladi Belperchinov-Shabanski "Cade" 
+ *  Copyright (c) 1996-2023 Vladi Belperchinov-Shabanski "Cade"
  *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
  *
  *  SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
@@ -23,9 +23,9 @@
 
 #else
 
-  #error One of ncurses/yascreen libraries is required under UNIX
-  #error use compile time -D_UNICON_USE_YASCREEN_  or
-  #error use compile time -D_UNICON_USE_CURSES_  to select wanted library
+  #error One of ncurses/yascreen libraries is required under UNIX:
+  #error use compile time -D_UNICON_USE_YASCREEN_
+  #error use compile time -D_UNICON_USE_CURSES_
 
 #endif
 
@@ -78,7 +78,7 @@
 ****************************************************************************/
 
 /******* common ************************************************************/
-                                    
+
   #define UKEY_WIDE_CTRL_PREFIX     0xF0000
   #define UKEY_WIDE_CTRL_PREFIX_END 0xFFFFD
   #define UKEY_WIDE(k)              (UKEY_WIDE_CTRL_PREFIX+(k))
@@ -228,7 +228,7 @@
   #define UKEY_CTRL_F10  UKEY_WIDE(KEY_F(0) + 32)
   #define UKEY_CTRL_F11  UKEY_WIDE(KEY_F(0) + 33)
   #define UKEY_CTRL_F12  UKEY_WIDE(KEY_F(0) + 34)
-                                      
+
   #define UKEY_ALT_F1    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  1)
   #define UKEY_ALT_F2    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  2)
   #define UKEY_ALT_F3    UKEY_WIDE(UKEY_ALT_PREFIX + KEY_F(0) +  3)

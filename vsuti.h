@@ -114,7 +114,7 @@ VString tilde_expand( const char* a_path );
 *****************************************************************************/
 
 int make_path( const char *s,
-        long mode = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
+        mode_t mode = S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH );
 
 /*****************************************************************************
 **
