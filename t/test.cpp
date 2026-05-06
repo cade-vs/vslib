@@ -392,7 +392,7 @@ void test8()
 void test9()
 {
   VString fn;
-  
+
   fn = "1'\"#\\2`&;*()[]{}~!@%^:.txt";
 
   shell_escape( fn );
@@ -400,9 +400,9 @@ void test9()
 
   VString v2 = shell_escape( fn.data() );
   printf( "vstr:     [%s]\n", v2.data() );
-  
+
   printf( "vstr ipl: [%s]\n", shell_escape( fn ).data() );
-  
+
 }
 
 int main( void )
@@ -426,7 +426,7 @@ int main( void )
 
   char t[92] = "this is simple test";
   char r[92] = "1111111111111111111";
-  str_word( t, " ", r );
+  str_word_buf( t, " ", r );
   ASSERT( strcmp( t, "is simple test" ) == 0 );
   ASSERT( strcmp( r, "this" ) == 0 );
 
@@ -453,9 +453,9 @@ int main( void )
   str_copy( t+10, t+20, 0, 15 ); // check for overlapping borders, end   of str
 
   strcpy( t, "despicable me" );
-  str_word( t, " ", r );
+  str_word_buf( t, " ", r );
   ASSERT( strcmp( r, "despicable" ) == 0 );
-  str_word( t, " ", r );
+  str_word_buf( t, " ", r );
   ASSERT( strcmp( r, "me" ) == 0 );
   ASSERT( t[0] == 0 );
 
@@ -471,8 +471,8 @@ int main( void )
   test8();
   test9();
   //*/
-  
-  
+
+
   wint_t ch = getwc( stdin );
   printf( "wchar: %u\n", ch );
   return 0;

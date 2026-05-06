@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "clusters.h"
 
 #define RETURN(n) { return status = n; }
@@ -40,8 +41,8 @@ FLCluster::FLCluster()
 
 void FLCluster::done()
 {
-  ASSERT( data );
   if (data) ::free( data );
+  data = NULL;
 }
 
 FLCluster::~FLCluster()
@@ -135,6 +136,9 @@ int FLCluster::Realloc( int32 pn ) // expand/shrink data list
   ASSERT( pn >= size );
   if ( pn == size ) return CE_OK;
 
+  // guard against int overflow in pn * es
+  if ( pn > 0 && es > 0 && pn > INT_MAX / es ) return CE_MEM;
+
   char *newdata = (char*)realloc( data, pn*es );
   if (!newdata) return CE_MEM;
   data = newdata;
@@ -190,7 +194,7 @@ void FLCluster::dump()
   {
     ASSERT( pn >= 0 && pn < cnt );
     if (pn < cnt - 1)
-      memmove( data + ( pn )*es, data + ( pn + 1 )*es, ( cnt - pn )*es );
+      memmove( data + ( pn )*es, data + ( pn + 1 )*es, ( cnt - pn - 1 )*es );
     cnt--;
   }
 
@@ -218,6 +222,10 @@ void FLCluster::dump()
   int BaseCluster::Realloc( int pn )
   {
     if ( pn == size ) RETURN(CE_OK);
+
+    // guard against int overflow in pn * es
+    if ( pn > 0 && es > 0 && pn > INT_MAX / es ) RETURN(CE_MEM);
+
     char* newdata = (char*)malloc( pn*es );
     if (newdata == NULL) RETURN(CE_MEM);
     #ifdef DEBUG
@@ -359,15 +367,15 @@ void FLCluster::dump()
 
     void BSet::set_range1( int start, int end ) // set range
       {
-      char s = ( start < end ) ? start : end;
-      char e = ( start > end ) ? start : end;
+      int s = ( start < end ) ? start : end;
+      int e = ( start > end ) ? start : end;
       for( int z = s; z <= e; z++) set1( z );
       }
 
     void BSet::set_range0( int start, int end ) // set range
       {
-      char s = ( start < end ) ? start : end;
-      char e = ( start > end ) ? start : end;
+      int s = ( start < end ) ? start : end;
+      int e = ( start > end ) ? start : end;
       for( int z = s; z <= e; z++) set0( z );
       }
 
