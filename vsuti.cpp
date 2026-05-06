@@ -459,7 +459,7 @@ int ftwalk( const char *origin,
   if ( !origin || !func || !origin[0] ) return 255;
 
   VString o = origin;
-  str_fix_path( o, '/' );
+  str_fix_path( o );
 
   if ( ! file_is_dir( o ) ) return 255;
   int r = __ftwalk_process( o, o, func, level );
@@ -480,13 +480,13 @@ VString get_rc_directory( const char* dir_prefix )
   VString rc_dir;
   rc_dir = getenv("HOME");
   if ( rc_dir == "" ) rc_dir = "/tmp/";
-  str_fix_path( rc_dir, '/' );
+  str_fix_path( rc_dir );
 
   const char *rc_prefix = getenv("RC_PREFIX");
   if( ! rc_prefix || ! rc_prefix[0] ) rc_prefix = NULL;
   if( rc_prefix )
     rc_dir += rc_prefix;
-  str_fix_path( rc_dir, '/' );
+  str_fix_path( rc_dir );
   if ( dir_prefix && dir_prefix[0] )
     {
     if ( rc_prefix )
@@ -496,7 +496,7 @@ VString get_rc_directory( const char* dir_prefix )
       rc_dir += ".";
       rc_dir += dir_prefix;
       }
-    str_fix_path( rc_dir, '/' );
+    str_fix_path( rc_dir );
     }
   make_path( rc_dir );
   return rc_dir;
