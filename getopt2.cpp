@@ -182,10 +182,9 @@ int getopt2(int argc, char *argv[], char *optstring)
         return (optopt);
     }
 
-    optarg = argv[optind];
-
-    if (optind == argc)
+    if (optind >= argc)
     {
+        optarg = NULL;
         if (opterr)
         {
           if (opterr_report)
@@ -211,6 +210,7 @@ int getopt2(int argc, char *argv[], char *optstring)
 
     else
     {
+        optarg = argv[optind];
         optind++;
     }
 

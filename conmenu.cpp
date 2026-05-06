@@ -169,10 +169,13 @@ int con_menu_box( int x, int y, const wchar_t *title, WArray *wa, int hotkeys, C
   if ( hotkeys > -1 )
     {
     for(z = 0; z < wa->count(); z++)
-      if (wcsncmp(L"--", wa->get(z), 2))
-        str_add_ch( hots, wchar_t(((const wchar_t*)(wa->get(z)))[hotkeys]) );
+      {
+      const wchar_t* entry = (const wchar_t*)wa->get(z);
+      if ( wcsncmp(L"--", entry, 2) && (int)wcslen(entry) > hotkeys )
+        str_add_ch( hots, entry[hotkeys] );
       else
-        str_add_ch( hots,L' ' );
+        str_add_ch( hots, L' ' );
+      }
     str_up(hots);
     }
   con_xy(x,y);

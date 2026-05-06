@@ -46,7 +46,7 @@ double Eval( const char* a_exp )
    VString p1;
    VString p2;
    str_copy( p1, exp, 0, ps );
-   str_copy( p1, exp, ps );
+   str_copy( p2, exp, ps + 1 );
 
    double res = 0.0;
    switch (exp[ps]) {
@@ -93,11 +93,9 @@ double Eval( const char* a_exp )
        if (strcasecmp(fname, "ln") == 0)     {res  = log(Eval(p1));} else
        if (strcasecmp(fname, "lg") == 0)     {res  = log10(Eval(p1));} else
   //       if (strcasecmp(fname, "") == 0) {} else
-       EvalResult = 10;
-       if (EvalResult == 10)
-         return 0;
-       else
-         return res;
+         { EvalResult = 10; return 0; }
+       EvalResult = 0;
+       return res;
        }
      else
        { // brackets
