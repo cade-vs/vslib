@@ -1,10 +1,11 @@
 /****************************************************************************
- *
- *  Copyright (c) 1996-2022 Vladi Belperchinov-Shabanski "Cade"
- *  http://cade.noxrun.com/  <cade@noxrun.com> <cade@bis.bg> <cade@cpan.org>
- *
- * SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
- *
+ #
+ # Copyright (c) 1996-2026 Vladi Belperchinov-Shabanski "Cade"
+ # https://cade.noxrun.com/  <cade@noxrun.com>
+ # https://cade.noxrun.com/projects/vfu     https://github.com/cade-vs/vfu
+ #
+ # SEE `README',`LICENSE' OR `COPYING' FILE FOR LICENSE AND OTHER DETAILS!
+ #
  ****************************************************************************/
 
 #include "unicon.h"
@@ -79,7 +80,7 @@
     idlok(conio_scr,TRUE);      // hardware line ins/del (required?)
     idcok(conio_scr,TRUE);      // hardware char ins/del (required?)
     // nodelay(conio_scr,FALSE);   // blocking getch()
-    scrollok(conio_scr,TRUE);   // scroll screen if required (cursor at bottom)
+    scrollok(conio_scr,FALSE);   // scroll screen if required (cursor at bottom)
     /* Color initialization */
     for ( __bg=0; __bg<8; __bg++ )
        for ( __fg=0; __fg<8; __fg++ )
@@ -106,8 +107,9 @@
 
   void con_reset_screen_size()
   {
-    //ungetch( KEY_RESIZE );
-    //nodelay(conio_scr,TRUE);   // non-blocking getch()
+    struct winsize ws;
+    if( ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == 0 && ws.ws_row > 0 && ws.ws_col > 0 )
+      resizeterm( ws.ws_row, ws.ws_col );
   }
 
   void con_ta( int attr )
